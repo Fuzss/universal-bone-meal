@@ -59,7 +59,10 @@ gradle-app.setting
 .gradletasknamecache
 
 ### Other ###
-run
+/run/*
+!/run/options.txt
+!/run/config/fabric_loader_dependencies.json
+!/run/config/modmenu.json
 .DS_Store
 *.txt
 
