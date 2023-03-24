@@ -1,5 +1,5 @@
-# Universal Bone Meal
+# Example Mod
 
 A Minecraft mod. Downloads can be found on [CurseForge](https://www.curseforge.com/members/fuzs_/projects) and [Modrinth](https://modrinth.com/user/Fuzs).
 
-![](https://i.imgur.com/q3CooZb.png)
+![](https://raw.githubusercontent.com/Fuzss/modresources/main/pages/data/examplemod/banner.png)
