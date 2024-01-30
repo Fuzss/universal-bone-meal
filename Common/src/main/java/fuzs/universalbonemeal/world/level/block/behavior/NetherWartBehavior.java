@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 public class NetherWartBehavior implements BonemealBehavior {
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader p_52258_, BlockPos p_52259_, BlockState p_52260_, boolean p_52261_) {
+    public boolean isValidBonemealTarget(LevelReader p_52258_, BlockPos p_52259_, BlockState p_52260_) {
         return !this.isMaxAge(p_52260_);
     }
 

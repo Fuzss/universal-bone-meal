@@ -16,9 +16,9 @@ public class SimpleGrowingPlantBehavior extends GrowingPlantBehavior {
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader p_53900_, BlockPos p_53901_, BlockState p_53902_, boolean p_53903_) {
+    public boolean isValidBonemealTarget(LevelReader p_53900_, BlockPos p_53901_, BlockState p_53902_) {
         if (this.getConnectedPlantHeight(p_53900_, p_53901_, p_53902_.getBlock()) < this.getMaxHeightAtPosition(p_53901_.getX(), p_53901_.getZ())) {
-            return super.isValidBonemealTarget(p_53900_, p_53901_, p_53902_, p_53903_);
+            return super.isValidBonemealTarget(p_53900_, p_53901_, p_53902_);
         }
         return false;
     }

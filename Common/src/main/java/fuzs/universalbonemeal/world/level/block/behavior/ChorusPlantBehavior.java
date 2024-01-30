@@ -20,9 +20,9 @@ import java.util.Set;
 public class ChorusPlantBehavior extends ChorusFlowerBehavior {
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState blockState, boolean isClient) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState blockState) {
         for (BlockPos flowerPosition : this.getFlowerPositions(level, pos)) {
-            if (super.isValidBonemealTarget(level, flowerPosition, level.getBlockState(flowerPosition), isClient)) return true;
+            if (super.isValidBonemealTarget(level, flowerPosition, level.getBlockState(flowerPosition))) return true;
         }
         return false;
     }

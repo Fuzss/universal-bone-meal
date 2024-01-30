@@ -1,6 +1,7 @@
-package fuzs.universalbonemeal;
+package fuzs.universalbonemeal.forge;
 
 import fuzs.puzzleslib.api.core.v1.ModConstructor;
+import fuzs.universalbonemeal.UniversalBoneMeal;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;

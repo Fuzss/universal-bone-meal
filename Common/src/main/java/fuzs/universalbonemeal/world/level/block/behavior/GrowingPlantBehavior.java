@@ -18,7 +18,7 @@ public abstract class GrowingPlantBehavior implements BonemealBehavior {
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader p_53900_, BlockPos p_53901_, BlockState p_53902_, boolean p_53903_) {
+    public boolean isValidBonemealTarget(LevelReader p_53900_, BlockPos p_53901_, BlockState p_53902_) {
         BlockPos headPos = this.getHeadPos(p_53900_, p_53901_, p_53902_.getBlock());
         return this.canGrowInto(p_53900_.getBlockState(headPos.relative(this.growthDirection)));
     }

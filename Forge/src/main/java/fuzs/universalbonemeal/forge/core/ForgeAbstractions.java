@@ -1,5 +1,6 @@
-package fuzs.universalbonemeal.core;
+package fuzs.universalbonemeal.forge.core;
 
+import fuzs.universalbonemeal.core.CommonAbstractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;

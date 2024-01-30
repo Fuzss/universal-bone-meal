@@ -3,7 +3,6 @@ package fuzs.universalbonemeal.world.level.block.behavior;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
@@ -12,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class DirtBehavior implements BonemealBehavior {
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader p_55002_, BlockPos p_55003_, BlockState p_55004_, boolean p_55005_) {
+    public boolean isValidBonemealTarget(LevelReader p_55002_, BlockPos p_55003_, BlockState p_55004_) {
         if (p_55002_.getBlockState(p_55003_.above()).propagatesSkylightDown(p_55002_, p_55003_)) {
             for (BlockPos blockpos : BlockPos.betweenClosed(p_55003_.offset(-1, -1, -1), p_55003_.offset(1, 1, 1))) {
                 BlockState state = p_55002_.getBlockState(blockpos);

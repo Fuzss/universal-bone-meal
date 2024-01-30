@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class FruitStemBehavior implements BonemealBehavior {
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
         // let vanilla run otherwise
         if (!state.hasProperty(StemBlock.AGE) || state.getValue(StemBlock.AGE) != 7) return false;
         // no need to check if attached to a fruit already, since attached stems are completely different block for some reason

@@ -3,7 +3,6 @@ package fuzs.universalbonemeal.world.level.block.behavior;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.WorldGenLevel;
@@ -12,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public abstract class SpreadAwayBehavior implements BonemealBehavior {
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader p_55064_, BlockPos p_55065_, BlockState p_55066_, boolean p_55067_) {
+    public boolean isValidBonemealTarget(LevelReader p_55064_, BlockPos p_55065_, BlockState p_55066_) {
         return true;
     }
 

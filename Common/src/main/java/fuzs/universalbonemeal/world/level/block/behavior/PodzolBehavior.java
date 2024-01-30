@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.SimpleWeightedRandomList;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
@@ -24,7 +23,7 @@ public class PodzolBehavior implements BonemealBehavior {
             .add(Blocks.DEAD_BUSH.defaultBlockState(), 1));
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader p_53692_, BlockPos p_53693_, BlockState p_53694_, boolean p_53695_) {
+    public boolean isValidBonemealTarget(LevelReader p_53692_, BlockPos p_53693_, BlockState p_53694_) {
         return p_53692_.getBlockState(p_53693_.above()).isAir();
     }
 

@@ -1,16 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog].
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v8.0.1-1.20.1] - 2023-08-12
-### Added
-- Added a bonemeal behavior for spore blossoms, you will receive a new spore blossom item for every bonemeal used, similar to using bonemeal on tall flowers
-### Changed
-- Growing melons and pumpkins from stems now uses much less bonemeal
-- Bonemeal no longer works on wither roses and torchflowers as there are other dedicated methods in vanilla for obtaining those
-
-## [v8.0.0-1.20.1] - 2023-06-27
-- Ported to Minecraft 1.20.1
-
-[Keep a Changelog]: https://keepachangelog.com/en/1.0.0/
+## [v20.4.0-1.20.4] - 2024-01-30
+- Port to Minecraft 1.20.4
+- Port to NeoForge
+### Fixed
+- Fix modded small flowers not being supported

@@ -13,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.BooleanSupplier;
@@ -23,13 +24,13 @@ public class BonemealHandler {
 
     private static Map<Block, BonemealBehavior> blockToBehavior;
 
-    public static EventResult onBonemeal(Level level, BlockPos pos, BlockState block, ItemStack stack) {
-        BonemealBehavior behavior = dissolve().get(block.getBlock());
+    public static EventResult onBonemeal(Level level, BlockPos pos, BlockState blockState, ItemStack stack) {
+        BonemealBehavior behavior = dissolve().get(blockState.getBlock());
         if (behavior != null) {
-            if (behavior.isValidBonemealTarget(level, pos, block, level.isClientSide)) {
+            if (behavior.isValidBonemealTarget(level, pos, blockState)) {
                 if (level instanceof ServerLevel) {
-                    if (behavior.isBonemealSuccess(level, level.random, pos, block)) {
-                        behavior.performBonemeal((ServerLevel) level, level.random, pos, block);
+                    if (behavior.isBonemealSuccess(level, level.random, pos, blockState)) {
+                        behavior.performBonemeal((ServerLevel) level, level.random, pos, blockState);
                     }
                 }
                 return EventResult.ALLOW;
@@ -66,7 +67,11 @@ public class BonemealHandler {
     }
 
     public static void registerBehavior(TagKey<Block> tag, Supplier<BonemealBehavior> factory, BooleanSupplier config) {
-        BONE_MEAL_BEHAVIORS.add(new BlockTagBehaviorData(tag, factory, config));
+        BONE_MEAL_BEHAVIORS.add(new BlockTagBehaviorData(tag, null, factory, config));
+    }
+
+    public static void registerBehavior(TagKey<Block> allowedTag, TagKey<Block> disallowedTag, Supplier<BonemealBehavior> factory, BooleanSupplier config) {
+        BONE_MEAL_BEHAVIORS.add(new BlockTagBehaviorData(allowedTag, disallowedTag, factory, config));
     }
 
     private abstract static class AbstractBehaviorData {
@@ -116,17 +121,22 @@ public class BonemealHandler {
     }
 
     private static class BlockTagBehaviorData extends AbstractBehaviorData {
-        private final TagKey<Block> tag;
+        private final TagKey<Block> allowedTag;
+        @Nullable
+        private final TagKey<Block> disallowedTag;
 
-        public BlockTagBehaviorData(TagKey<Block> tag, Supplier<BonemealBehavior> factory, BooleanSupplier config) {
+        public BlockTagBehaviorData(TagKey<Block> allowedTag, @Nullable TagKey<Block> disallowedTag, Supplier<BonemealBehavior> factory, BooleanSupplier config) {
             super(factory, config);
-            this.tag = tag;
+            this.allowedTag = allowedTag;
+            this.disallowedTag = disallowedTag;
         }
 
         @Override
         public void compile(Map<Block, BonemealBehavior> map) {
-            for (Holder<Block> value : BuiltInRegistries.BLOCK.getTagOrEmpty(this.tag)) {
-                map.putIfAbsent(value.value(), this.behavior);
+            for (Holder<Block> holder : BuiltInRegistries.BLOCK.getTagOrEmpty(this.allowedTag)) {
+                if (this.disallowedTag == null || !holder.is(this.disallowedTag)) {
+                    map.putIfAbsent(holder.value(), this.behavior);
+                }
             }
         }
     }

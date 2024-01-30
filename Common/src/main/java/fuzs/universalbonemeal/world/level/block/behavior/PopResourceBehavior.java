@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 public record PopResourceBehavior(@Nullable Direction direction) implements BonemealBehavior {
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
         return true;
     }
 
