@@ -14,6 +14,6 @@ public class ModBlockTagProvider extends AbstractTagProvider.Blocks {
 
     @Override
     public void addTags(HolderLookup.Provider provider) {
-        this.tag(ModRegistry.FERTILIZER_RESISTANT_FLOWER_BLOCK_TAG).add(Blocks.WITHER_ROSE, Blocks.TORCHFLOWER);
+        this.tag(ModRegistry.FERTILIZER_RESISTANT_FLOWER_BLOCK_TAG).add(Blocks.WITHER_ROSE, Blocks.TORCHFLOWER, Blocks.PINK_PETALS);
     }
 }
