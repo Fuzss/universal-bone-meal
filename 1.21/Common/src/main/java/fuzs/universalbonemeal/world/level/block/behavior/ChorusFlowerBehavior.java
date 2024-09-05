@@ -8,7 +8,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.ChorusFlowerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class ChorusFlowerBehavior implements BonemealBehavior {
+public class ChorusFlowerBehavior implements BoneMealBehavior {
 
     @Override
     public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState blockState) {

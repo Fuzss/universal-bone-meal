@@ -10,7 +10,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-public abstract class GrowingPlantBehavior implements BonemealBehavior {
+public abstract class GrowingPlantBehavior implements BoneMealBehavior {
     protected final Direction growthDirection;
 
     public GrowingPlantBehavior(Direction growthDirection) {
@@ -18,13 +18,13 @@ public abstract class GrowingPlantBehavior implements BonemealBehavior {
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader p_53900_, BlockPos p_53901_, BlockState p_53902_) {
-        BlockPos headPos = this.getHeadPos(p_53900_, p_53901_, p_53902_.getBlock());
-        return this.canGrowInto(p_53900_.getBlockState(headPos.relative(this.growthDirection)));
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos blockPos, BlockState blockState) {
+        BlockPos headPos = this.getHeadPos(level, blockPos, blockState.getBlock());
+        return this.canGrowInto(level.getBlockState(headPos.relative(this.growthDirection)));
     }
 
     @Override
-    public boolean isBonemealSuccess(Level p_53944_, RandomSource p_53945_, BlockPos p_53946_, BlockState p_53947_) {
+    public boolean isBonemealSuccess(Level level, RandomSource randomSource, BlockPos blockPos, BlockState blockState) {
         return true;
     }
 
@@ -34,17 +34,17 @@ public abstract class GrowingPlantBehavior implements BonemealBehavior {
         this.performBonemealTop(level, random, topPos, sourceState);
     }
 
-    private void performBonemealTop(ServerLevel level, RandomSource p_53935_, BlockPos topPos, BlockState sourceState) {
+    private void performBonemealTop(ServerLevel level, RandomSource randomSource, BlockPos topPos, BlockState sourceState) {
         BlockPos blockpos = topPos.relative(this.growthDirection);
-        int j = this.getBlocksToGrowWhenBonemealed(p_53935_);
+        int j = this.getBlocksToGrowWhenBonemealed(randomSource);
         for(int k = 0; k < j && this.canGrowInto(level.getBlockState(blockpos)); ++k) {
             level.setBlockAndUpdate(blockpos, this.getGrownBlockState(sourceState.getBlock(), sourceState));
             blockpos = blockpos.relative(this.growthDirection);
         }
     }
 
-    private BlockPos getHeadPos(BlockGetter p_153323_, BlockPos p_153324_, Block p_153325_) {
-        return getTopConnectedBlock(p_153323_, p_153324_, p_153325_, this.growthDirection);
+    private BlockPos getHeadPos(BlockGetter level, BlockPos blockPos, Block block) {
+        return getTopConnectedBlock(level, blockPos, block, this.growthDirection);
     }
 
     public static BlockPos getTopConnectedBlock(BlockGetter level, BlockPos pos, Block block, Direction direction) {

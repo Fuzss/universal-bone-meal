@@ -11,15 +11,18 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 
 public class MyceliumBehavior extends SpreadAroundBehavior {
-    private static final BlockStateProvider MYCELIUM_VEGETATION_PROVIDER = new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(Blocks.RED_MUSHROOM.defaultBlockState(), 1).add(Blocks.BROWN_MUSHROOM.defaultBlockState(), 1));
+    private static final BlockStateProvider MYCELIUM_VEGETATION_PROVIDER = new WeightedStateProvider(
+            SimpleWeightedRandomList.<BlockState>builder()
+                    .add(Blocks.RED_MUSHROOM.defaultBlockState(), 1)
+                    .add(Blocks.BROWN_MUSHROOM.defaultBlockState(), 1));
 
     public MyceliumBehavior() {
         super(MYCELIUM_VEGETATION_PROVIDER);
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader p_55064_, BlockPos p_55065_, BlockState p_55066_) {
-        return p_55064_.getBlockState(p_55065_.above()).isAir();
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos blockPos, BlockState blockState) {
+        return level.getBlockState(blockPos.above()).isAir();
     }
 
     @Override

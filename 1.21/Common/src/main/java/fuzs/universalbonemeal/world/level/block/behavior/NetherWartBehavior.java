@@ -10,43 +10,43 @@ import net.minecraft.world.level.block.NetherWartBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
-public class NetherWartBehavior implements BonemealBehavior {
+public class NetherWartBehavior implements BoneMealBehavior {
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader p_52258_, BlockPos p_52259_, BlockState p_52260_) {
-        return !this.isMaxAge(p_52260_);
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos blockPos, BlockState blockState) {
+        return !this.isMaxAge(blockState);
     }
 
     @Override
-    public boolean isBonemealSuccess(Level p_52268_, RandomSource p_52269_, BlockPos p_52270_, BlockState p_52271_) {
+    public boolean isBonemealSuccess(Level level, RandomSource randomSource, BlockPos blockPos, BlockState blockState) {
         return true;
     }
 
     @Override
-    public void performBonemeal(ServerLevel p_52249_, RandomSource p_52250_, BlockPos p_52251_, BlockState p_52252_) {
-        this.growCrops(p_52249_, p_52251_, p_52252_);
+    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos blockPos, BlockState blockState) {
+        this.growCrops(level, blockPos, blockState);
     }
 
-    public void growCrops(Level p_52264_, BlockPos p_52265_, BlockState p_52266_) {
-        int i = this.getAge(p_52266_) + this.getBonemealAgeIncrease(p_52264_);
+    public void growCrops(Level level, BlockPos blockPos, BlockState blockState) {
+        int i = this.getAge(blockState) + this.getBonemealAgeIncrease(level);
         int j = this.getMaxAge();
         if (i > j) {
             i = j;
         }
 
-        p_52264_.setBlock(p_52265_, this.getStateForAge(p_52266_, i), 2);
+        level.setBlock(blockPos, this.getStateForAge(blockState, i), 2);
     }
 
-    public BlockState getStateForAge(BlockState p_52266_, int p_52290_) {
-        return p_52266_.getBlock().defaultBlockState().setValue(this.getAgeProperty(), p_52290_);
+    public BlockState getStateForAge(BlockState blockState, int plantAge) {
+        return blockState.getBlock().defaultBlockState().setValue(this.getAgeProperty(), plantAge);
     }
 
-    protected int getBonemealAgeIncrease(Level p_52262_) {
-        return Mth.nextInt(p_52262_.random, 2, 5) / 3;
+    protected int getBonemealAgeIncrease(Level level) {
+        return Mth.nextInt(level.random, 2, 5) / 3;
     }
 
-    protected int getAge(BlockState p_52306_) {
-        return p_52306_.getValue(this.getAgeProperty());
+    protected int getAge(BlockState blockState) {
+        return blockState.getValue(this.getAgeProperty());
     }
 
     public IntegerProperty getAgeProperty() {
@@ -57,7 +57,7 @@ public class NetherWartBehavior implements BonemealBehavior {
         return 3;
     }
 
-    public boolean isMaxAge(BlockState p_52308_) {
-        return p_52308_.getValue(this.getAgeProperty()) >= this.getMaxAge();
+    public boolean isMaxAge(BlockState blockState) {
+        return blockState.getValue(this.getAgeProperty()) >= this.getMaxAge();
     }
 }

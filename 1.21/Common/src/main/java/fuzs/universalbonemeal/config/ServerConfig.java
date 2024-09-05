@@ -2,7 +2,7 @@ package fuzs.universalbonemeal.config;
 
 import fuzs.puzzleslib.api.config.v3.Config;
 import fuzs.puzzleslib.api.config.v3.ConfigCore;
-import fuzs.universalbonemeal.handler.BonemealHandler;
+import fuzs.universalbonemeal.handler.UseBoneMealHandler;
 
 public class ServerConfig implements ConfigCore {
     @Config(description = "Allow bone meal to work on cactus.")
@@ -36,6 +36,6 @@ public class ServerConfig implements ConfigCore {
 
     @Override
     public void afterConfigReload() {
-        BonemealHandler.invalidate();
+        UseBoneMealHandler.invalidate();
     }
 }

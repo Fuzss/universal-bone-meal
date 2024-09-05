@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public record PopResourceBehavior(@Nullable Direction direction) implements BonemealBehavior {
+public record PopResourceBehavior(@Nullable Direction direction) implements BoneMealBehavior {
 
     @Override
     public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {

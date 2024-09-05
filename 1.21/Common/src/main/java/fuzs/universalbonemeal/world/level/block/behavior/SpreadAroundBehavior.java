@@ -9,7 +9,7 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
-public abstract class SpreadAroundBehavior implements BonemealBehavior {
+public abstract class SpreadAroundBehavior implements BoneMealBehavior {
     private final BlockStateProvider blockStateProvider;
 
     public SpreadAroundBehavior(BlockStateProvider blockStateProvider) {
@@ -17,12 +17,12 @@ public abstract class SpreadAroundBehavior implements BonemealBehavior {
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader p_55064_, BlockPos p_55065_, BlockState p_55066_) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos blockPos, BlockState blockState) {
         return true;
     }
 
     @Override
-    public boolean isBonemealSuccess(Level p_55069_, RandomSource p_55070_, BlockPos p_55071_, BlockState p_55072_) {
+    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos blockPos, BlockState blockState) {
         return true;
     }
 
