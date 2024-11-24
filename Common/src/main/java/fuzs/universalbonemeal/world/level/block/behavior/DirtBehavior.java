@@ -12,7 +12,7 @@ public class DirtBehavior implements BoneMealBehavior {
 
     @Override
     public boolean isValidBonemealTarget(LevelReader level, BlockPos blockPos, BlockState blockState) {
-        if (level.getBlockState(blockPos.above()).propagatesSkylightDown(level, blockPos)) {
+        if (level.getBlockState(blockPos.above()).propagatesSkylightDown()) {
             for (BlockPos blockpos : BlockPos.betweenClosed(blockPos.offset(-1, -1, -1), blockPos.offset(1, 1, 1))) {
                 BlockState state = level.getBlockState(blockpos);
                 if (state.is(Blocks.GRASS_BLOCK) || state.is(Blocks.MYCELIUM)) {

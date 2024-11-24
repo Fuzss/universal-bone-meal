@@ -62,7 +62,7 @@ public class PodzolBehavior implements BoneMealBehavior {
             if (stateAtRandomPosition.isAir()) {
                 if (random.nextInt(5) == 0) {
 
-                    if (level.isEmptyBlock(randomPosition) && randomPosition.getY() > level.getMinBuildHeight()) {
+                    if (level.isEmptyBlock(randomPosition) && randomPosition.getY() > level.getMinY()) {
                         BlockState stateToPlace = PODZOL_VEGETATION_PROVIDER.getState(random, randomPosition);
                         level.setBlock(randomPosition, stateToPlace, 2);
                     }

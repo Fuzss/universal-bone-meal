@@ -37,7 +37,7 @@ public abstract class SpreadAwayBehavior implements BoneMealBehavior {
                     continue label;
                 }
             }
-            if (level.isEmptyBlock(currentPos) && currentPos.getY() > level.getMinBuildHeight()) {
+            if (level.isEmptyBlock(currentPos) && currentPos.getY() > level.getMinY()) {
                 ((WorldGenLevel) level).setBlock(currentPos, defaultBlockState, 2);
                 if (++successes >= this.getMostSuccesses()) {
                     return;

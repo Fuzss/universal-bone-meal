@@ -23,7 +23,7 @@ public record ClientboundGrowthParticlesMessage(BlockPos blockPos) implements Cl
             }
 
             public static void addGrowthParticles(LevelAccessor level, BlockPos blockPos, int data) {
-                if (level.getBlockState(blockPos).isSolidRender(level, blockPos)) {
+                if (level.getBlockState(blockPos).isSolidRender()) {
                     ParticleUtils.spawnParticles(level, blockPos.above(), data * 3, 3.0, 1.0, false,
                             ParticleTypes.HAPPY_VILLAGER
                     );

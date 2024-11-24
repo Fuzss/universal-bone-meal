@@ -86,7 +86,7 @@ public class CoralBehavior implements BoneMealBehavior {
     private Block getBlockEquivalent(BlockState blockState, RandomSource random) {
         Block block = plantToBlock.get(blockState.getBlock());
         if (block != null) return block;
-        return BuiltInRegistries.BLOCK.getTag(BlockTags.CORAL_BLOCKS).flatMap((holders) -> {
+        return BuiltInRegistries.BLOCK.get(BlockTags.CORAL_BLOCKS).flatMap((holders) -> {
             return holders.getRandomElement(random);
         }).map(Holder::value).orElseThrow();
     }
@@ -124,7 +124,7 @@ public class CoralBehavior implements BoneMealBehavior {
 
     private boolean isValidPosition(LevelAccessor level, BlockPos blockPos, int height) {
         int i = blockPos.getY();
-        if (i >= level.getMinBuildHeight() + 1 && i + height + 1 < level.getMaxBuildHeight()) {
+        if (i >= level.getMinY() + 1 && i + height + 1 < level.getMaxY()) {
             BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
             for(int j = 0; j <= height + 4; ++j) {
                 int k = j < height ? 0 : (j - height) / 2 + 1;
@@ -156,10 +156,10 @@ public class CoralBehavior implements BoneMealBehavior {
             // vanilla always decorates top, resulting in trunks sometimes being cut off
             if (decorateTop) {
                 if (random.nextFloat() < 0.25F) {
-                    BuiltInRegistries.BLOCK.getTag(BlockTags.CORALS).flatMap((holders) -> {
+                    BuiltInRegistries.BLOCK.get(BlockTags.CORALS).flatMap((holders) -> {
                         return holders.getRandomElement(random);
-                    }).map(Holder::value).ifPresent((p_204720_) -> {
-                        level.setBlock(blockpos, p_204720_.defaultBlockState(), 2);
+                    }).map(Holder::value).ifPresent((block) -> {
+                        level.setBlock(blockpos, block.defaultBlockState(), 2);
                     });
                 } else if (random.nextFloat() < 0.05F) {
                     level.setBlock(blockpos, Blocks.SEA_PICKLE.defaultBlockState().setValue(SeaPickleBlock.PICKLES, random.nextInt(4) + 1), 2);
@@ -169,7 +169,7 @@ public class CoralBehavior implements BoneMealBehavior {
                 if (random.nextFloat() < 0.2F) {
                     BlockPos blockpos1 = pos.relative(direction);
                     if (level.getBlockState(blockpos1).is(Blocks.WATER)) {
-                        BuiltInRegistries.BLOCK.getTag(BlockTags.WALL_CORALS).flatMap((holders) -> {
+                        BuiltInRegistries.BLOCK.get(BlockTags.WALL_CORALS).flatMap((holders) -> {
                             return holders.getRandomElement(random);
                         }).map(Holder::value).ifPresent((block) -> {
                             BlockState blockstate1 = block.defaultBlockState();
