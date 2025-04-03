@@ -3,7 +3,7 @@ package fuzs.universalbonemeal.world.level.block.behavior;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
@@ -14,14 +14,13 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 
 public class PodzolBehavior implements BoneMealBehavior {
-    private static final BlockStateProvider PODZOL_VEGETATION_PROVIDER = new WeightedStateProvider(
-            SimpleWeightedRandomList.<BlockState>builder()
-                    .add(Blocks.SWEET_BERRY_BUSH.defaultBlockState().setValue(SweetBerryBushBlock.AGE, 3), 2)
-                    .add(Blocks.SWEET_BERRY_BUSH.defaultBlockState().setValue(SweetBerryBushBlock.AGE, 2), 4)
-                    .add(Blocks.SWEET_BERRY_BUSH.defaultBlockState().setValue(SweetBerryBushBlock.AGE, 1), 8)
-                    .add(Blocks.SWEET_BERRY_BUSH.defaultBlockState().setValue(SweetBerryBushBlock.AGE, 0), 12)
-                    .add(Blocks.FERN.defaultBlockState(), 120)
-                    .add(Blocks.DEAD_BUSH.defaultBlockState(), 1));
+    private static final BlockStateProvider PODZOL_VEGETATION_PROVIDER = new WeightedStateProvider(WeightedList.<BlockState>builder()
+            .add(Blocks.SWEET_BERRY_BUSH.defaultBlockState().setValue(SweetBerryBushBlock.AGE, 3), 2)
+            .add(Blocks.SWEET_BERRY_BUSH.defaultBlockState().setValue(SweetBerryBushBlock.AGE, 2), 4)
+            .add(Blocks.SWEET_BERRY_BUSH.defaultBlockState().setValue(SweetBerryBushBlock.AGE, 1), 8)
+            .add(Blocks.SWEET_BERRY_BUSH.defaultBlockState().setValue(SweetBerryBushBlock.AGE, 0), 12)
+            .add(Blocks.FERN.defaultBlockState(), 120)
+            .add(Blocks.DEAD_BUSH.defaultBlockState(), 1));
 
     @Override
     public boolean isValidBonemealTarget(LevelReader level, BlockPos blockPos, BlockState blockState) {
@@ -43,10 +42,11 @@ public class PodzolBehavior implements BoneMealBehavior {
             BlockPos randomPosition = sourcePosition;
 
             for (int j = 0; j < i / 16; ++j) {
-                randomPosition = randomPosition.offset(random.nextInt(3) - 1, (random.nextInt(3) - 1) *
-                        random.nextInt(3) / 2, random.nextInt(3) - 1);
-                if (!level.getBlockState(randomPosition.below()).is(Blocks.PODZOL) || level.getBlockState(
-                        randomPosition).isCollisionShapeFullBlock(level, randomPosition)) {
+                randomPosition = randomPosition.offset(random.nextInt(3) - 1,
+                        (random.nextInt(3) - 1) * random.nextInt(3) / 2,
+                        random.nextInt(3) - 1);
+                if (!level.getBlockState(randomPosition.below()).is(Blocks.PODZOL) ||
+                        level.getBlockState(randomPosition).isCollisionShapeFullBlock(level, randomPosition)) {
                     continue label;
                 }
             }
@@ -54,9 +54,10 @@ public class PodzolBehavior implements BoneMealBehavior {
             BlockState stateAtRandomPosition = level.getBlockState(randomPosition);
             if (stateAtRandomPosition.is(fernState.getBlock()) && random.nextInt(10) == 0) {
 
-                ((BonemealableBlock) fernState.getBlock()).performBonemeal(level, random, randomPosition,
-                        stateAtRandomPosition
-                );
+                ((BonemealableBlock) fernState.getBlock()).performBonemeal(level,
+                        random,
+                        randomPosition,
+                        stateAtRandomPosition);
             }
 
             if (stateAtRandomPosition.isAir()) {

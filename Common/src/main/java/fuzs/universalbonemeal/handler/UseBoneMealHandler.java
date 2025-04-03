@@ -3,7 +3,8 @@ package fuzs.universalbonemeal.handler;
 import com.google.common.collect.ImmutableMap;
 import fuzs.puzzleslib.api.event.v1.core.EventResult;
 import fuzs.puzzleslib.api.item.v2.ItemHelper;
-import fuzs.universalbonemeal.UniversalBoneMeal;
+import fuzs.puzzleslib.api.network.v4.MessageSender;
+import fuzs.puzzleslib.api.network.v4.PlayerSet;
 import fuzs.universalbonemeal.network.ClientboundGrowthParticlesMessage;
 import fuzs.universalbonemeal.world.level.block.behavior.BoneMealBehavior;
 import net.minecraft.core.BlockPos;
@@ -46,9 +47,8 @@ public class UseBoneMealHandler {
                     // which in our case only applies to stem blocks
                     // so send a custom packet for all others
                     if (!(blockState.getBlock() instanceof BonemealableBlock)) {
-                        UniversalBoneMeal.NETWORK.sendToAllNear(blockPos, serverLevel,
-                                new ClientboundGrowthParticlesMessage(blockPos)
-                        );
+                        MessageSender.broadcast(PlayerSet.nearPosition(blockPos, serverLevel),
+                                new ClientboundGrowthParticlesMessage(blockPos));
                     }
                 }
 
