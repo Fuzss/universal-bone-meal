@@ -8,6 +8,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CactusBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public abstract class GrowingPlantBehavior implements BoneMealBehavior {
@@ -34,12 +35,15 @@ public abstract class GrowingPlantBehavior implements BoneMealBehavior {
         this.performBonemealTop(level, random, topPos, sourceState);
     }
 
-    private void performBonemealTop(ServerLevel level, RandomSource randomSource, BlockPos topPos, BlockState sourceState) {
-        BlockPos blockpos = topPos.relative(this.growthDirection);
+    private void performBonemealTop(ServerLevel serverLevel, RandomSource randomSource, BlockPos topPos, BlockState sourceState) {
+        BlockPos blockPos = topPos.relative(this.growthDirection);
         int j = this.getBlocksToGrowWhenBonemealed(randomSource);
-        for(int k = 0; k < j && this.canGrowInto(level.getBlockState(blockpos)); ++k) {
-            level.setBlockAndUpdate(blockpos, this.getGrownBlockState(sourceState.getBlock(), sourceState));
-            blockpos = blockpos.relative(this.growthDirection);
+        for (int k = 0; k < j && this.canGrowInto(serverLevel.getBlockState(blockPos)); ++k) {
+            BlockState blockState = this.getGrownBlockState(sourceState.getBlock(), sourceState);
+            serverLevel.setBlockAndUpdate(blockPos, blockState);
+            // tick for cacti to destroy if necessary; couldn't figure out how to do this from neighbor updates
+            serverLevel.scheduleTick(blockPos, blockState.getBlock(), 1);
+            blockPos = blockPos.relative(this.growthDirection);
         }
     }
 
@@ -53,7 +57,7 @@ public abstract class GrowingPlantBehavior implements BoneMealBehavior {
         do {
             mutable.move(direction);
             blockstate = level.getBlockState(mutable);
-        } while(blockstate.is(block));
+        } while (blockstate.is(block));
         return mutable.move(direction.getOpposite());
     }
 
