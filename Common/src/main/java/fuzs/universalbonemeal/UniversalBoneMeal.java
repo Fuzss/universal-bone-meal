@@ -50,7 +50,7 @@ public class UniversalBoneMeal implements ModConstructor {
 
     private static void registerBonemealBehaviors() {
         UseBoneMealHandler.registerBehavior(Blocks.CACTUS,
-                SimpleGrowingPlantBehavior::new,
+                CactusBehavior::new,
                 () -> CONFIG.get(ServerConfig.class).allowCactus);
         UseBoneMealHandler.registerBehavior(Blocks.SUGAR_CANE,
                 SimpleGrowingPlantBehavior::new,

@@ -8,20 +8,15 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CactusBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.MustBeInvokedByOverriders;
 
 public abstract class GrowingPlantBehavior implements BoneMealBehavior {
-    protected final Direction growthDirection;
-
-    public GrowingPlantBehavior(Direction growthDirection) {
-        this.growthDirection = growthDirection;
-    }
 
     @Override
     public boolean isValidBonemealTarget(LevelReader level, BlockPos blockPos, BlockState blockState) {
         BlockPos headPos = this.getHeadPos(level, blockPos, blockState.getBlock());
-        return this.canGrowInto(level.getBlockState(headPos.relative(this.growthDirection)));
+        return this.canGrowInto(level.getBlockState(headPos.relative(this.getGrowthDirection())));
     }
 
     @Override
@@ -35,20 +30,24 @@ public abstract class GrowingPlantBehavior implements BoneMealBehavior {
         this.performBonemealTop(level, random, topPos, sourceState);
     }
 
-    private void performBonemealTop(ServerLevel serverLevel, RandomSource randomSource, BlockPos topPos, BlockState sourceState) {
-        BlockPos blockPos = topPos.relative(this.growthDirection);
+    @MustBeInvokedByOverriders
+    protected void performBonemealTop(ServerLevel serverLevel, RandomSource randomSource, BlockPos topPos, BlockState sourceState) {
+        BlockPos blockPos = topPos.relative(this.getGrowthDirection());
         int j = this.getBlocksToGrowWhenBonemealed(randomSource);
         for (int k = 0; k < j && this.canGrowInto(serverLevel.getBlockState(blockPos)); ++k) {
-            BlockState blockState = this.getGrownBlockState(sourceState.getBlock(), sourceState);
+            BlockState blockState = this.getGrownBlockState(sourceState, randomSource);
             serverLevel.setBlockAndUpdate(blockPos, blockState);
-            // tick for cacti to destroy if necessary; couldn't figure out how to do this from neighbor updates
-            serverLevel.scheduleTick(blockPos, blockState.getBlock(), 1);
-            blockPos = blockPos.relative(this.growthDirection);
+            // stop if we grew a block that is not the default plant block, like a cactus flower on a cactus
+            if (!blockState.is(sourceState.getBlock())) {
+                break;
+            }
+
+            blockPos = blockPos.relative(this.getGrowthDirection());
         }
     }
 
     private BlockPos getHeadPos(BlockGetter level, BlockPos blockPos, Block block) {
-        return getTopConnectedBlock(level, blockPos, block, this.growthDirection);
+        return getTopConnectedBlock(level, blockPos, block, this.getGrowthDirection());
     }
 
     public static BlockPos getTopConnectedBlock(BlockGetter level, BlockPos pos, Block block, Direction direction) {
@@ -61,9 +60,11 @@ public abstract class GrowingPlantBehavior implements BoneMealBehavior {
         return mutable.move(direction.getOpposite());
     }
 
+    protected abstract Direction getGrowthDirection();
+
     protected abstract int getBlocksToGrowWhenBonemealed(RandomSource random);
 
     protected abstract boolean canGrowInto(BlockState state);
 
-    protected abstract BlockState getGrownBlockState(Block sourceBlock, BlockState sourceState);
+    protected abstract BlockState getGrownBlockState(BlockState sourceState, RandomSource randomSource);
 }
