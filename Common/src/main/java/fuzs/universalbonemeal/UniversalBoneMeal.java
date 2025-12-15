@@ -3,7 +3,7 @@ package fuzs.universalbonemeal;
 import fuzs.puzzleslib.api.config.v3.ConfigHolder;
 import fuzs.puzzleslib.api.core.v1.ModConstructor;
 import fuzs.puzzleslib.api.core.v1.context.PayloadTypesContext;
-import fuzs.puzzleslib.api.core.v1.utility.ResourceLocationHelper;
+import net.minecraft.resources.Identifier;
 import fuzs.puzzleslib.api.event.v1.level.UseBoneMealCallback;
 import fuzs.puzzleslib.api.event.v1.server.TagsUpdatedCallback;
 import fuzs.universalbonemeal.config.ServerConfig;
@@ -13,7 +13,7 @@ import fuzs.universalbonemeal.network.ClientboundGrowthParticlesMessage;
 import fuzs.universalbonemeal.world.level.block.behavior.*;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import org.slf4j.Logger;
@@ -102,7 +102,7 @@ public class UniversalBoneMeal implements ModConstructor {
         context.playToClient(ClientboundGrowthParticlesMessage.class, ClientboundGrowthParticlesMessage.STREAM_CODEC);
     }
 
-    public static ResourceLocation id(String path) {
-        return ResourceLocationHelper.fromNamespaceAndPath(MOD_ID, path);
+    public static Identifier id(String path) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
 }

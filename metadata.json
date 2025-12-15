@@ -1,0 +1,61 @@
+{
+    "mod": {
+        "id": "universalbonemeal",
+        "group": "fuzs.universalbonemeal",
+        "name": "Universal Bone Meal",
+        "version": "21.11.0",
+        "authors": [
+            "Fuzs"
+        ],
+        "description": "Stop the bonemeal discrimination! Grow all plants, no limitations.",
+        "license": "MPL-2.0"
+    },
+    "dependencies": [
+        {
+            "name": "fabricapi",
+            "type": "required",
+            "platforms": [
+                "fabric"
+            ]
+        },
+        {
+            "name": "forgeconfigapiport",
+            "type": "required",
+            "platforms": [
+                "fabric"
+            ]
+        },
+        {
+            "name": "puzzleslib",
+            "type": "required",
+            "platforms": [
+                "fabric",
+                "neoforge"
+            ]
+        }
+    ],
+    "links": [
+        {
+            "name": "github",
+            "slug": "universalbonemeal-forge"
+        },
+        {
+            "name": "curseforge",
+            "slug": "universal-bone-meal",
+            "id": "594013"
+        },
+        {
+            "name": "modrinth",
+            "slug": "universal-bone-meal",
+            "id": "66VIiT1y"
+        }
+    ],
+    "environments": {
+        "client": "required",
+        "server": "required"
+    },
+    "platforms": [
+        "fabric",
+        "neoforge"
+    ]
+}
