@@ -1,6 +1,6 @@
 package fuzs.universalbonemeal.init;
 
-import fuzs.puzzleslib.api.init.v3.tags.TagFactory;
+import fuzs.puzzleslib.common.api.init.v3.tags.TagFactory;
 import fuzs.universalbonemeal.UniversalBoneMeal;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;

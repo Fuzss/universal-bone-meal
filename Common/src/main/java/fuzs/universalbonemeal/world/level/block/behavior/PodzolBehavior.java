@@ -34,43 +34,33 @@ public class PodzolBehavior implements BoneMealBehavior {
 
     @Override
     public void performBonemeal(ServerLevel level, RandomSource random, BlockPos blockPos, BlockState blockState) {
-        BlockPos sourcePosition = blockPos.above();
-        BlockState fernState = Blocks.FERN.defaultBlockState();
-
         label:
         for (int i = 0; i < 128; ++i) {
-            BlockPos randomPosition = sourcePosition;
-
+            BlockPos randomPos = blockPos.above();
             for (int j = 0; j < i / 16; ++j) {
-                randomPosition = randomPosition.offset(random.nextInt(3) - 1,
+                randomPos = randomPos.offset(random.nextInt(3) - 1,
                         (random.nextInt(3) - 1) * random.nextInt(3) / 2,
                         random.nextInt(3) - 1);
-                if (!level.getBlockState(randomPosition.below()).is(Blocks.PODZOL) ||
-                        level.getBlockState(randomPosition).isCollisionShapeFullBlock(level, randomPosition)) {
+                if (!level.getBlockState(randomPos.below()).is(Blocks.PODZOL) || level.getBlockState(randomPos)
+                        .isCollisionShapeFullBlock(level, randomPos)) {
                     continue label;
                 }
             }
 
-            BlockState stateAtRandomPosition = level.getBlockState(randomPosition);
-            if (stateAtRandomPosition.is(fernState.getBlock()) && random.nextInt(10) == 0) {
-
-                ((BonemealableBlock) fernState.getBlock()).performBonemeal(level,
-                        random,
-                        randomPosition,
-                        stateAtRandomPosition);
+            BlockState stateAtRandomPosition = level.getBlockState(randomPos);
+            if (stateAtRandomPosition.is(Blocks.FERN) && random.nextInt(10) == 0) {
+                ((BonemealableBlock) Blocks.FERN).performBonemeal(level, random, randomPos, stateAtRandomPosition);
             }
 
             if (stateAtRandomPosition.isAir()) {
                 if (random.nextInt(5) == 0) {
-
-                    if (level.isEmptyBlock(randomPosition) && randomPosition.getY() > level.getMinY()) {
-                        BlockState stateToPlace = PODZOL_VEGETATION_PROVIDER.getState(random, randomPosition);
-                        level.setBlock(randomPosition, stateToPlace, 2);
+                    if (level.isEmptyBlock(randomPos) && randomPos.getY() > level.getMinY()) {
+                        BlockState stateToPlace = PODZOL_VEGETATION_PROVIDER.getState(level, random, randomPos);
+                        level.setBlock(randomPos, stateToPlace, 2);
                     }
                 }
 
             }
         }
-
     }
 }

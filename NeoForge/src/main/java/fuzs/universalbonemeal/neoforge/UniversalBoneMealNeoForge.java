@@ -1,6 +1,6 @@
 package fuzs.universalbonemeal.neoforge;
 
-import fuzs.puzzleslib.api.core.v1.ModConstructor;
+import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
 import fuzs.puzzleslib.neoforge.api.data.v2.core.DataProviderHelper;
 import fuzs.universalbonemeal.UniversalBoneMeal;
 import fuzs.universalbonemeal.data.ModBlockTagProvider;

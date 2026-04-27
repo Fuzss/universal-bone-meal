@@ -35,11 +35,14 @@ public abstract class SpreadAroundBehavior implements BoneMealBehavior {
         if (i >= level.getMinY() + 1 && i + 1 < level.getMaxY()) {
             final int spreadWidth = this.getSpreadWidth();
             final int spreadHeight = this.getSpreadHeight();
-            for(int k = 0; k < spreadWidth * spreadWidth; ++k) {
-                BlockPos blockpos1 = pos.offset(random.nextInt(spreadWidth) - random.nextInt(spreadWidth), random.nextInt(spreadHeight) - random.nextInt(spreadHeight), random.nextInt(spreadWidth) - random.nextInt(spreadWidth));
-                BlockState blockstate1 = this.blockStateProvider.getState(random, blockpos1);
-                if (level.isEmptyBlock(blockpos1) && blockpos1.getY() > level.getMinY() && blockstate1.canSurvive(level, blockpos1)) {
-                    level.setBlock(blockpos1, blockstate1, 2);
+            for (int k = 0; k < spreadWidth * spreadWidth; ++k) {
+                BlockPos randomPos = pos.offset(random.nextInt(spreadWidth) - random.nextInt(spreadWidth),
+                        random.nextInt(spreadHeight) - random.nextInt(spreadHeight),
+                        random.nextInt(spreadWidth) - random.nextInt(spreadWidth));
+                BlockState state = this.blockStateProvider.getState(level, random, randomPos);
+                if (level.isEmptyBlock(randomPos) && randomPos.getY() > level.getMinY() && state.canSurvive(level,
+                        randomPos)) {
+                    level.setBlock(randomPos, state, 2);
                 }
             }
         }

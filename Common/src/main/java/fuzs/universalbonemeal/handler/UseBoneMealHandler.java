@@ -1,10 +1,10 @@
 package fuzs.universalbonemeal.handler;
 
 import com.google.common.collect.ImmutableMap;
-import fuzs.puzzleslib.api.event.v1.core.EventResult;
-import fuzs.puzzleslib.api.item.v2.ItemHelper;
-import fuzs.puzzleslib.api.network.v4.MessageSender;
-import fuzs.puzzleslib.api.network.v4.PlayerSet;
+import fuzs.puzzleslib.common.api.event.v1.core.EventResult;
+import fuzs.puzzleslib.common.api.item.v2.ItemHelper;
+import fuzs.puzzleslib.common.api.network.v4.MessageSender;
+import fuzs.puzzleslib.common.api.network.v4.PlayerSet;
 import fuzs.universalbonemeal.network.ClientboundGrowthParticlesMessage;
 import fuzs.universalbonemeal.world.level.block.behavior.BoneMealBehavior;
 import net.minecraft.core.BlockPos;
@@ -33,8 +33,8 @@ public class UseBoneMealHandler {
         if (boneMealBehavior != null) {
             if (boneMealBehavior.isValidBonemealTarget(level, blockPos, blockState)) {
                 if (level instanceof ServerLevel serverLevel) {
-                    if (boneMealBehavior.isBonemealSuccess(level, level.random, blockPos, blockState)) {
-                        boneMealBehavior.performBonemeal(serverLevel, level.random, blockPos, blockState);
+                    if (boneMealBehavior.isBonemealSuccess(level, level.getRandom(), blockPos, blockState)) {
+                        boneMealBehavior.performBonemeal(serverLevel, level.getRandom(), blockPos, blockState);
                     }
 
                     if (itemStack.isStackable()) {

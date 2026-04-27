@@ -28,7 +28,7 @@ public class NetherWartBehavior implements BoneMealBehavior {
     }
 
     public void growCrops(Level level, BlockPos blockPos, BlockState blockState) {
-        int i = this.getAge(blockState) + this.getBonemealAgeIncrease(level);
+        int i = this.getAge(blockState) + this.getBoneMealAgeIncrease(level);
         int j = this.getMaxAge();
         if (i > j) {
             i = j;
@@ -41,8 +41,8 @@ public class NetherWartBehavior implements BoneMealBehavior {
         return blockState.getBlock().defaultBlockState().setValue(this.getAgeProperty(), plantAge);
     }
 
-    protected int getBonemealAgeIncrease(Level level) {
-        return Mth.nextInt(level.random, 2, 5) / 3;
+    protected int getBoneMealAgeIncrease(Level level) {
+        return Mth.nextInt(level.getRandom(), 2, 5) / 3;
     }
 
     protected int getAge(BlockState blockState) {

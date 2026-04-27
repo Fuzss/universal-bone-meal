@@ -1,6 +1,6 @@
 package fuzs.universalbonemeal.fabric;
 
-import fuzs.puzzleslib.api.core.v1.ModConstructor;
+import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
 import fuzs.universalbonemeal.UniversalBoneMeal;
 import net.fabricmc.api.ModInitializer;
 

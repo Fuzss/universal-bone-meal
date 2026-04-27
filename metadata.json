@@ -1,9 +1,10 @@
 {
+    "minecraft": "26.1.2",
     "mod": {
         "id": "universalbonemeal",
         "group": "fuzs.universalbonemeal",
         "name": "Universal Bone Meal",
-        "version": "21.11.0",
+        "version": "26.1.0",
         "authors": [
             "Fuzs"
         ],
@@ -36,13 +37,13 @@
     ],
     "links": [
         {
-            "name": "github",
-            "slug": "universalbonemeal-forge"
-        },
-        {
             "name": "curseforge",
             "slug": "universal-bone-meal",
             "id": "594013"
+        },
+        {
+            "name": "github",
+            "slug": "universal-bone-meal"
         },
         {
             "name": "modrinth",

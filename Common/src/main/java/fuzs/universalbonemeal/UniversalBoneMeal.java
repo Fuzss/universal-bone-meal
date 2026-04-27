@@ -1,11 +1,10 @@
 package fuzs.universalbonemeal;
 
-import fuzs.puzzleslib.api.config.v3.ConfigHolder;
-import fuzs.puzzleslib.api.core.v1.ModConstructor;
-import fuzs.puzzleslib.api.core.v1.context.PayloadTypesContext;
-import net.minecraft.resources.Identifier;
-import fuzs.puzzleslib.api.event.v1.level.UseBoneMealCallback;
-import fuzs.puzzleslib.api.event.v1.server.TagsUpdatedCallback;
+import fuzs.puzzleslib.common.api.config.v3.ConfigHolder;
+import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
+import fuzs.puzzleslib.common.api.core.v1.context.PayloadTypesContext;
+import fuzs.puzzleslib.common.api.event.v1.level.UseBoneMealCallback;
+import fuzs.puzzleslib.common.api.event.v1.server.TagsUpdatedCallback;
 import fuzs.universalbonemeal.config.ServerConfig;
 import fuzs.universalbonemeal.handler.UseBoneMealHandler;
 import fuzs.universalbonemeal.init.ModRegistry;
@@ -61,8 +60,11 @@ public class UniversalBoneMeal implements ModConstructor {
         UseBoneMealHandler.registerBehavior(Blocks.NETHER_WART,
                 NetherWartBehavior::new,
                 () -> CONFIG.get(ServerConfig.class).allowNetherWart);
-        UseBoneMealHandler.registerBehavior(Set.of(Blocks.MELON_STEM, Blocks.PUMPKIN_STEM),
-                FruitStemBehavior::new,
+        UseBoneMealHandler.registerBehavior(Set.of(Blocks.MELON_STEM),
+                () -> new FruitStemBehavior(BlockTags.SUPPORTS_MELON_STEM_FRUIT),
+                () -> CONFIG.get(ServerConfig.class).allowFruitStems);
+        UseBoneMealHandler.registerBehavior(Set.of(Blocks.PUMPKIN_STEM),
+                () -> new FruitStemBehavior(BlockTags.SUPPORTS_PUMPKIN_STEM_FRUIT),
                 () -> CONFIG.get(ServerConfig.class).allowFruitStems);
         UseBoneMealHandler.registerBehavior(Blocks.LILY_PAD,
                 () -> new SimpleSpreadBehavior(4, 3),
