@@ -1,7 +1,7 @@
 package fuzs.universalbonemeal.fabric;
 
 import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
-import fuzs.universalbonemeal.UniversalBoneMeal;
+import fuzs.universalbonemeal.common.UniversalBoneMeal;
 import net.fabricmc.api.ModInitializer;
 
 public class UniversalBoneMealFabric implements ModInitializer {
