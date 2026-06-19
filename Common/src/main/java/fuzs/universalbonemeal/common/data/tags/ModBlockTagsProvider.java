@@ -1,22 +1,24 @@
-package fuzs.universalbonemeal.common.data;
+package fuzs.universalbonemeal.common.data.tags;
 
 import fuzs.puzzleslib.common.api.data.v2.core.DataProviderContext;
 import fuzs.puzzleslib.common.api.data.v2.tags.AbstractTagProvider;
 import fuzs.universalbonemeal.common.init.ModRegistry;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 
-public class ModBlockTagProvider extends AbstractTagProvider<Block> {
+public class ModBlockTagsProvider extends AbstractTagProvider<Block> {
 
-    public ModBlockTagProvider(DataProviderContext context) {
+    public ModBlockTagsProvider(DataProviderContext context) {
         super(Registries.BLOCK, context);
     }
 
     @Override
     public void addTags(HolderLookup.Provider provider) {
         this.tag(ModRegistry.FERTILIZER_RESISTANT_FLOWERS_BLOCK_TAG)
-                .add(Blocks.WITHER_ROSE, Blocks.TORCHFLOWER, Blocks.PINK_PETALS);
+                .add(BlockItemIds.WITHER_ROSE.block(),
+                        BlockItemIds.TORCHFLOWER.block(),
+                        BlockItemIds.PINK_PETALS.block());
     }
 }

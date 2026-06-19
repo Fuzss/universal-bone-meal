@@ -4,15 +4,16 @@ import fuzs.puzzleslib.common.api.config.v3.ConfigHolder;
 import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
 import fuzs.puzzleslib.common.api.core.v1.context.PayloadTypesContext;
 import fuzs.puzzleslib.common.api.event.v1.level.UseBoneMealCallback;
-import fuzs.puzzleslib.common.api.event.v1.server.TagsUpdatedCallback;
+import fuzs.puzzleslib.common.api.event.v1.server.ServerResourcesLoadCallback;
 import fuzs.universalbonemeal.common.config.ServerConfig;
 import fuzs.universalbonemeal.common.handler.UseBoneMealHandler;
 import fuzs.universalbonemeal.common.init.ModRegistry;
 import fuzs.universalbonemeal.common.network.ClientboundGrowthParticlesMessage;
 import fuzs.universalbonemeal.common.world.level.block.behavior.*;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.ReloadableServerResources;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import org.slf4j.Logger;
@@ -40,8 +41,7 @@ public class UniversalBoneMeal implements ModConstructor {
 
     private static void registerEventHandlers() {
         UseBoneMealCallback.EVENT.register(UseBoneMealHandler::onUseBoneMeal);
-        TagsUpdatedCallback.EVENT.register((HolderLookup.Provider registries, boolean client) -> {
-            if (client) return;
+        ServerResourcesLoadCallback.EVENT.register((ReloadableServerResources serverResources, RegistryAccess registries) -> {
             UseBoneMealHandler.invalidate();
             CoralBehavior.invalidate();
         });
