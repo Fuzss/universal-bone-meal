@@ -19,6 +19,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProvider;
@@ -85,13 +86,16 @@ public class BoneMealBehaviors {
                         BlockPredicate.ONLY_IN_AIR_PREDICATE,
                         Holder.direct(new CopySourceBlockStateProvider(Direction.UP)),
                         ConstantInt.of(128)));
-        context.register(NETHER_WART, new CropGrowthBehavior(3, UniformInt.of(0, 1)));
+        context.register(NETHER_WART, new CropGrowthBehavior(BlockStateProperties.MAX_AGE_3, UniformInt.of(0, 1)));
         context.register(MELON_STEM,
                 new FruitStemBehavior(context.lookup(Registries.BLOCK).getOrThrow(BlockTags.SUPPORTS_MELON_STEM_FRUIT),
-                        7));
+                        BlockStateProperties.MAX_AGE_7,
+                        UniformInt.of(2, 5)));
         context.register(PUMPKIN_STEM,
                 new FruitStemBehavior(context.lookup(Registries.BLOCK)
-                        .getOrThrow(BlockTags.SUPPORTS_PUMPKIN_STEM_FRUIT), 7));
+                        .getOrThrow(BlockTags.SUPPORTS_PUMPKIN_STEM_FRUIT),
+                        BlockStateProperties.MAX_AGE_7,
+                        UniformInt.of(2, 5)));
         context.register(LILY_PAD, new NeighborSpreadBehavior(4, 3));
         context.register(DEAD_BUSH, new NeighborSpreadBehavior(4, 2));
         context.register(SMALL_FLOWER, new NeighborSpreadBehavior(3, 1));
@@ -102,12 +106,12 @@ public class BoneMealBehaviors {
         context.register(BUBBLE_CORAL, coralBehavior(context, coralBiomes, CoralPlacedFeatures.BUBBLE_CORAL));
         context.register(FIRE_CORAL, coralBehavior(context, coralBiomes, CoralPlacedFeatures.FIRE_CORAL));
         context.register(HORN_CORAL, coralBehavior(context, coralBiomes, CoralPlacedFeatures.HORN_CORAL));
-        context.register(CHORUS_FLOWER, new ChorusFlowerBehavior(5));
+        context.register(CHORUS_FLOWER, new ChorusFlowerBehavior(BlockStateProperties.MAX_AGE_5));
         context.register(CHORUS_PLANT,
                 new ChorusPlantBehavior(HolderSet.direct(Blocks.CHORUS_PLANT.builtInRegistryHolder()),
                         HolderSet.direct(Blocks.CHORUS_FLOWER.builtInRegistryHolder()),
                         128,
-                        5));
+                        BlockStateProperties.MAX_AGE_5));
         context.register(MYCELIUM, new VegetationScatterBehavior(MYCELIUM_VEGETATION, 3, 1));
         context.register(DIRT,
                 new DirtConversionBehavior(HolderSet.direct(Blocks.GRASS_BLOCK.builtInRegistryHolder(),
@@ -115,7 +119,9 @@ public class BoneMealBehaviors {
         context.register(PODZOL,
                 new PodzolVegetationBehavior(HolderSet.direct(Blocks.PODZOL.builtInRegistryHolder()),
                         PODZOL_VEGETATION,
-                        HolderSet.direct(Blocks.FERN.builtInRegistryHolder())));
+                        HolderSet.direct(Blocks.FERN.builtInRegistryHolder()),
+                        128,
+                        16));
         context.register(SPORE_BLOSSOM,
                 new PopResourceBehavior(ModRegistry.SPORE_BLOSSOM_LOOT_TABLE,
                         BlockTransformer.DropStrategy.CLICKED_FACE,

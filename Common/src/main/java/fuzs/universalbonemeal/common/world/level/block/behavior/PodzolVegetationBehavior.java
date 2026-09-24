@@ -1,5 +1,6 @@
 package fuzs.universalbonemeal.common.world.level.block.behavior;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
@@ -18,7 +19,9 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 
 public record PodzolVegetationBehavior(HolderSet<Block> groundBlocks,
                                        Holder<BlockStateProvider> vegetation,
-                                       HolderSet<Block> bonemealableBlocks) implements BoneMealBehavior {
+                                       HolderSet<Block> bonemealableBlocks,
+                                       int attempts,
+                                       int attemptsPerStep) implements BoneMealBehavior {
     public static final MapCodec<PodzolVegetationBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                     RegistryCodecs.holderSet(Registries.BLOCK)
                             .fieldOf("ground_blocks")
@@ -26,7 +29,9 @@ public record PodzolVegetationBehavior(HolderSet<Block> groundBlocks,
                     BlockStateProvider.CODEC.fieldOf("vegetation").forGetter(PodzolVegetationBehavior::vegetation),
                     RegistryCodecs.holderSet(Registries.BLOCK)
                             .fieldOf("bonemealable_blocks")
-                            .forGetter(PodzolVegetationBehavior::bonemealableBlocks))
+                            .forGetter(PodzolVegetationBehavior::bonemealableBlocks),
+                    Codec.intRange(1, 1024).fieldOf("attempts").forGetter(PodzolVegetationBehavior::attempts),
+                    Codec.intRange(1, 128).fieldOf("attempts_per_step").forGetter(PodzolVegetationBehavior::attemptsPerStep))
             .apply(instance, PodzolVegetationBehavior::new));
 
     @Override
@@ -42,9 +47,9 @@ public record PodzolVegetationBehavior(HolderSet<Block> groundBlocks,
     @Override
     public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
         label:
-        for (int i = 0; i < 128; ++i) {
+        for (int attempt = 0; attempt < this.attempts; ++attempt) {
             BlockPos randomPos = pos.above();
-            for (int j = 0; j < i / 16; ++j) {
+            for (int step = 0; step < attempt / this.attemptsPerStep; ++step) {
                 randomPos = randomPos.offset(random.nextInt(3) - 1,
                         (random.nextInt(3) - 1) * random.nextInt(3) / 2,
                         random.nextInt(3) - 1);
@@ -56,9 +61,8 @@ public record PodzolVegetationBehavior(HolderSet<Block> groundBlocks,
 
             BlockState stateAtRandomPosition = level.getBlockState(randomPos);
             if (this.bonemealableBlocks.contains(stateAtRandomPosition.typeHolder())
-                    && stateAtRandomPosition.getBlock() instanceof BonemealableBlock bonemealableBlock
-                    && random.nextInt(10) == 0) {
-                bonemealableBlock.performBonemeal(level, random, randomPos, stateAtRandomPosition, source);
+                    && stateAtRandomPosition.getBlock() instanceof BonemealableBlock block && random.nextInt(10) == 0) {
+                block.performBonemeal(level, random, randomPos, stateAtRandomPosition, source);
             }
 
             if (stateAtRandomPosition.isAir() && random.nextInt(5) == 0 && level.isEmptyBlock(randomPos)

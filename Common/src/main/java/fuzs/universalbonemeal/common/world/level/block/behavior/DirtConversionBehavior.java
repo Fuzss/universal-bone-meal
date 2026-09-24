@@ -9,6 +9,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.Util;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -46,7 +47,7 @@ public record DirtConversionBehavior(HolderSet<Block> spreadSources,
     public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
         List<Block> foundBlocks = this.findSpreadSources(level, pos).toList();
         if (!foundBlocks.isEmpty()) {
-            Block block = foundBlocks.get(random.nextInt(foundBlocks.size()));
+            Block block = Util.getRandom(foundBlocks, random);
             level.setBlock(pos, block.defaultBlockState(), Block.UPDATE_ALL);
         }
     }
@@ -55,7 +56,7 @@ public record DirtConversionBehavior(HolderSet<Block> spreadSources,
         return BlockPos.betweenClosedStream(pos.offset(-this.spreadWidth, -this.spreadHeight, -this.spreadWidth),
                         pos.offset(this.spreadWidth, this.spreadHeight, this.spreadWidth))
                 .map(level::getBlockState)
-                .filter(state -> this.spreadSources.contains(state.typeHolder()))
+                .filter((BlockState state) -> this.spreadSources.contains(state.typeHolder()))
                 .map(BlockState::getBlock)
                 .distinct();
     }

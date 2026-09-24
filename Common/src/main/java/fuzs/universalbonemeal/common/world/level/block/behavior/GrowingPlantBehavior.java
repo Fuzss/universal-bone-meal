@@ -26,9 +26,10 @@ public record GrowingPlantBehavior(Direction direction,
                                    Holder<BlockStateProvider> blockStateProvider,
                                    IntProvider maxHeight) implements BoneMealBehavior {
     public static final MapCodec<GrowingPlantBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                    Direction.CODEC.fieldOf("direction").forGetter(GrowingPlantBehavior::direction),
+                    Direction.CODEC.optionalFieldOf("direction", Direction.UP).forGetter(GrowingPlantBehavior::direction),
                     IntProviders.codec(0, 128).fieldOf("blocks_to_grow").forGetter(GrowingPlantBehavior::blocksToGrow),
-                    BlockPredicate.CODEC.fieldOf("can_grow_into").forGetter(GrowingPlantBehavior::canGrowInto),
+                    BlockPredicate.CODEC.optionalFieldOf("can_grow_into", BlockPredicate.ONLY_IN_AIR_PREDICATE)
+                            .forGetter(GrowingPlantBehavior::canGrowInto),
                     BlockStateProvider.CODEC.fieldOf("block_state_provider")
                             .forGetter(GrowingPlantBehavior::blockStateProvider),
                     IntProviders.codec(1, 128).fieldOf("max_height").forGetter(GrowingPlantBehavior::maxHeight))
@@ -61,20 +62,20 @@ public record GrowingPlantBehavior(Direction direction,
     }
 
     private void growPlant(ServerLevel level, RandomSource random, BlockPos topPos, BlockState sourceState) {
-        BlockPos pos = topPos.relative(this.direction);
+        BlockPos.MutableBlockPos pos = topPos.relative(this.direction).mutable();
         int blocksToGrow = this.blocksToGrow.sample(random);
         for (int i = 0; i < blocksToGrow && this.canGrowInto.test(level, pos); ++i) {
             BlockState state = this.blockStateProvider.value().getState(level, random, pos);
             level.setBlockAndUpdate(pos, state);
-            // stop if we grew a block that is not the default plant block, like a cactus flower on a cactus
+            // Stop if we grew a block that is not the default plant block, like a cactus flower on a cactus.
             if (!state.is(sourceState.getBlock())) {
                 break;
             }
 
-            pos = pos.relative(this.direction);
+            pos.move(this.direction);
         }
 
-        // reset the age of the top block so the plant can be bone mealed again
+        // Reset the age of the top block so the plant can be bone mealed again.
         if (this.direction == Direction.UP) {
             BlockState state = level.getBlockState(topPos);
             if (state.hasProperty(BlockStateProperties.AGE_15)) {

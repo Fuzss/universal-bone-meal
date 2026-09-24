@@ -10,11 +10,13 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.ChorusFlowerBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class ChorusFlowerBehavior implements BoneMealBehavior {
     public static final MapCodec<ChorusFlowerBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                    Codec.intRange(1, 5).fieldOf("max_age").forGetter(ChorusFlowerBehavior::getMaxAge))
-            .apply(instance, ChorusFlowerBehavior::new));
+            Codec.intRange(1, BlockStateProperties.MAX_AGE_5)
+                    .fieldOf("max_age")
+                    .forGetter(ChorusFlowerBehavior::getMaxAge)).apply(instance, ChorusFlowerBehavior::new));
 
     private final int maxAge;
 

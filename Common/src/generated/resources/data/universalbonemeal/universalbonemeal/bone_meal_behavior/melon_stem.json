@@ -1,5 +1,10 @@
 {
   "type": "universalbonemeal:fruit_stem",
   "fruit_support_blocks": "#minecraft:supports_melon_stem_fruit",
+  "growth_attempts": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 5,
+    "min_inclusive": 2
+  },
   "max_age": 7
 }

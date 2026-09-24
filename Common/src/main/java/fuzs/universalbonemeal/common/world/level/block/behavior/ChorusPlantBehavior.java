@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 import java.util.Collection;
@@ -25,15 +26,12 @@ import java.util.Set;
 
 public class ChorusPlantBehavior extends ChorusFlowerBehavior {
     public static final MapCodec<ChorusPlantBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                    RegistryCodecs.holderSet(Registries.BLOCK).fieldOf("plant").forGetter(ChorusPlantBehavior::getPlant),
-                    RegistryCodecs.holderSet(Registries.BLOCK)
-                            .fieldOf("flower")
-                            .forGetter(ChorusPlantBehavior::getFlower),
-                    Codec.intRange(1, 256)
-                            .fieldOf("search_range")
-                            .forGetter(ChorusPlantBehavior::getSearchRange),
-                    Codec.intRange(1, 5).fieldOf("max_age").forGetter(ChorusFlowerBehavior::getMaxAge))
-            .apply(instance, ChorusPlantBehavior::new));
+            RegistryCodecs.holderSet(Registries.BLOCK).fieldOf("plant").forGetter(ChorusPlantBehavior::getPlant),
+            RegistryCodecs.holderSet(Registries.BLOCK).fieldOf("flower").forGetter(ChorusPlantBehavior::getFlower),
+            Codec.intRange(1, 256).fieldOf("search_range").forGetter(ChorusPlantBehavior::getSearchRange),
+            Codec.intRange(1, BlockStateProperties.MAX_AGE_5)
+                    .fieldOf("max_age")
+                    .forGetter(ChorusFlowerBehavior::getMaxAge)).apply(instance, ChorusPlantBehavior::new));
 
     private final HolderSet<Block> plant;
     private final HolderSet<Block> flower;
@@ -100,6 +98,7 @@ public class ChorusPlantBehavior extends ChorusFlowerBehavior {
             }
             return;
         }
+
         for (Map.Entry<Direction, BooleanProperty> entry : PipeBlock.PROPERTY_BY_DIRECTION.entrySet()) {
             Direction direction = entry.getKey();
             if (direction != Direction.DOWN && direction != sourceDirection && sourceState.getValue(entry.getValue())) {

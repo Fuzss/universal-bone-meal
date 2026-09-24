@@ -10,6 +10,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.IntProviders;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealSource;
@@ -17,12 +19,15 @@ import net.minecraft.world.level.block.StemBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
-public record FruitStemBehavior(HolderSet<Block> fruitSupportBlocks, int maxAge) implements BoneMealBehavior {
+public record FruitStemBehavior(HolderSet<Block> fruitSupportBlocks,
+                                int maxAge,
+                                IntProvider growthAttempts) implements BoneMealBehavior {
     public static final MapCodec<FruitStemBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                     RegistryCodecs.holderSet(Registries.BLOCK)
                             .fieldOf("fruit_support_blocks")
                             .forGetter(FruitStemBehavior::fruitSupportBlocks),
-                    Codec.intRange(1, BlockStateProperties.MAX_AGE_7).fieldOf("max_age").forGetter(FruitStemBehavior::maxAge))
+                    Codec.intRange(1, BlockStateProperties.MAX_AGE_7).fieldOf("max_age").forGetter(FruitStemBehavior::maxAge),
+                    IntProviders.codec(1, 64).fieldOf("growth_attempts").forGetter(FruitStemBehavior::growthAttempts))
             .apply(instance, FruitStemBehavior::new));
 
     @Override
@@ -54,8 +59,9 @@ public record FruitStemBehavior(HolderSet<Block> fruitSupportBlocks, int maxAge)
 
     @Override
     public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
-        // growing fruit from stem blocks takes forever, let's speed it up a little
-        while (level.getBlockState(pos) == state && random.nextInt(3) != 0) {
+        // Growing fruit from stem blocks takes forever, so try multiple times to roll a successful random tick.
+        int growthAttempts = this.growthAttempts.sample(random);
+        for (int i = 0; i < growthAttempts && level.getBlockState(pos) == state; i++) {
             state.randomTick(level, pos, random);
         }
     }

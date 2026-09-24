@@ -14,13 +14,15 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.NetherWartBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 public record CropGrowthBehavior(int maxAge, IntProvider ageIncrease) implements BoneMealBehavior {
     public static final MapCodec<CropGrowthBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                    Codec.intRange(1, 3).fieldOf("max_age").forGetter(CropGrowthBehavior::maxAge),
-                    IntProviders.codec(0, 3).fieldOf("age_increase").forGetter(CropGrowthBehavior::ageIncrease))
-            .apply(instance, CropGrowthBehavior::new));
+            Codec.intRange(1, BlockStateProperties.MAX_AGE_3).fieldOf("max_age").forGetter(CropGrowthBehavior::maxAge),
+            IntProviders.codec(0, BlockStateProperties.MAX_AGE_3)
+                    .fieldOf("age_increase")
+                    .forGetter(CropGrowthBehavior::ageIncrease)).apply(instance, CropGrowthBehavior::new));
 
     @Override
     public MapCodec<CropGrowthBehavior> codec() {
