@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:block_interact",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:spore_blossom"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "universalbonemeal:spore_blossom"
+}

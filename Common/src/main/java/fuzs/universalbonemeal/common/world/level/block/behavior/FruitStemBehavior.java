@@ -1,5 +1,6 @@
 package fuzs.universalbonemeal.common.world.level.block.behavior;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
@@ -14,12 +15,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.StemBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
-public record FruitStemBehavior(HolderSet<Block> fruitSupportBlocks) implements BoneMealBehavior {
+public record FruitStemBehavior(HolderSet<Block> fruitSupportBlocks, int maxAge) implements BoneMealBehavior {
     public static final MapCodec<FruitStemBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                     RegistryCodecs.holderSet(Registries.BLOCK)
                             .fieldOf("fruit_support_blocks")
-                            .forGetter(FruitStemBehavior::fruitSupportBlocks))
+                            .forGetter(FruitStemBehavior::fruitSupportBlocks),
+                    Codec.intRange(1, BlockStateProperties.MAX_AGE_7).fieldOf("max_age").forGetter(FruitStemBehavior::maxAge))
             .apply(instance, FruitStemBehavior::new));
 
     @Override
@@ -32,12 +35,12 @@ public record FruitStemBehavior(HolderSet<Block> fruitSupportBlocks) implements 
      */
     @Override
     public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, BonemealSource source) {
-        // let vanilla run otherwise
-        if (!state.hasProperty(StemBlock.AGE) || state.getValue(StemBlock.AGE) != 7) {
+        // Let vanilla run if this is not the case.
+        if (!state.hasProperty(StemBlock.AGE) || state.getValue(StemBlock.AGE) < this.maxAge) {
             return false;
         }
 
-        // no need to check if attached to a fruit already, since attached stems are completely different block for some reason
+        // No need to check if attached to a fruit already, since attached stems are completely different block.
         for (Direction direction : Direction.Plane.HORIZONTAL) {
             BlockPos fruitPos = pos.relative(direction);
             BlockState soilState = level.getBlockState(fruitPos.below());

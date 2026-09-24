@@ -1,4 +1,9 @@
 {
   "type": "universalbonemeal:crop_growth",
+  "age_increase": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 1,
+    "min_inclusive": 0
+  },
   "max_age": 3
 }

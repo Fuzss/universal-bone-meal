@@ -31,14 +31,16 @@ public class ChorusPlantBehavior extends ChorusFlowerBehavior {
                             .forGetter(ChorusPlantBehavior::getFlower),
                     Codec.intRange(1, 256)
                             .fieldOf("search_range")
-                            .forGetter(ChorusPlantBehavior::getSearchRange))
+                            .forGetter(ChorusPlantBehavior::getSearchRange),
+                    Codec.intRange(1, 5).fieldOf("max_age").forGetter(ChorusFlowerBehavior::getMaxAge))
             .apply(instance, ChorusPlantBehavior::new));
 
     private final HolderSet<Block> plant;
     private final HolderSet<Block> flower;
     private final int searchRange;
 
-    public ChorusPlantBehavior(HolderSet<Block> plant, HolderSet<Block> flower, int searchRange) {
+    public ChorusPlantBehavior(HolderSet<Block> plant, HolderSet<Block> flower, int searchRange, int maxAge) {
+        super(maxAge);
         this.plant = plant;
         this.flower = flower;
         this.searchRange = searchRange;

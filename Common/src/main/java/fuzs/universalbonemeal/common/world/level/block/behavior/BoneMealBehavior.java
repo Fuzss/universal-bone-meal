@@ -10,7 +10,6 @@ import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public interface BoneMealBehavior extends BonemealableBlock {
-
     /**
      * @return the codec for this bone meal behavior type
      *

@@ -3,8 +3,9 @@
     "#universalbonemeal:fertilizer_resistant_flowers"
   ],
   "values": {
-    "#minecraft:coral_plants": "universalbonemeal:coral",
     "#minecraft:small_flowers": "universalbonemeal:small_flower",
+    "minecraft:brain_coral": "universalbonemeal:brain_coral",
+    "minecraft:bubble_coral": "universalbonemeal:bubble_coral",
     "minecraft:cactus": "universalbonemeal:cactus",
     "minecraft:chorus_flower": "universalbonemeal:chorus_flower",
     "minecraft:chorus_plant": "universalbonemeal:chorus_plant",
@@ -12,6 +13,8 @@
     "minecraft:dead_bush": "universalbonemeal:dead_bush",
     "minecraft:dirt": "universalbonemeal:dirt",
     "minecraft:dirt_path": "universalbonemeal:dirt",
+    "minecraft:fire_coral": "universalbonemeal:fire_coral",
+    "minecraft:horn_coral": "universalbonemeal:horn_coral",
     "minecraft:lily_pad": "universalbonemeal:lily_pad",
     "minecraft:melon_stem": "universalbonemeal:melon_stem",
     "minecraft:mycelium": "universalbonemeal:mycelium",
@@ -20,6 +23,7 @@
     "minecraft:pumpkin_stem": "universalbonemeal:pumpkin_stem",
     "minecraft:spore_blossom": "universalbonemeal:spore_blossom",
     "minecraft:sugar_cane": "universalbonemeal:sugar_cane",
+    "minecraft:tube_coral": "universalbonemeal:tube_coral",
     "minecraft:vine": "universalbonemeal:vine"
   }
 }

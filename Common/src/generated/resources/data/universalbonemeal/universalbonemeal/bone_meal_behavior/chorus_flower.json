@@ -1,3 +1,4 @@
 {
-  "type": "universalbonemeal:chorus_flower"
+  "type": "universalbonemeal:chorus_flower",
+  "max_age": 5
 }

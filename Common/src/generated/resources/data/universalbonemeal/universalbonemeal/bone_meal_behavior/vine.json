@@ -1,6 +1,17 @@
 {
-  "type": "universalbonemeal:hanging_plant",
+  "type": "universalbonemeal:growing_plant",
+  "block_state_provider": {
+    "type": "universalbonemeal:copy_source",
+    "direction": "up"
+  },
   "blocks_to_grow": {
-    "type": "universalbonemeal:nether_vines"
-  }
+    "type": "universalbonemeal:nether_vines",
+    "max_inclusive": 32
+  },
+  "can_grow_into": {
+    "type": "minecraft:matching_block_tag",
+    "tag": "minecraft:air"
+  },
+  "direction": "down",
+  "max_height": 128
 }

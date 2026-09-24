@@ -1,4 +1,6 @@
 {
   "type": "universalbonemeal:pop_resource",
-  "direction": "down"
+  "direction": "down",
+  "drop_strategy": "clicked_face",
+  "loot": "universalbonemeal:spore_blossom"
 }

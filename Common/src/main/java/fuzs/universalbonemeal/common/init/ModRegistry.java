@@ -8,9 +8,9 @@ import fuzs.puzzleslib.common.api.init.v3.registry.RegistryFactory;
 import fuzs.puzzleslib.common.api.init.v3.registry.RegistryManager;
 import fuzs.puzzleslib.common.api.init.v3.tags.TagFactory;
 import fuzs.universalbonemeal.common.UniversalBoneMeal;
+import fuzs.universalbonemeal.common.util.stateproviders.CopySourceBlockStateProvider;
 import fuzs.universalbonemeal.common.util.valueproviders.NetherVinesIntProvider;
 import fuzs.universalbonemeal.common.world.level.block.behavior.BoneMealBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.CactusBehavior;
 import fuzs.universalbonemeal.common.world.level.block.behavior.ChorusFlowerBehavior;
 import fuzs.universalbonemeal.common.world.level.block.behavior.ChorusPlantBehavior;
 import fuzs.universalbonemeal.common.world.level.block.behavior.CoralTreeBehavior;
@@ -18,7 +18,6 @@ import fuzs.universalbonemeal.common.world.level.block.behavior.CropGrowthBehavi
 import fuzs.universalbonemeal.common.world.level.block.behavior.DirtConversionBehavior;
 import fuzs.universalbonemeal.common.world.level.block.behavior.FruitStemBehavior;
 import fuzs.universalbonemeal.common.world.level.block.behavior.GrowingPlantBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.HangingPlantBehavior;
 import fuzs.universalbonemeal.common.world.level.block.behavior.NeighborSpreadBehavior;
 import fuzs.universalbonemeal.common.world.level.block.behavior.PodzolVegetationBehavior;
 import fuzs.universalbonemeal.common.world.level.block.behavior.PopResourceBehavior;
@@ -30,6 +29,7 @@ import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootTable;
 
 import java.util.function.Function;
 
@@ -48,6 +48,9 @@ public class ModRegistry {
     public static final Codec<BoneMealBehavior> BONE_MEAL_BEHAVIOR_CODEC = BONE_MEAL_BEHAVIOR_TYPE_REGISTRY.byNameCodec()
             .dispatch(BoneMealBehavior::codec, Function.identity());
 
+    public static final ResourceKey<LootTable> SPORE_BLOSSOM_LOOT_TABLE = ResourceKey.create(Registries.LOOT_TABLE,
+            UniversalBoneMeal.id("spore_blossom"));
+
     public static final DataMapToken<Block, Holder<BoneMealBehavior>> BONE_MEAL_BEHAVIORS_DATA_MAP = DataMapRegistrar.register(
             UniversalBoneMeal.id("bone_meal_behaviors"),
             Registries.BLOCK,
@@ -56,12 +59,11 @@ public class ModRegistry {
             true);
 
     public static void bootstrap() {
-        REGISTRIES.register(Registries.INT_PROVIDER_TYPE,
-                "nether_vines",
-                () -> NetherVinesIntProvider.CODEC);
+        REGISTRIES.register(Registries.INT_PROVIDER_TYPE, "nether_vines", () -> NetherVinesIntProvider.CODEC);
+        REGISTRIES.register(Registries.BLOCK_STATE_PROVIDER_TYPE,
+                "copy_source",
+                () -> CopySourceBlockStateProvider.CODEC);
         registerBoneMealBehaviorType("growing_plant", GrowingPlantBehavior.CODEC);
-        registerBoneMealBehaviorType("hanging_plant", HangingPlantBehavior.CODEC);
-        registerBoneMealBehaviorType("cactus", CactusBehavior.CODEC);
         registerBoneMealBehaviorType("crop_growth", CropGrowthBehavior.CODEC);
         registerBoneMealBehaviorType("fruit_stem", FruitStemBehavior.CODEC);
         registerBoneMealBehaviorType("neighbor_spread", NeighborSpreadBehavior.CODEC);

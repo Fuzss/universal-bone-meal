@@ -18,12 +18,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.List;
 import java.util.stream.Stream;
 
-public record DirtConversionBehavior(HolderSet<Block> spreadSources, int searchRange) implements BoneMealBehavior {
+public record DirtConversionBehavior(HolderSet<Block> spreadSources,
+                                     int spreadWidth,
+                                     int spreadHeight) implements BoneMealBehavior {
     public static final MapCodec<DirtConversionBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                     RegistryCodecs.holderSet(Registries.BLOCK)
                             .fieldOf("spread_sources")
                             .forGetter(DirtConversionBehavior::spreadSources),
-                    Codec.intRange(1, 64).fieldOf("search_range").forGetter(DirtConversionBehavior::searchRange))
+                    Codec.intRange(1, 16).fieldOf("spread_width").forGetter(DirtConversionBehavior::spreadWidth),
+                    Codec.intRange(0, 16).fieldOf("spread_height").forGetter(DirtConversionBehavior::spreadHeight))
             .apply(instance, DirtConversionBehavior::new));
 
     @Override
@@ -49,8 +52,8 @@ public record DirtConversionBehavior(HolderSet<Block> spreadSources, int searchR
     }
 
     private Stream<Block> findSpreadSources(BlockGetter level, BlockPos pos) {
-        return BlockPos.betweenClosedStream(pos.offset(-this.searchRange, -this.searchRange, -this.searchRange),
-                        pos.offset(this.searchRange, this.searchRange, this.searchRange))
+        return BlockPos.betweenClosedStream(pos.offset(-this.spreadWidth, -this.spreadHeight, -this.spreadWidth),
+                        pos.offset(this.spreadWidth, this.spreadHeight, this.spreadWidth))
                 .map(level::getBlockState)
                 .filter(state -> this.spreadSources.contains(state.typeHolder()))
                 .map(BlockState::getBlock)

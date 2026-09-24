@@ -1,6 +1,7 @@
 {
   "type": "universalbonemeal:chorus_plant",
   "flower": "minecraft:chorus_flower",
+  "max_age": 5,
   "plant": "minecraft:chorus_plant",
   "search_range": 128
 }

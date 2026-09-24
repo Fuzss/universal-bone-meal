@@ -1,4 +1,5 @@
 {
   "type": "universalbonemeal:fruit_stem",
-  "fruit_support_blocks": "#minecraft:supports_pumpkin_stem_fruit"
+  "fruit_support_blocks": "#minecraft:supports_pumpkin_stem_fruit",
+  "max_age": 7
 }
