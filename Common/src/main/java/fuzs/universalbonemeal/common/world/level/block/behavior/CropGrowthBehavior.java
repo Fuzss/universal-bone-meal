@@ -1,6 +1,5 @@
 package fuzs.universalbonemeal.common.world.level.block.behavior;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
@@ -14,13 +13,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.NetherWartBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
-public record CropGrowthBehavior(int maxAge, IntProvider ageIncrease) implements BoneMealBehavior {
+public record CropGrowthBehavior(IntProvider ageIncrease) implements BoneMealBehavior {
     public static final MapCodec<CropGrowthBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.intRange(1, BlockStateProperties.MAX_AGE_3).fieldOf("max_age").forGetter(CropGrowthBehavior::maxAge),
-            IntProviders.codec(0, BlockStateProperties.MAX_AGE_3)
+            IntProviders.codec(0, NetherWartBlock.MAX_AGE)
                     .fieldOf("age_increase")
                     .forGetter(CropGrowthBehavior::ageIncrease)).apply(instance, CropGrowthBehavior::new));
 
@@ -40,7 +37,7 @@ public record CropGrowthBehavior(int maxAge, IntProvider ageIncrease) implements
     }
 
     private void growCrops(Level level, BlockPos pos, BlockState state, RandomSource random) {
-        int age = Math.min(this.getAge(state) + this.ageIncrease.sample(random), this.maxAge);
+        int age = Math.min(this.getAge(state) + this.ageIncrease.sample(random), NetherWartBlock.MAX_AGE);
         level.setBlock(pos,
                 state.getBlock().defaultBlockState().setValue(this.getAgeProperty(), age),
                 Block.UPDATE_CLIENTS);
@@ -55,6 +52,6 @@ public record CropGrowthBehavior(int maxAge, IntProvider ageIncrease) implements
     }
 
     private boolean isMaxAge(BlockState state) {
-        return state.getValue(this.getAgeProperty()) >= this.maxAge;
+        return state.getValue(this.getAgeProperty()) >= NetherWartBlock.MAX_AGE;
     }
 }

@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 import java.util.Collection;
@@ -28,17 +27,14 @@ public class ChorusPlantBehavior extends ChorusFlowerBehavior {
     public static final MapCodec<ChorusPlantBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             RegistryCodecs.holderSet(Registries.BLOCK).fieldOf("plant").forGetter(ChorusPlantBehavior::getPlant),
             RegistryCodecs.holderSet(Registries.BLOCK).fieldOf("flower").forGetter(ChorusPlantBehavior::getFlower),
-            Codec.intRange(1, 256).fieldOf("search_range").forGetter(ChorusPlantBehavior::getSearchRange),
-            Codec.intRange(1, BlockStateProperties.MAX_AGE_5)
-                    .fieldOf("max_age")
-                    .forGetter(ChorusFlowerBehavior::getMaxAge)).apply(instance, ChorusPlantBehavior::new));
+            Codec.intRange(1, 256).fieldOf("search_range").forGetter(ChorusPlantBehavior::getSearchRange)
+    ).apply(instance, ChorusPlantBehavior::new));
 
     private final HolderSet<Block> plant;
     private final HolderSet<Block> flower;
     private final int searchRange;
 
-    public ChorusPlantBehavior(HolderSet<Block> plant, HolderSet<Block> flower, int searchRange, int maxAge) {
-        super(maxAge);
+    public ChorusPlantBehavior(HolderSet<Block> plant, HolderSet<Block> flower, int searchRange) {
         this.plant = plant;
         this.flower = flower;
         this.searchRange = searchRange;
@@ -68,6 +64,7 @@ public class ChorusPlantBehavior extends ChorusFlowerBehavior {
                 return true;
             }
         }
+
         return false;
     }
 

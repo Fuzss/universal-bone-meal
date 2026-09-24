@@ -1,6 +1,5 @@
 package fuzs.universalbonemeal.common.world.level.block.behavior;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
@@ -17,16 +16,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.StemBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public record FruitStemBehavior(HolderSet<Block> fruitSupportBlocks,
-                                int maxAge,
                                 IntProvider growthAttempts) implements BoneMealBehavior {
     public static final MapCodec<FruitStemBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                     RegistryCodecs.holderSet(Registries.BLOCK)
                             .fieldOf("fruit_support_blocks")
                             .forGetter(FruitStemBehavior::fruitSupportBlocks),
-                    Codec.intRange(1, BlockStateProperties.MAX_AGE_7).fieldOf("max_age").forGetter(FruitStemBehavior::maxAge),
                     IntProviders.codec(1, 64).fieldOf("growth_attempts").forGetter(FruitStemBehavior::growthAttempts))
             .apply(instance, FruitStemBehavior::new));
 
@@ -41,7 +37,7 @@ public record FruitStemBehavior(HolderSet<Block> fruitSupportBlocks,
     @Override
     public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, BonemealSource source) {
         // Let vanilla run if this is not the case.
-        if (!state.hasProperty(StemBlock.AGE) || state.getValue(StemBlock.AGE) < this.maxAge) {
+        if (!state.hasProperty(StemBlock.AGE) || state.getValue(StemBlock.AGE) < StemBlock.MAX_AGE) {
             return false;
         }
 

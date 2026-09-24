@@ -1,8 +1,6 @@
 package fuzs.universalbonemeal.common.world.level.block.behavior;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -10,23 +8,9 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.ChorusFlowerBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class ChorusFlowerBehavior implements BoneMealBehavior {
-    public static final MapCodec<ChorusFlowerBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.intRange(1, BlockStateProperties.MAX_AGE_5)
-                    .fieldOf("max_age")
-                    .forGetter(ChorusFlowerBehavior::getMaxAge)).apply(instance, ChorusFlowerBehavior::new));
-
-    private final int maxAge;
-
-    public ChorusFlowerBehavior(int maxAge) {
-        this.maxAge = maxAge;
-    }
-
-    public int getMaxAge() {
-        return this.maxAge;
-    }
+    public static final MapCodec<ChorusFlowerBehavior> CODEC = MapCodec.unit(ChorusFlowerBehavior::new);
 
     @Override
     public MapCodec<? extends BoneMealBehavior> codec() {
@@ -35,7 +19,8 @@ public class ChorusFlowerBehavior implements BoneMealBehavior {
 
     @Override
     public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, BonemealSource source) {
-        return state.hasProperty(ChorusFlowerBlock.AGE) && state.getValue(ChorusFlowerBlock.AGE) < this.maxAge;
+        return state.hasProperty(ChorusFlowerBlock.AGE)
+                && state.getValue(ChorusFlowerBlock.AGE) < ChorusFlowerBlock.DEAD_AGE;
     }
 
     @Override

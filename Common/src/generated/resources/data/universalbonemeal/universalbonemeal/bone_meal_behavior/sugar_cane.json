@@ -11,11 +11,6 @@
     "max_inclusive": 2,
     "min_inclusive": 1
   },
-  "can_grow_into": {
-    "type": "minecraft:matching_block_tag",
-    "tag": "minecraft:air"
-  },
-  "direction": "up",
   "max_height": {
     "type": "minecraft:uniform",
     "max_inclusive": 16,

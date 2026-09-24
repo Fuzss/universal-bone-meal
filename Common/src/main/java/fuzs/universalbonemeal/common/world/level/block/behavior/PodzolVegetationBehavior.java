@@ -59,13 +59,13 @@ public record PodzolVegetationBehavior(HolderSet<Block> groundBlocks,
                 }
             }
 
-            BlockState stateAtRandomPosition = level.getBlockState(randomPos);
-            if (this.bonemealableBlocks.contains(stateAtRandomPosition.typeHolder())
-                    && stateAtRandomPosition.getBlock() instanceof BonemealableBlock block && random.nextInt(10) == 0) {
-                block.performBonemeal(level, random, randomPos, stateAtRandomPosition, source);
+            BlockState randomState = level.getBlockState(randomPos);
+            if (this.bonemealableBlocks.contains(randomState.typeHolder())
+                    && randomState.getBlock() instanceof BonemealableBlock block && random.nextInt(10) == 0) {
+                block.performBonemeal(level, random, randomPos, randomState, source);
             }
 
-            if (stateAtRandomPosition.isAir() && random.nextInt(5) == 0 && level.isEmptyBlock(randomPos)
+            if (randomState.isAir() && random.nextInt(5) == 0 && level.isEmptyBlock(randomPos)
                     && randomPos.getY() > level.getMinY()) {
                 BlockState vegetationState = this.vegetation.value().getState(level, random, randomPos);
                 level.setBlock(randomPos, vegetationState, Block.UPDATE_CLIENTS);

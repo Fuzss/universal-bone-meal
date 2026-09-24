@@ -18,10 +18,6 @@ import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
-/**
- * Runs a vanilla coral feature (e.g. {@code minecraft:coral_tree} or {@code minecraft:coral_claw}), which is built
- * around the matching {@code minecraft:coral/<type>_block} feature.
- */
 public record CoralTreeBehavior(Holder<PlacedFeature> feature,
                                 HolderSet<Biome> biomes,
                                 float successChance) implements BoneMealBehavior {

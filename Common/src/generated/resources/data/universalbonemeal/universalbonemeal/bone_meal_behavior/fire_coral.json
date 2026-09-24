@@ -1,6 +1,6 @@
 {
   "type": "universalbonemeal:coral_tree",
   "biomes": "#minecraft:produces_corals_from_bonemeal",
-  "feature": "universalbonemeal:coral/fire",
+  "feature": "universalbonemeal:fire_coral",
   "success_chance": 0.4
 }
