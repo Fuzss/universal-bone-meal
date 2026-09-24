@@ -14,9 +14,12 @@ import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.util.valueproviders.WeightedListInt;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.NetherWartBlock;
 import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
@@ -83,11 +86,16 @@ public class BoneMealBehaviors {
                         UniformInt.of(12, 16)));
         context.register(VINE,
                 new GrowingPlantBehavior(Direction.DOWN,
-                        new NetherVinesIntProvider(32),
+                        new NetherVinesIntProvider(5),
                         BlockPredicate.ONLY_IN_AIR_PREDICATE,
                         Holder.direct(new CopySourceBlockStateProvider(Direction.UP)),
                         ConstantInt.of(128)));
-        context.register(NETHER_WART, new CropGrowthBehavior(UniformInt.of(0, 1)));
+        context.register(NETHER_WART,
+                new CropGrowthBehavior(NetherWartBlock.AGE,
+                        new WeightedListInt(WeightedList.<IntProvider>builder()
+                                .add(ConstantInt.of(0), 1)
+                                .add(ConstantInt.of(1), 3)
+                                .build())));
         context.register(MELON_STEM,
                 new FruitStemBehavior(context.lookup(Registries.BLOCK).getOrThrow(BlockTags.SUPPORTS_MELON_STEM_FRUIT),
                         UniformInt.of(2, 5)));

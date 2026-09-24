@@ -10,18 +10,7 @@ import fuzs.puzzleslib.common.api.init.v3.tags.TagFactory;
 import fuzs.universalbonemeal.common.UniversalBoneMeal;
 import fuzs.universalbonemeal.common.util.stateproviders.CopySourceBlockStateProvider;
 import fuzs.universalbonemeal.common.util.valueproviders.NetherVinesIntProvider;
-import fuzs.universalbonemeal.common.world.level.block.behavior.BoneMealBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.ChorusFlowerBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.ChorusPlantBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.CoralTreeBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.CropGrowthBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.DirtConversionBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.FruitStemBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.GrowingPlantBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.NeighborSpreadBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.PodzolVegetationBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.PopResourceBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.VegetationScatterBehavior;
+import fuzs.universalbonemeal.common.world.level.block.behavior.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -48,8 +37,8 @@ public class ModRegistry {
     public static final Codec<BoneMealBehavior> BONE_MEAL_BEHAVIOR_CODEC = BONE_MEAL_BEHAVIOR_TYPE_REGISTRY.byNameCodec()
             .dispatch(BoneMealBehavior::codec, Function.identity());
 
-    public static final ResourceKey<LootTable> SPORE_BLOSSOM_LOOT_TABLE = ResourceKey.create(Registries.LOOT_TABLE,
-            UniversalBoneMeal.id("spore_blossom"));
+    public static final ResourceKey<LootTable> SPORE_BLOSSOM_LOOT_TABLE = REGISTRIES.makeResourceKey(Registries.LOOT_TABLE,
+            "spore_blossom");
 
     public static final DataMapToken<Block, Holder<BoneMealBehavior>> BONE_MEAL_BEHAVIORS_DATA_MAP = DataMapRegistrar.register(
             UniversalBoneMeal.id("bone_meal_behaviors"),

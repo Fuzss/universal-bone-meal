@@ -6,7 +6,7 @@
   },
   "blocks_to_grow": {
     "type": "universalbonemeal:nether_vines",
-    "max_inclusive": 32
+    "max_inclusive": 5
   },
   "direction": "down",
   "max_height": 128
