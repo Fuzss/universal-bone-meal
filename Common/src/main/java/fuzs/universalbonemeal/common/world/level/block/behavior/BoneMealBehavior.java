@@ -18,11 +18,6 @@ public interface BoneMealBehavior extends BonemealableBlock {
     MapCodec<? extends BoneMealBehavior> codec();
 
     @Override
-    default boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, BonemealSource source) {
-        return true;
-    }
-
-    @Override
     default boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
         return true;
     }
