@@ -1,20 +1,21 @@
 package fuzs.universalbonemeal.common.init;
 
 import fuzs.universalbonemeal.common.UniversalBoneMeal;
+import fuzs.universalbonemeal.common.util.valueproviders.NetherVinesIntProvider;
 import fuzs.universalbonemeal.common.world.level.block.behavior.BoneMealBehavior;
 import fuzs.universalbonemeal.common.world.level.block.behavior.CactusBehavior;
 import fuzs.universalbonemeal.common.world.level.block.behavior.ChorusFlowerBehavior;
 import fuzs.universalbonemeal.common.world.level.block.behavior.ChorusPlantBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.CoralBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.DirtBehavior;
+import fuzs.universalbonemeal.common.world.level.block.behavior.CoralTreeBehavior;
+import fuzs.universalbonemeal.common.world.level.block.behavior.CropGrowthBehavior;
+import fuzs.universalbonemeal.common.world.level.block.behavior.DirtConversionBehavior;
 import fuzs.universalbonemeal.common.world.level.block.behavior.FruitStemBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.MyceliumBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.NetherWartBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.PodzolBehavior;
+import fuzs.universalbonemeal.common.world.level.block.behavior.GrowingPlantBehavior;
+import fuzs.universalbonemeal.common.world.level.block.behavior.HangingPlantBehavior;
+import fuzs.universalbonemeal.common.world.level.block.behavior.NeighborSpreadBehavior;
+import fuzs.universalbonemeal.common.world.level.block.behavior.PodzolVegetationBehavior;
 import fuzs.universalbonemeal.common.world.level.block.behavior.PopResourceBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.SimpleGrowingPlantBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.SimpleSpreadBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.VineBehavior;
+import fuzs.universalbonemeal.common.world.level.block.behavior.VegetationScatterBehavior;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -68,18 +69,18 @@ public class BoneMealBehaviors {
     }
 
     public static void bootstrap(BootstrapContext<BoneMealBehavior> context) {
-        context.register(CACTUS, new CactusBehavior(UniformInt.of(1, 2), CACTUS_FLOWER, 0.1F));
-        context.register(SUGAR_CANE, new SimpleGrowingPlantBehavior(UniformInt.of(1, 2)));
-        context.register(VINE, new VineBehavior());
-        context.register(NETHER_WART, new NetherWartBehavior(3));
+        context.register(CACTUS, new CactusBehavior(UniformInt.of(1, 2), UniformInt.of(12, 16), CACTUS_FLOWER, 0.1F));
+        context.register(SUGAR_CANE, new GrowingPlantBehavior(UniformInt.of(1, 2), UniformInt.of(12, 16)));
+        context.register(VINE, new HangingPlantBehavior(NetherVinesIntProvider.INSTANCE));
+        context.register(NETHER_WART, new CropGrowthBehavior(3));
         context.register(MELON_STEM, new FruitStemBehavior(context.lookup(Registries.BLOCK)
                 .getOrThrow(BlockTags.SUPPORTS_MELON_STEM_FRUIT)));
         context.register(PUMPKIN_STEM, new FruitStemBehavior(context.lookup(Registries.BLOCK)
                 .getOrThrow(BlockTags.SUPPORTS_PUMPKIN_STEM_FRUIT)));
-        context.register(LILY_PAD, new SimpleSpreadBehavior(4, 3));
-        context.register(DEAD_BUSH, new SimpleSpreadBehavior(4, 2));
-        context.register(SMALL_FLOWER, new SimpleSpreadBehavior(3, 1));
-        context.register(CORAL, new CoralBehavior(context.lookup(Registries.BLOCK)
+        context.register(LILY_PAD, new NeighborSpreadBehavior(4, 3));
+        context.register(DEAD_BUSH, new NeighborSpreadBehavior(4, 2));
+        context.register(SMALL_FLOWER, new NeighborSpreadBehavior(3, 1));
+        context.register(CORAL, new CoralTreeBehavior(context.lookup(Registries.BLOCK)
                 .getOrThrow(BlockTags.CORAL_BLOCKS),
                 context.lookup(Registries.BLOCK).getOrThrow(BlockTags.CORALS),
                 context.lookup(Registries.BLOCK).getOrThrow(BlockTags.WALL_CORALS),
@@ -88,10 +89,10 @@ public class BoneMealBehaviors {
         context.register(CHORUS_PLANT, new ChorusPlantBehavior(HolderSet.direct(Blocks.CHORUS_PLANT.builtInRegistryHolder()),
                 HolderSet.direct(Blocks.CHORUS_FLOWER.builtInRegistryHolder()),
                 128));
-        context.register(MYCELIUM, new MyceliumBehavior(MYCELIUM_VEGETATION, 3, 1));
-        context.register(DIRT, new DirtBehavior(HolderSet.direct(Blocks.GRASS_BLOCK.builtInRegistryHolder(),
-                Blocks.MYCELIUM.builtInRegistryHolder())));
-        context.register(PODZOL, new PodzolBehavior(HolderSet.direct(Blocks.PODZOL.builtInRegistryHolder()),
+        context.register(MYCELIUM, new VegetationScatterBehavior(MYCELIUM_VEGETATION, 3, 1));
+        context.register(DIRT, new DirtConversionBehavior(HolderSet.direct(Blocks.GRASS_BLOCK.builtInRegistryHolder(),
+                Blocks.MYCELIUM.builtInRegistryHolder()), 1));
+        context.register(PODZOL, new PodzolVegetationBehavior(HolderSet.direct(Blocks.PODZOL.builtInRegistryHolder()),
                 PODZOL_VEGETATION,
                 HolderSet.direct(Blocks.FERN.builtInRegistryHolder())));
         context.register(SPORE_BLOSSOM, new PopResourceBehavior(Direction.DOWN));

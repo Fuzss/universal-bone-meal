@@ -1,3 +1,6 @@
 {
-  "type": "universalbonemeal:hanging_plant"
+  "type": "universalbonemeal:hanging_plant",
+  "blocks_to_grow": {
+    "type": "universalbonemeal:nether_vines"
+  }
 }

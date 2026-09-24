@@ -8,20 +8,21 @@ import fuzs.puzzleslib.common.api.init.v3.registry.RegistryFactory;
 import fuzs.puzzleslib.common.api.init.v3.registry.RegistryManager;
 import fuzs.puzzleslib.common.api.init.v3.tags.TagFactory;
 import fuzs.universalbonemeal.common.UniversalBoneMeal;
+import fuzs.universalbonemeal.common.util.valueproviders.NetherVinesIntProvider;
 import fuzs.universalbonemeal.common.world.level.block.behavior.BoneMealBehavior;
 import fuzs.universalbonemeal.common.world.level.block.behavior.CactusBehavior;
 import fuzs.universalbonemeal.common.world.level.block.behavior.ChorusFlowerBehavior;
 import fuzs.universalbonemeal.common.world.level.block.behavior.ChorusPlantBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.CoralBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.DirtBehavior;
+import fuzs.universalbonemeal.common.world.level.block.behavior.CoralTreeBehavior;
+import fuzs.universalbonemeal.common.world.level.block.behavior.CropGrowthBehavior;
+import fuzs.universalbonemeal.common.world.level.block.behavior.DirtConversionBehavior;
 import fuzs.universalbonemeal.common.world.level.block.behavior.FruitStemBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.MyceliumBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.NetherWartBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.PodzolBehavior;
+import fuzs.universalbonemeal.common.world.level.block.behavior.GrowingPlantBehavior;
+import fuzs.universalbonemeal.common.world.level.block.behavior.HangingPlantBehavior;
+import fuzs.universalbonemeal.common.world.level.block.behavior.NeighborSpreadBehavior;
+import fuzs.universalbonemeal.common.world.level.block.behavior.PodzolVegetationBehavior;
 import fuzs.universalbonemeal.common.world.level.block.behavior.PopResourceBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.SimpleGrowingPlantBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.SimpleSpreadBehavior;
-import fuzs.universalbonemeal.common.world.level.block.behavior.VineBehavior;
+import fuzs.universalbonemeal.common.world.level.block.behavior.VegetationScatterBehavior;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -55,18 +56,21 @@ public class ModRegistry {
             true);
 
     public static void bootstrap() {
-        registerBoneMealBehaviorType("growing_plant", SimpleGrowingPlantBehavior.CODEC);
-        registerBoneMealBehaviorType("hanging_plant", VineBehavior.CODEC);
+        REGISTRIES.register(Registries.INT_PROVIDER_TYPE,
+                "nether_vines",
+                () -> NetherVinesIntProvider.CODEC);
+        registerBoneMealBehaviorType("growing_plant", GrowingPlantBehavior.CODEC);
+        registerBoneMealBehaviorType("hanging_plant", HangingPlantBehavior.CODEC);
         registerBoneMealBehaviorType("cactus", CactusBehavior.CODEC);
-        registerBoneMealBehaviorType("crop_growth", NetherWartBehavior.CODEC);
+        registerBoneMealBehaviorType("crop_growth", CropGrowthBehavior.CODEC);
         registerBoneMealBehaviorType("fruit_stem", FruitStemBehavior.CODEC);
-        registerBoneMealBehaviorType("neighbor_spread", SimpleSpreadBehavior.CODEC);
-        registerBoneMealBehaviorType("vegetation_scatter", MyceliumBehavior.CODEC);
-        registerBoneMealBehaviorType("coral_tree", CoralBehavior.CODEC);
+        registerBoneMealBehaviorType("neighbor_spread", NeighborSpreadBehavior.CODEC);
+        registerBoneMealBehaviorType("vegetation_scatter", VegetationScatterBehavior.CODEC);
+        registerBoneMealBehaviorType("coral_tree", CoralTreeBehavior.CODEC);
         registerBoneMealBehaviorType("chorus_flower", ChorusFlowerBehavior.CODEC);
         registerBoneMealBehaviorType("chorus_plant", ChorusPlantBehavior.CODEC);
-        registerBoneMealBehaviorType("dirt_conversion", DirtBehavior.CODEC);
-        registerBoneMealBehaviorType("podzol_vegetation", PodzolBehavior.CODEC);
+        registerBoneMealBehaviorType("dirt_conversion", DirtConversionBehavior.CODEC);
+        registerBoneMealBehaviorType("podzol_vegetation", PodzolVegetationBehavior.CODEC);
         registerBoneMealBehaviorType("pop_resource", PopResourceBehavior.CODEC);
     }
 

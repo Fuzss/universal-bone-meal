@@ -1,71 +1,80 @@
 package fuzs.universalbonemeal.common.world.level.block.behavior;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.IntProviders;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.MustBeInvokedByOverriders;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.levelgen.WorldgenRandom;
 
-public abstract class GrowingPlantBehavior implements BoneMealBehavior {
+public class GrowingPlantBehavior extends AbstractGrowingPlantBehavior {
+    public static final MapCodec<GrowingPlantBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                    IntProviders.codec(0, 128)
+                            .fieldOf("blocks_to_grow")
+                            .forGetter(AbstractGrowingPlantBehavior::getBlocksToGrow),
+                    IntProviders.codec(1, 128).fieldOf("max_height").forGetter(GrowingPlantBehavior::getMaxHeight))
+            .apply(instance, GrowingPlantBehavior::new));
 
-    @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos blockPos, BlockState blockState, BonemealSource bonemealSource) {
-        BlockPos headPos = this.getHeadPos(level, blockPos, blockState.getBlock());
-        return this.canGrowInto(level.getBlockState(headPos.relative(this.getGrowthDirection())));
+    private final IntProvider maxHeight;
+
+    public GrowingPlantBehavior(IntProvider blocksToGrow, IntProvider maxHeight) {
+        super(blocksToGrow);
+        this.maxHeight = maxHeight;
+    }
+
+    public IntProvider getMaxHeight() {
+        return this.maxHeight;
     }
 
     @Override
-    public boolean isBonemealSuccess(Level level, RandomSource randomSource, BlockPos blockPos, BlockState blockState, BonemealSource bonemealSource) {
-        return true;
+    public MapCodec<? extends BoneMealBehavior> codec() {
+        return CODEC;
     }
 
     @Override
-    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos sourcePos, BlockState sourceState, BonemealSource bonemealSource) {
-        BlockPos topPos = this.getHeadPos(level, sourcePos, sourceState.getBlock());
-        this.performBonemealTop(level, random, topPos, sourceState);
-    }
-
-    @MustBeInvokedByOverriders
-    protected void performBonemealTop(ServerLevel serverLevel, RandomSource randomSource, BlockPos topPos, BlockState sourceState) {
-        BlockPos blockPos = topPos.relative(this.getGrowthDirection());
-        int j = this.getBlocksToGrowWhenBonemealed(randomSource);
-        for (int k = 0; k < j && this.canGrowInto(serverLevel.getBlockState(blockPos)); ++k) {
-            BlockState blockState = this.getGrownBlockState(sourceState, randomSource, serverLevel, blockPos);
-            serverLevel.setBlockAndUpdate(blockPos, blockState);
-            // stop if we grew a block that is not the default plant block, like a cactus flower on a cactus
-            if (!blockState.is(sourceState.getBlock())) {
-                break;
-            }
-
-            blockPos = blockPos.relative(this.getGrowthDirection());
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, BonemealSource source) {
+        if (this.getConnectedPlantHeight(level, pos, state.getBlock()) < this.getMaxHeightAtPosition(pos)) {
+            return super.isValidBonemealTarget(level, pos, state, source);
+        } else {
+            return false;
         }
     }
 
-    private BlockPos getHeadPos(BlockGetter level, BlockPos blockPos, Block block) {
-        return getTopConnectedBlock(level, blockPos, block, this.getGrowthDirection());
+    private int getConnectedPlantHeight(BlockGetter level, BlockPos pos, Block block) {
+        BlockPos topPos = getTopConnectedBlock(level, pos, block, this.getGrowthDirection());
+        BlockPos bottomPos = getTopConnectedBlock(level, pos, block, this.getGrowthDirection().getOpposite());
+        return Math.abs(topPos.getY() - bottomPos.getY());
     }
 
-    public static BlockPos getTopConnectedBlock(BlockGetter level, BlockPos pos, Block block, Direction direction) {
-        BlockPos.MutableBlockPos mutable = pos.mutable();
-        BlockState blockstate;
-        do {
-            mutable.move(direction);
-            blockstate = level.getBlockState(mutable);
-        } while (blockstate.is(block));
-        return mutable.move(direction.getOpposite());
+    private int getMaxHeightAtPosition(BlockPos pos) {
+        // always use 0 seed, as client does not have access to world seed
+        return this.maxHeight.sample(WorldgenRandom.seedSlimeChunk(pos.getX(), pos.getZ(), 0, 987234911L));
     }
 
-    protected abstract Direction getGrowthDirection();
+    @Override
+    protected void performBonemealTop(ServerLevel level, RandomSource random, BlockPos topPos, BlockState sourceState) {
+        super.performBonemealTop(level, random, topPos, sourceState);
+        BlockState state = level.getBlockState(topPos).setValue(this.getAgeProperty(), 0);
+        level.setBlockAndUpdate(topPos, state);
+        state.updateNeighbourShapes(level, topPos, Block.UPDATE_ALL);
+    }
 
-    protected abstract int getBlocksToGrowWhenBonemealed(RandomSource random);
+    @Override
+    protected Direction getGrowthDirection() {
+        return Direction.UP;
+    }
 
-    protected abstract boolean canGrowInto(BlockState state);
-
-    protected abstract BlockState getGrownBlockState(BlockState sourceState, RandomSource randomSource, ServerLevel level, BlockPos pos);
+    protected IntegerProperty getAgeProperty() {
+        return BlockStateProperties.AGE_15;
+    }
 }

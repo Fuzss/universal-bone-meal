@@ -62,24 +62,19 @@ public class ChorusPlantBehavior extends ChorusFlowerBehavior {
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState blockState, BonemealSource bonemealSource) {
-        for (BlockPos flowerPosition : this.getFlowerPositions(level, pos)) {
-            if (super.isValidBonemealTarget(level,
-                    flowerPosition,
-                    level.getBlockState(flowerPosition),
-                    bonemealSource)) return true;
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, BonemealSource source) {
+        for (BlockPos flowerPos : this.getFlowerPositions(level, pos)) {
+            if (super.isValidBonemealTarget(level, flowerPos, level.getBlockState(flowerPos), source)) {
+                return true;
+            }
         }
         return false;
     }
 
     @Override
-    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState blockState, BonemealSource bonemealSource) {
-        for (BlockPos flowerPosition : this.getFlowerPositions(level, pos)) {
-            super.performBonemeal(level,
-                    random,
-                    flowerPosition,
-                    level.getBlockState(flowerPosition),
-                    bonemealSource);
+    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
+        for (BlockPos flowerPos : this.getFlowerPositions(level, pos)) {
+            super.performBonemeal(level, random, flowerPos, level.getBlockState(flowerPos), source);
         }
     }
 
@@ -95,28 +90,26 @@ public class ChorusPlantBehavior extends ChorusFlowerBehavior {
         return targets;
     }
 
-    public static void getTopConnectedBlock(BlockGetter level, BlockPos.MutableBlockPos sourcePosition, HolderSet<Block> sourceBlocks, HolderSet<Block> targetBlocks, Collection<BlockPos> targets, Direction sourceDirection, int depth) {
-        BlockState sourceState = level.getBlockState(sourcePosition);
+    public static void getTopConnectedBlock(BlockGetter level, BlockPos.MutableBlockPos sourcePos, HolderSet<Block> sourceBlocks, HolderSet<Block> targetBlocks, Collection<BlockPos> targets, Direction sourceDirection, int depth) {
+        BlockState sourceState = level.getBlockState(sourcePos);
         if (depth <= 0 || !sourceBlocks.contains(sourceState.typeHolder())) {
             if (targetBlocks.contains(sourceState.typeHolder())) {
-                targets.add(sourcePosition.immutable());
+                targets.add(sourcePos.immutable());
             }
             return;
         }
         for (Map.Entry<Direction, BooleanProperty> entry : PipeBlock.PROPERTY_BY_DIRECTION.entrySet()) {
             Direction direction = entry.getKey();
-            if (direction != Direction.DOWN && direction != sourceDirection) {
-                if (sourceState.getValue(entry.getValue())) {
-                    sourcePosition.move(direction);
-                    getTopConnectedBlock(level,
-                            sourcePosition,
-                            sourceBlocks,
-                            targetBlocks,
-                            targets,
-                            direction.getOpposite(),
-                            depth - 1);
-                    sourcePosition.move(direction.getOpposite());
-                }
+            if (direction != Direction.DOWN && direction != sourceDirection && sourceState.getValue(entry.getValue())) {
+                sourcePos.move(direction);
+                getTopConnectedBlock(level,
+                        sourcePos,
+                        sourceBlocks,
+                        targetBlocks,
+                        targets,
+                        direction.getOpposite(),
+                        depth - 1);
+                sourcePos.move(direction.getOpposite());
             }
         }
     }

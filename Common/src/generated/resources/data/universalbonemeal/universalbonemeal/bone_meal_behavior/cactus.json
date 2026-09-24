@@ -8,5 +8,10 @@
   "flower": {
     "id": "minecraft:cactus_flower"
   },
-  "flower_chance": 0.1
+  "flower_chance": 0.1,
+  "max_height": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 16,
+    "min_inclusive": 12
+  }
 }

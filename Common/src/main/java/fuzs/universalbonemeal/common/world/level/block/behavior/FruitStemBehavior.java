@@ -9,7 +9,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealSource;
@@ -32,32 +31,26 @@ public record FruitStemBehavior(HolderSet<Block> fruitSupportBlocks) implements 
      * @see StemBlock#randomTick(BlockState, ServerLevel, BlockPos, RandomSource)
      */
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, BonemealSource bonemealSource) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, BonemealSource source) {
         // let vanilla run otherwise
         if (!state.hasProperty(StemBlock.AGE) || state.getValue(StemBlock.AGE) != 7) {
             return false;
-        } else {
-            // no need to check if attached to a fruit already, since attached stems are completely different block for some reason
-            for (Direction direction : Direction.Plane.HORIZONTAL) {
-                BlockPos fruitBlockPos = pos.relative(direction);
-                BlockState soilBlockState = level.getBlockState(fruitBlockPos.below());
-                if (level.getBlockState(fruitBlockPos)
-                        .isAir() && this.fruitSupportBlocks.contains(soilBlockState.typeHolder())) {
-                    return true;
-                }
-            }
-
-            return false;
         }
+
+        // no need to check if attached to a fruit already, since attached stems are completely different block for some reason
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+            BlockPos fruitPos = pos.relative(direction);
+            BlockState soilState = level.getBlockState(fruitPos.below());
+            if (level.getBlockState(fruitPos).isAir() && this.fruitSupportBlocks.contains(soilState.typeHolder())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
-    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state, BonemealSource bonemealSource) {
-        return true;
-    }
-
-    @Override
-    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state, BonemealSource bonemealSource) {
+    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
         // growing fruit from stem blocks takes forever, let's speed it up a little
         while (level.getBlockState(pos) == state && random.nextInt(3) != 0) {
             state.randomTick(level, pos, random);

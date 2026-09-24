@@ -1,5 +1,6 @@
 {
   "type": "universalbonemeal:dirt_conversion",
+  "search_range": 1,
   "spread_sources": [
     "minecraft:grass_block",
     "minecraft:mycelium"

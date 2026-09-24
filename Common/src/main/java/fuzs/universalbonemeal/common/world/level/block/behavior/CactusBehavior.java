@@ -12,11 +12,12 @@ import net.minecraft.util.valueproviders.IntProviders;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
-public class CactusBehavior extends SimpleGrowingPlantBehavior {
+public class CactusBehavior extends GrowingPlantBehavior {
     public static final MapCodec<CactusBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                     IntProviders.codec(0, 128)
                             .fieldOf("blocks_to_grow")
-                            .forGetter(SimpleGrowingPlantBehavior::getBlocksToGrow),
+                            .forGetter(AbstractGrowingPlantBehavior::getBlocksToGrow),
+                    IntProviders.codec(1, 128).fieldOf("max_height").forGetter(GrowingPlantBehavior::getMaxHeight),
                     BlockStateProvider.CODEC.fieldOf("flower").forGetter(CactusBehavior::getFlower),
                     Codec.floatRange(0.0F, 1.0F).fieldOf("flower_chance").forGetter(CactusBehavior::getFlowerChance))
             .apply(instance, CactusBehavior::new));
@@ -24,8 +25,8 @@ public class CactusBehavior extends SimpleGrowingPlantBehavior {
     private final Holder<BlockStateProvider> flower;
     private final float flowerChance;
 
-    public CactusBehavior(IntProvider blocksToGrow, Holder<BlockStateProvider> flower, float flowerChance) {
-        super(blocksToGrow);
+    public CactusBehavior(IntProvider blocksToGrow, IntProvider maxHeight, Holder<BlockStateProvider> flower, float flowerChance) {
+        super(blocksToGrow, maxHeight);
         this.flower = flower;
         this.flowerChance = flowerChance;
     }
@@ -44,11 +45,8 @@ public class CactusBehavior extends SimpleGrowingPlantBehavior {
     }
 
     @Override
-    protected BlockState getGrownBlockState(BlockState sourceState, RandomSource randomSource, ServerLevel level, BlockPos pos) {
-        return randomSource.nextDouble() < this.flowerChance ? this.flower.value()
-                .getState(level, randomSource, pos) : super.getGrownBlockState(sourceState,
-                randomSource,
-                level,
-                pos);
+    protected BlockState getGrownBlockState(BlockState sourceState, RandomSource random, ServerLevel level, BlockPos pos) {
+        return random.nextDouble() < this.flowerChance ? this.flower.value()
+                .getState(level, random, pos) : super.getGrownBlockState(sourceState, random, level, pos);
     }
 }

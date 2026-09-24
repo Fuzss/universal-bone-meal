@@ -4,5 +4,10 @@
     "type": "minecraft:uniform",
     "max_inclusive": 2,
     "min_inclusive": 1
+  },
+  "max_height": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 16,
+    "min_inclusive": 12
   }
 }
