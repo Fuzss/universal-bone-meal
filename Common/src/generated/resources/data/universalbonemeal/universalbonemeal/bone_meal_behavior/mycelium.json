@@ -1,0 +1,18 @@
+{
+  "type": "universalbonemeal:vegetation_scatter",
+  "spread_height": 1,
+  "spread_width": 3,
+  "vegetation": {
+    "type": "minecraft:weighted",
+    "entries": [
+      {
+        "data": "minecraft:red_mushroom",
+        "weight": 1
+      },
+      {
+        "data": "minecraft:brown_mushroom",
+        "weight": 1
+      }
+    ]
+  }
+}

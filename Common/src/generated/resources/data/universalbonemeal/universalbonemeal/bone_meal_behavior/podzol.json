@@ -1,0 +1,49 @@
+{
+  "type": "universalbonemeal:podzol_vegetation",
+  "bonemealable_blocks": "minecraft:fern",
+  "ground_blocks": "minecraft:podzol",
+  "vegetation": {
+    "type": "minecraft:weighted",
+    "entries": [
+      {
+        "data": {
+          "id": "minecraft:sweet_berry_bush",
+          "properties": {
+            "age": "3"
+          }
+        },
+        "weight": 2
+      },
+      {
+        "data": {
+          "id": "minecraft:sweet_berry_bush",
+          "properties": {
+            "age": "2"
+          }
+        },
+        "weight": 4
+      },
+      {
+        "data": {
+          "id": "minecraft:sweet_berry_bush",
+          "properties": {
+            "age": "1"
+          }
+        },
+        "weight": 8
+      },
+      {
+        "data": "minecraft:sweet_berry_bush",
+        "weight": 12
+      },
+      {
+        "data": "minecraft:fern",
+        "weight": 120
+      },
+      {
+        "data": "minecraft:dead_bush",
+        "weight": 1
+      }
+    ]
+  }
+}

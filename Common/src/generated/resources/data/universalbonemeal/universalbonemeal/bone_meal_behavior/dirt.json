@@ -1,0 +1,7 @@
+{
+  "type": "universalbonemeal:dirt_conversion",
+  "spread_sources": [
+    "minecraft:grass_block",
+    "minecraft:mycelium"
+  ]
+}

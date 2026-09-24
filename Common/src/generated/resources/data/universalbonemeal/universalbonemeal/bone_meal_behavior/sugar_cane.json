@@ -1,0 +1,8 @@
+{
+  "type": "universalbonemeal:growing_plant",
+  "blocks_to_grow": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 2,
+    "min_inclusive": 1
+  }
+}

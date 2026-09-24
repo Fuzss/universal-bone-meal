@@ -1,0 +1,12 @@
+{
+  "type": "universalbonemeal:cactus",
+  "blocks_to_grow": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 2,
+    "min_inclusive": 1
+  },
+  "flower": {
+    "id": "minecraft:cactus_flower"
+  },
+  "flower_chance": 0.1
+}
