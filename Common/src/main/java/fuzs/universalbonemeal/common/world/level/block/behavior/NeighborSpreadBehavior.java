@@ -4,15 +4,17 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
-public record NeighborSpreadBehavior(int spreadWidth, int mostSuccesses) implements BoneMealBehavior {
-    public static final MapCodec<NeighborSpreadBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+public record NeighborSpreadBehavior(Holder<BlockStateProvider> vegetation, int spreadWidth, int mostSuccesses) implements BoneMealBehavior {
+    public static final MapCodec<NeighborSpreadBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(BlockStateProvider.CODEC.fieldOf("vegetation").forGetter(NeighborSpreadBehavior::vegetation),
                     Codec.intRange(1, 16).fieldOf("spread_width").forGetter(NeighborSpreadBehavior::spreadWidth),
                     Codec.intRange(1, 16).fieldOf("most_successes").forGetter(NeighborSpreadBehavior::mostSuccesses))
             .apply(instance, NeighborSpreadBehavior::new));
@@ -30,7 +32,7 @@ public record NeighborSpreadBehavior(int spreadWidth, int mostSuccesses) impleme
     @Override
     public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
         int successes = 0;
-        BlockState blockState = state.getBlock().defaultBlockState();
+        BlockState blockState = this.vegetation.value().getState(level, random, pos);
         label:
         for (int i = (this.spreadWidth + 1) * 16 - 1; i >= 0; i--) {
             BlockPos randomPos = pos;

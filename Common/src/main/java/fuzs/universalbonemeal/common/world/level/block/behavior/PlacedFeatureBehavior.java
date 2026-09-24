@@ -18,19 +18,19 @@ import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
-public record CoralTreeBehavior(ResourceKey<PlacedFeature> feature,
-                                HolderSet<Biome> biomes,
-                                float successChance) implements BoneMealBehavior {
-    public static final MapCodec<CoralTreeBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+public record PlacedFeatureBehavior(ResourceKey<PlacedFeature> feature,
+                                    HolderSet<Biome> biomes,
+                                    float successChance) implements BoneMealBehavior {
+    public static final MapCodec<PlacedFeatureBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                     ResourceKey.codec(Registries.PLACED_FEATURE)
                             .fieldOf("feature")
-                            .forGetter(CoralTreeBehavior::feature),
-                    RegistryCodecs.holderSet(Registries.BIOME).fieldOf("biomes").forGetter(CoralTreeBehavior::biomes),
-                    Codec.floatRange(0.0F, 1.0F).fieldOf("success_chance").forGetter(CoralTreeBehavior::successChance))
-            .apply(instance, CoralTreeBehavior::new));
+                            .forGetter(PlacedFeatureBehavior::feature),
+                    RegistryCodecs.holderSet(Registries.BIOME).fieldOf("biomes").forGetter(PlacedFeatureBehavior::biomes),
+                    Codec.floatRange(0.0F, 1.0F).fieldOf("success_chance").forGetter(PlacedFeatureBehavior::successChance))
+            .apply(instance, PlacedFeatureBehavior::new));
 
     @Override
-    public MapCodec<CoralTreeBehavior> codec() {
+    public MapCodec<PlacedFeatureBehavior> codec() {
         return CODEC;
     }
 

@@ -9,7 +9,7 @@ import fuzs.puzzleslib.common.api.init.v3.registry.RegistryManager;
 import fuzs.puzzleslib.common.api.init.v3.tags.TagFactory;
 import fuzs.universalbonemeal.common.UniversalBoneMeal;
 import fuzs.universalbonemeal.common.util.stateproviders.CopySourceBlockStateProvider;
-import fuzs.universalbonemeal.common.util.valueproviders.NetherVinesIntProvider;
+import fuzs.universalbonemeal.common.util.valueproviders.VinesIntProvider;
 import fuzs.universalbonemeal.common.world.level.block.behavior.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -48,7 +48,7 @@ public class ModRegistry {
             true);
 
     public static void bootstrap() {
-        REGISTRIES.register(Registries.INT_PROVIDER_TYPE, "nether_vines", () -> NetherVinesIntProvider.CODEC);
+        REGISTRIES.register(Registries.INT_PROVIDER_TYPE, "vines", () -> VinesIntProvider.CODEC);
         REGISTRIES.register(Registries.BLOCK_STATE_PROVIDER_TYPE,
                 "copy_source",
                 () -> CopySourceBlockStateProvider.CODEC);
@@ -57,11 +57,11 @@ public class ModRegistry {
         registerBoneMealBehaviorType("fruit_stem", FruitStemBehavior.CODEC);
         registerBoneMealBehaviorType("neighbor_spread", NeighborSpreadBehavior.CODEC);
         registerBoneMealBehaviorType("vegetation_scatter", VegetationScatterBehavior.CODEC);
-        registerBoneMealBehaviorType("coral_tree", CoralTreeBehavior.CODEC);
+        registerBoneMealBehaviorType("placed_feature", PlacedFeatureBehavior.CODEC);
         registerBoneMealBehaviorType("chorus_flower", ChorusFlowerBehavior.CODEC);
         registerBoneMealBehaviorType("chorus_plant", ChorusPlantBehavior.CODEC);
-        registerBoneMealBehaviorType("dirt_conversion", DirtConversionBehavior.CODEC);
-        registerBoneMealBehaviorType("podzol_vegetation", PodzolVegetationBehavior.CODEC);
+        registerBoneMealBehaviorType("neighbor_conversion", NeighborConversionBehavior.CODEC);
+        registerBoneMealBehaviorType("vegetation_spread", VegetationSpreadBehavior.CODEC);
         registerBoneMealBehaviorType("pop_resource", PopResourceBehavior.CODEC);
     }
 

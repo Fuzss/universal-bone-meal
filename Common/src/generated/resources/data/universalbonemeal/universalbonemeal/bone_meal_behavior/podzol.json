@@ -1,5 +1,5 @@
 {
-  "type": "universalbonemeal:podzol_vegetation",
+  "type": "universalbonemeal:vegetation_spread",
   "attempts": 128,
   "attempts_per_step": 16,
   "bonemealable_blocks": "minecraft:fern",

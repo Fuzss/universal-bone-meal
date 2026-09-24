@@ -25,10 +25,10 @@ import java.util.Set;
 
 public class ChorusPlantBehavior extends ChorusFlowerBehavior {
     public static final MapCodec<ChorusPlantBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            RegistryCodecs.holderSet(Registries.BLOCK).fieldOf("plant").forGetter(ChorusPlantBehavior::getPlant),
-            RegistryCodecs.holderSet(Registries.BLOCK).fieldOf("flower").forGetter(ChorusPlantBehavior::getFlower),
-            Codec.intRange(1, 256).fieldOf("search_range").forGetter(ChorusPlantBehavior::getSearchRange)
-    ).apply(instance, ChorusPlantBehavior::new));
+                    RegistryCodecs.holderSet(Registries.BLOCK).fieldOf("plant").forGetter(ChorusPlantBehavior::getPlant),
+                    RegistryCodecs.holderSet(Registries.BLOCK).fieldOf("flower").forGetter(ChorusPlantBehavior::getFlower),
+                    Codec.intRange(1, 256).fieldOf("search_range").forGetter(ChorusPlantBehavior::getSearchRange))
+            .apply(instance, ChorusPlantBehavior::new));
 
     private final HolderSet<Block> plant;
     private final HolderSet<Block> flower;
@@ -87,7 +87,7 @@ public class ChorusPlantBehavior extends ChorusFlowerBehavior {
         return targets;
     }
 
-    public static void getTopConnectedBlock(BlockGetter level, BlockPos.MutableBlockPos sourcePos, HolderSet<Block> sourceBlocks, HolderSet<Block> targetBlocks, Collection<BlockPos> targets, Direction sourceDirection, int depth) {
+    private static void getTopConnectedBlock(BlockGetter level, BlockPos.MutableBlockPos sourcePos, HolderSet<Block> sourceBlocks, HolderSet<Block> targetBlocks, Collection<BlockPos> targets, Direction sourceDirection, int depth) {
         BlockState sourceState = level.getBlockState(sourcePos);
         if (depth <= 0 || !sourceBlocks.contains(sourceState.typeHolder())) {
             if (targetBlocks.contains(sourceState.typeHolder())) {

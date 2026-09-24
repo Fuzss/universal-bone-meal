@@ -17,25 +17,25 @@ import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
-public record PodzolVegetationBehavior(HolderSet<Block> groundBlocks,
+public record VegetationSpreadBehavior(HolderSet<Block> groundBlocks,
                                        Holder<BlockStateProvider> vegetation,
                                        HolderSet<Block> bonemealableBlocks,
                                        int attempts,
                                        int attemptsPerStep) implements BoneMealBehavior {
-    public static final MapCodec<PodzolVegetationBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+    public static final MapCodec<VegetationSpreadBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                     RegistryCodecs.holderSet(Registries.BLOCK)
                             .fieldOf("ground_blocks")
-                            .forGetter(PodzolVegetationBehavior::groundBlocks),
-                    BlockStateProvider.CODEC.fieldOf("vegetation").forGetter(PodzolVegetationBehavior::vegetation),
+                            .forGetter(VegetationSpreadBehavior::groundBlocks),
+                    BlockStateProvider.CODEC.fieldOf("vegetation").forGetter(VegetationSpreadBehavior::vegetation),
                     RegistryCodecs.holderSet(Registries.BLOCK)
                             .fieldOf("bonemealable_blocks")
-                            .forGetter(PodzolVegetationBehavior::bonemealableBlocks),
-                    Codec.intRange(1, 1024).fieldOf("attempts").forGetter(PodzolVegetationBehavior::attempts),
-                    Codec.intRange(1, 128).fieldOf("attempts_per_step").forGetter(PodzolVegetationBehavior::attemptsPerStep))
-            .apply(instance, PodzolVegetationBehavior::new));
+                            .forGetter(VegetationSpreadBehavior::bonemealableBlocks),
+                    Codec.intRange(1, 1024).fieldOf("attempts").forGetter(VegetationSpreadBehavior::attempts),
+                    Codec.intRange(1, 128).fieldOf("attempts_per_step").forGetter(VegetationSpreadBehavior::attemptsPerStep))
+            .apply(instance, VegetationSpreadBehavior::new));
 
     @Override
-    public MapCodec<PodzolVegetationBehavior> codec() {
+    public MapCodec<VegetationSpreadBehavior> codec() {
         return CODEC;
     }
 

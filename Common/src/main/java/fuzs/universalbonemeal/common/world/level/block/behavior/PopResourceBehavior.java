@@ -27,6 +27,10 @@ public record PopResourceBehavior(ResourceKey<LootTable> loot,
                     Direction.CODEC.optionalFieldOf("direction").forGetter(PopResourceBehavior::direction))
             .apply(instance, PopResourceBehavior::new));
 
+    public PopResourceBehavior(ResourceKey<LootTable> loot, BlockTransformer.DropStrategy dropStrategy) {
+        this(loot, dropStrategy, Optional.empty());
+    }
+
     @Override
     public MapCodec<PopResourceBehavior> codec() {
         return CODEC;

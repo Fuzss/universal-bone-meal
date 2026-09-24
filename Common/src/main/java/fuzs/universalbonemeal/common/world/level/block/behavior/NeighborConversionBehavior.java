@@ -19,19 +19,19 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.List;
 import java.util.stream.Stream;
 
-public record DirtConversionBehavior(HolderSet<Block> spreadSources,
-                                     int spreadWidth,
-                                     int spreadHeight) implements BoneMealBehavior {
-    public static final MapCodec<DirtConversionBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+public record NeighborConversionBehavior(HolderSet<Block> spreadSources,
+                                         int spreadWidth,
+                                         int spreadHeight) implements BoneMealBehavior {
+    public static final MapCodec<NeighborConversionBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                     RegistryCodecs.holderSet(Registries.BLOCK)
                             .fieldOf("spread_sources")
-                            .forGetter(DirtConversionBehavior::spreadSources),
-                    Codec.intRange(1, 16).fieldOf("spread_width").forGetter(DirtConversionBehavior::spreadWidth),
-                    Codec.intRange(0, 16).fieldOf("spread_height").forGetter(DirtConversionBehavior::spreadHeight))
-            .apply(instance, DirtConversionBehavior::new));
+                            .forGetter(NeighborConversionBehavior::spreadSources),
+                    Codec.intRange(1, 16).fieldOf("spread_width").forGetter(NeighborConversionBehavior::spreadWidth),
+                    Codec.intRange(0, 16).fieldOf("spread_height").forGetter(NeighborConversionBehavior::spreadHeight))
+            .apply(instance, NeighborConversionBehavior::new));
 
     @Override
-    public MapCodec<DirtConversionBehavior> codec() {
+    public MapCodec<NeighborConversionBehavior> codec() {
         return CODEC;
     }
 

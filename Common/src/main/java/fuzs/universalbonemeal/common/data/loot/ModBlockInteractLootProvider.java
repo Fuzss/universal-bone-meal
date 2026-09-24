@@ -9,9 +9,9 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
-public class ModLootProvider extends AbstractLootSubProvider {
+public class ModBlockInteractLootProvider extends AbstractLootSubProvider {
 
-    public ModLootProvider(LootTableSubProvider.Context output) {
+    public ModBlockInteractLootProvider(LootTableSubProvider.Context output) {
         super(output);
     }
 

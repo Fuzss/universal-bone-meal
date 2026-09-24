@@ -8,14 +8,13 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.NetherVines;
 
 /**
- * An {@link IntProvider} that reproduces the decreasing probability distribution vanilla uses when bone mealing nether
- * vines, capped at {@link #maxInclusive}.
+ * @see NetherVines#getBlocksToGrowWhenBonemealed(RandomSource)
  */
-public record NetherVinesIntProvider(int maxInclusive) implements IntProvider {
-    public static final MapCodec<NetherVinesIntProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.intRange(1, 128)
-                    .optionalFieldOf("max_inclusive", 128)
-                    .forGetter(NetherVinesIntProvider::maxInclusive)).apply(instance, NetherVinesIntProvider::new));
+public record VinesIntProvider(int maxInclusive) implements IntProvider {
+    public static final MapCodec<VinesIntProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(Codec.intRange(
+                    1,
+                    128).optionalFieldOf("max_inclusive", 128).forGetter(VinesIntProvider::maxInclusive))
+            .apply(instance, VinesIntProvider::new));
 
     @Override
     public int sample(RandomSource random) {
@@ -34,7 +33,7 @@ public record NetherVinesIntProvider(int maxInclusive) implements IntProvider {
     }
 
     @Override
-    public MapCodec<NetherVinesIntProvider> codec() {
+    public MapCodec<VinesIntProvider> codec() {
         return CODEC;
     }
 }

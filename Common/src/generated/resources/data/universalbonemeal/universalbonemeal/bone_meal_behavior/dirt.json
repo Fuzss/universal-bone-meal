@@ -1,5 +1,5 @@
 {
-  "type": "universalbonemeal:dirt_conversion",
+  "type": "universalbonemeal:neighbor_conversion",
   "spread_height": 1,
   "spread_sources": [
     "minecraft:grass_block",

@@ -1,7 +1,7 @@
 package fuzs.universalbonemeal.common.init;
 
 import fuzs.universalbonemeal.common.util.stateproviders.CopySourceBlockStateProvider;
-import fuzs.universalbonemeal.common.util.valueproviders.NetherVinesIntProvider;
+import fuzs.universalbonemeal.common.util.valueproviders.VinesIntProvider;
 import fuzs.universalbonemeal.common.world.level.block.behavior.*;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -27,8 +27,6 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-
-import java.util.Optional;
 
 public class BoneMealBehaviors {
     public static final ResourceKey<BoneMealBehavior> CACTUS = register("cactus");
@@ -86,7 +84,7 @@ public class BoneMealBehaviors {
                         UniformInt.of(12, 16)));
         context.register(VINE,
                 new GrowingPlantBehavior(Direction.DOWN,
-                        new NetherVinesIntProvider(5),
+                        new VinesIntProvider(5),
                         BlockPredicate.ONLY_IN_AIR_PREDICATE,
                         Holder.direct(new CopySourceBlockStateProvider(Direction.UP)),
                         ConstantInt.of(128)));
@@ -102,16 +100,16 @@ public class BoneMealBehaviors {
         context.register(PUMPKIN_STEM,
                 new FruitStemBehavior(context.lookup(Registries.BLOCK)
                         .getOrThrow(BlockTags.SUPPORTS_PUMPKIN_STEM_FRUIT), UniformInt.of(2, 5)));
-        context.register(LILY_PAD, new NeighborSpreadBehavior(4, 3));
-        context.register(DEAD_BUSH, new NeighborSpreadBehavior(4, 2));
-        context.register(SMALL_FLOWER, new NeighborSpreadBehavior(3, 1));
+        context.register(LILY_PAD, new NeighborSpreadBehavior(Holder.direct(new SimpleStateProvider(Blocks.LILY_PAD.defaultBlockState())), 4, 3));
+        context.register(DEAD_BUSH, new NeighborSpreadBehavior(Holder.direct(new SimpleStateProvider(Blocks.SUGAR_CANE.defaultBlockState())),4, 2));
+        context.register(SMALL_FLOWER, new NeighborSpreadBehavior(Holder.direct(new SimpleStateProvider(Blocks.SUGAR_CANE.defaultBlockState())), 3, 1));
         HolderSet<Biome> coralBiomes = context.lookup(Registries.BIOME)
                 .getOrThrow(BiomeTags.PRODUCES_CORALS_FROM_BONEMEAL);
-        context.register(TUBE_CORAL, coralBehavior(coralBiomes, CoralPlacedFeatures.TUBE_CORAL));
-        context.register(BRAIN_CORAL, coralBehavior(coralBiomes, CoralPlacedFeatures.BRAIN_CORAL));
-        context.register(BUBBLE_CORAL, coralBehavior(coralBiomes, CoralPlacedFeatures.BUBBLE_CORAL));
-        context.register(FIRE_CORAL, coralBehavior(coralBiomes, CoralPlacedFeatures.FIRE_CORAL));
-        context.register(HORN_CORAL, coralBehavior(coralBiomes, CoralPlacedFeatures.HORN_CORAL));
+        context.register(TUBE_CORAL, placedFeatureBehavior(coralBiomes, CoralPlacedFeatures.TUBE_CORAL));
+        context.register(BRAIN_CORAL, placedFeatureBehavior(coralBiomes, CoralPlacedFeatures.BRAIN_CORAL));
+        context.register(BUBBLE_CORAL, placedFeatureBehavior(coralBiomes, CoralPlacedFeatures.BUBBLE_CORAL));
+        context.register(FIRE_CORAL, placedFeatureBehavior(coralBiomes, CoralPlacedFeatures.FIRE_CORAL));
+        context.register(HORN_CORAL, placedFeatureBehavior(coralBiomes, CoralPlacedFeatures.HORN_CORAL));
         context.register(CHORUS_FLOWER, new ChorusFlowerBehavior());
         context.register(CHORUS_PLANT,
                 new ChorusPlantBehavior(HolderSet.direct(Blocks.CHORUS_PLANT.builtInRegistryHolder()),
@@ -119,24 +117,23 @@ public class BoneMealBehaviors {
                         128));
         context.register(MYCELIUM, new VegetationScatterBehavior(MYCELIUM_VEGETATION, 3, 1));
         context.register(DIRT,
-                new DirtConversionBehavior(HolderSet.direct(Blocks.GRASS_BLOCK.builtInRegistryHolder(),
+                new NeighborConversionBehavior(HolderSet.direct(Blocks.GRASS_BLOCK.builtInRegistryHolder(),
                         Blocks.MYCELIUM.builtInRegistryHolder()), 1, 1));
         context.register(PODZOL,
-                new PodzolVegetationBehavior(HolderSet.direct(Blocks.PODZOL.builtInRegistryHolder()),
+                new VegetationSpreadBehavior(HolderSet.direct(Blocks.PODZOL.builtInRegistryHolder()),
                         PODZOL_VEGETATION,
                         HolderSet.direct(Blocks.FERN.builtInRegistryHolder()),
                         128,
                         16));
         context.register(SPORE_BLOSSOM,
                 new PopResourceBehavior(ModRegistry.SPORE_BLOSSOM_LOOT_TABLE,
-                        BlockTransformer.DropStrategy.FROM_MIDDLE,
-                        Optional.empty()));
+                        BlockTransformer.DropStrategy.FROM_MIDDLE));
     }
 
     /**
      * @see net.minecraft.world.level.block.NetherFungusBlock#BONEMEAL_SUCCESS_PROBABILITY
      */
-    private static CoralTreeBehavior coralBehavior(HolderSet<Biome> biomes, ResourceKey<PlacedFeature> feature) {
-        return new CoralTreeBehavior(feature, biomes, 0.4F);
+    private static PlacedFeatureBehavior placedFeatureBehavior(HolderSet<Biome> biomes, ResourceKey<PlacedFeature> feature) {
+        return new PlacedFeatureBehavior(feature, biomes, 0.4F);
     }
 }
