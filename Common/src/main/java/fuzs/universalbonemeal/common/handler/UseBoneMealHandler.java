@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.function.Consumers;
 import org.jspecify.annotations.Nullable;
@@ -31,10 +32,10 @@ public class UseBoneMealHandler {
     public static EventResult onUseBoneMeal(Level level, BlockPos blockPos, BlockState blockState, ItemStack itemStack) {
         BoneMealBehavior boneMealBehavior = dissolve().get(blockState.getBlock());
         if (boneMealBehavior != null) {
-            if (boneMealBehavior.isValidBonemealTarget(level, blockPos, blockState)) {
+            if (boneMealBehavior.isValidBonemealTarget(level, blockPos, blockState, BonemealSource.INTERACTION)) {
                 if (level instanceof ServerLevel serverLevel) {
-                    if (boneMealBehavior.isBonemealSuccess(level, level.getRandom(), blockPos, blockState)) {
-                        boneMealBehavior.performBonemeal(serverLevel, level.getRandom(), blockPos, blockState);
+                    if (boneMealBehavior.isBonemealSuccess(level, level.getRandom(), blockPos, blockState, BonemealSource.INTERACTION)) {
+                        boneMealBehavior.performBonemeal(serverLevel, level.getRandom(), blockPos, blockState, BonemealSource.INTERACTION);
                     }
 
                     if (itemStack.isStackable()) {

@@ -5,23 +5,24 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.ChorusFlowerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class ChorusFlowerBehavior implements BoneMealBehavior {
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState blockState) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState blockState, BonemealSource bonemealSource) {
         return blockState.hasProperty(ChorusFlowerBlock.AGE) && blockState.getValue(ChorusFlowerBlock.AGE) < 5;
     }
 
     @Override
-    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState blockState) {
+    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState blockState, BonemealSource bonemealSource) {
         return true;
     }
 
     @Override
-    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState blockState) {
+    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState blockState, BonemealSource bonemealSource) {
         blockState.randomTick(level, pos, random);
     }
 }

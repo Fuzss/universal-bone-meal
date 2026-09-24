@@ -8,6 +8,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.StemBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -25,7 +26,7 @@ public class FruitStemBehavior implements BoneMealBehavior {
      * @see StemBlock#randomTick(BlockState, ServerLevel, BlockPos, RandomSource)
      */
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, BonemealSource bonemealSource) {
         // let vanilla run otherwise
         if (!state.hasProperty(StemBlock.AGE) || state.getValue(StemBlock.AGE) != 7) {
             return false;
@@ -44,12 +45,12 @@ public class FruitStemBehavior implements BoneMealBehavior {
     }
 
     @Override
-    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state, BonemealSource bonemealSource) {
         return true;
     }
 
     @Override
-    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
+    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state, BonemealSource bonemealSource) {
         // growing fruit from stem blocks takes forever, let's speed it up a little
         while (level.getBlockState(pos) == state && random.nextInt(3) != 0) {
             state.randomTick(level, pos, random);

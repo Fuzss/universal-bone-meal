@@ -8,6 +8,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
@@ -23,17 +24,17 @@ public class PodzolBehavior implements BoneMealBehavior {
             .add(Blocks.DEAD_BUSH.defaultBlockState(), 1));
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos blockPos, BlockState blockState) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos blockPos, BlockState blockState, BonemealSource bonemealSource) {
         return level.getBlockState(blockPos.above()).isAir();
     }
 
     @Override
-    public boolean isBonemealSuccess(Level level, RandomSource randomSource, BlockPos blockPos, BlockState blockState) {
+    public boolean isBonemealSuccess(Level level, RandomSource randomSource, BlockPos blockPos, BlockState blockState, BonemealSource bonemealSource) {
         return true;
     }
 
     @Override
-    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos blockPos, BlockState blockState) {
+    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos blockPos, BlockState blockState, BonemealSource bonemealSource) {
         label:
         for (int i = 0; i < 128; ++i) {
             BlockPos randomPos = blockPos.above();
@@ -49,7 +50,7 @@ public class PodzolBehavior implements BoneMealBehavior {
 
             BlockState stateAtRandomPosition = level.getBlockState(randomPos);
             if (stateAtRandomPosition.is(Blocks.FERN) && random.nextInt(10) == 0) {
-                ((BonemealableBlock) Blocks.FERN).performBonemeal(level, random, randomPos, stateAtRandomPosition);
+                ((BonemealableBlock) Blocks.FERN).performBonemeal(level, random, randomPos, stateAtRandomPosition, bonemealSource);
             }
 
             if (stateAtRandomPosition.isAir()) {

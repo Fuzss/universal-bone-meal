@@ -6,12 +6,13 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class DirtBehavior implements BoneMealBehavior {
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos blockPos, BlockState blockState) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos blockPos, BlockState blockState, BonemealSource bonemealSource) {
         if (level.getBlockState(blockPos.above()).propagatesSkylightDown()) {
             for (BlockPos blockpos : BlockPos.betweenClosed(blockPos.offset(-1, -1, -1), blockPos.offset(1, 1, 1))) {
                 BlockState state = level.getBlockState(blockpos);
@@ -24,12 +25,12 @@ public class DirtBehavior implements BoneMealBehavior {
     }
 
     @Override
-    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos blockPos, BlockState blockState) {
+    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos blockPos, BlockState blockState, BonemealSource bonemealSource) {
         return true;
     }
 
     @Override
-    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos blockPos, BlockState blockState) {
+    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos blockPos, BlockState blockState, BonemealSource bonemealSource) {
         boolean foundMyceliumBlock = false;
         boolean foundGrassBlock = false;
         for(BlockPos blockpos : BlockPos.betweenClosed(blockPos.offset(-1, -1, -1), blockPos.offset(1, 1, 1))) {

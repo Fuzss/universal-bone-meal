@@ -7,6 +7,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -15,10 +16,10 @@ import net.minecraft.world.level.levelgen.WorldgenRandom;
 public class SimpleGrowingPlantBehavior extends GrowingPlantBehavior {
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos blockPos, BlockState blockState) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos blockPos, BlockState blockState, BonemealSource bonemealSource) {
         if (this.getConnectedPlantHeight(level, blockPos, blockState.getBlock())
                 < this.getMaxHeightAtPosition(blockPos.getX(), blockPos.getZ())) {
-            return super.isValidBonemealTarget(level, blockPos, blockState);
+            return super.isValidBonemealTarget(level, blockPos, blockState, bonemealSource);
         } else {
             return false;
         }

@@ -8,24 +8,25 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 
 public abstract class GrowingPlantBehavior implements BoneMealBehavior {
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos blockPos, BlockState blockState) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos blockPos, BlockState blockState, BonemealSource bonemealSource) {
         BlockPos headPos = this.getHeadPos(level, blockPos, blockState.getBlock());
         return this.canGrowInto(level.getBlockState(headPos.relative(this.getGrowthDirection())));
     }
 
     @Override
-    public boolean isBonemealSuccess(Level level, RandomSource randomSource, BlockPos blockPos, BlockState blockState) {
+    public boolean isBonemealSuccess(Level level, RandomSource randomSource, BlockPos blockPos, BlockState blockState, BonemealSource bonemealSource) {
         return true;
     }
 
     @Override
-    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos sourcePos, BlockState sourceState) {
+    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos sourcePos, BlockState sourceState, BonemealSource bonemealSource) {
         BlockPos topPos = this.getHeadPos(level, sourcePos, sourceState.getBlock());
         this.performBonemealTop(level, random, topPos, sourceState);
     }

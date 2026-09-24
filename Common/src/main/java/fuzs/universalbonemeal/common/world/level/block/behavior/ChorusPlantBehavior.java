@@ -9,6 +9,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -20,17 +21,17 @@ import java.util.Set;
 public class ChorusPlantBehavior extends ChorusFlowerBehavior {
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState blockState) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState blockState, BonemealSource bonemealSource) {
         for (BlockPos flowerPosition : this.getFlowerPositions(level, pos)) {
-            if (super.isValidBonemealTarget(level, flowerPosition, level.getBlockState(flowerPosition))) return true;
+            if (super.isValidBonemealTarget(level, flowerPosition, level.getBlockState(flowerPosition), bonemealSource)) return true;
         }
         return false;
     }
 
     @Override
-    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState blockState) {
+    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState blockState, BonemealSource bonemealSource) {
         for (BlockPos flowerPosition : this.getFlowerPositions(level, pos)) {
-            super.performBonemeal(level, random, flowerPosition, level.getBlockState(flowerPosition));
+            super.performBonemeal(level, random, flowerPosition, level.getBlockState(flowerPosition), bonemealSource);
         }
     }
 
