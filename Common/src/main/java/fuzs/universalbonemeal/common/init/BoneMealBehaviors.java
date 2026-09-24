@@ -1,6 +1,6 @@
 package fuzs.universalbonemeal.common.init;
 
-import fuzs.universalbonemeal.common.util.stateproviders.CopySourceBlockStateProvider;
+import fuzs.universalbonemeal.common.util.stateproviders.CopySourceProvider;
 import fuzs.universalbonemeal.common.util.valueproviders.VinesIntProvider;
 import fuzs.universalbonemeal.common.world.level.block.behavior.*;
 import net.minecraft.core.Direction;
@@ -64,7 +64,7 @@ public class BoneMealBehaviors {
                     .add(Blocks.DEAD_BUSH.defaultBlockState(), 1)));
 
     private static ResourceKey<BoneMealBehavior> register(String path) {
-        return ModRegistry.REGISTRIES.makeResourceKey(ModRegistry.BONE_MEAL_BEHAVIOR_REGISTRY_KEY, path);
+        return ModRegistry.REGISTRIES.makeResourceKey(BoneMealBehavior.REGISTRY_KEY, path);
     }
 
     public static void bootstrap(BootstrapContext<BoneMealBehavior> context) {
@@ -86,7 +86,7 @@ public class BoneMealBehaviors {
                 new GrowingPlantBehavior(Direction.DOWN,
                         new VinesIntProvider(5),
                         BlockPredicate.ONLY_IN_AIR_PREDICATE,
-                        Holder.direct(new CopySourceBlockStateProvider(Direction.UP)),
+                        Holder.direct(new CopySourceProvider()),
                         ConstantInt.of(128)));
         context.register(NETHER_WART,
                 new CropGrowthBehavior(NetherWartBlock.AGE,
@@ -100,9 +100,9 @@ public class BoneMealBehaviors {
         context.register(PUMPKIN_STEM,
                 new FruitStemBehavior(context.lookup(Registries.BLOCK)
                         .getOrThrow(BlockTags.SUPPORTS_PUMPKIN_STEM_FRUIT), UniformInt.of(2, 5)));
-        context.register(LILY_PAD, new NeighborSpreadBehavior(Holder.direct(new SimpleStateProvider(Blocks.LILY_PAD.defaultBlockState())), 4, 3));
-        context.register(DEAD_BUSH, new NeighborSpreadBehavior(Holder.direct(new SimpleStateProvider(Blocks.SUGAR_CANE.defaultBlockState())),4, 2));
-        context.register(SMALL_FLOWER, new NeighborSpreadBehavior(Holder.direct(new SimpleStateProvider(Blocks.SUGAR_CANE.defaultBlockState())), 3, 1));
+        context.register(LILY_PAD, new NeighborSpreadBehavior(Holder.direct(new CopySourceProvider()), 4, 3));
+        context.register(DEAD_BUSH, new NeighborSpreadBehavior(Holder.direct(new CopySourceProvider()), 4, 2));
+        context.register(SMALL_FLOWER, new NeighborSpreadBehavior(Holder.direct(new CopySourceProvider()), 3, 1));
         HolderSet<Biome> coralBiomes = context.lookup(Registries.BIOME)
                 .getOrThrow(BiomeTags.PRODUCES_CORALS_FROM_BONEMEAL);
         context.register(TUBE_CORAL, placedFeatureBehavior(coralBiomes, CoralPlacedFeatures.TUBE_CORAL));

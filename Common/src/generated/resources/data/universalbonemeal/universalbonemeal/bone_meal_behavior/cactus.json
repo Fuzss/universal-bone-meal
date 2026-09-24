@@ -1,6 +1,16 @@
 {
   "type": "universalbonemeal:growing_plant",
-  "block_state_provider": {
+  "blocks_to_grow": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 2,
+    "min_inclusive": 1
+  },
+  "max_height": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 16,
+    "min_inclusive": 12
+  },
+  "vegetation": {
     "type": "minecraft:weighted",
     "entries": [
       {
@@ -12,15 +22,5 @@
         "weight": 1
       }
     ]
-  },
-  "blocks_to_grow": {
-    "type": "minecraft:uniform",
-    "max_inclusive": 2,
-    "min_inclusive": 1
-  },
-  "max_height": {
-    "type": "minecraft:uniform",
-    "max_inclusive": 16,
-    "min_inclusive": 12
   }
 }

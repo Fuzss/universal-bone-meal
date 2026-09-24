@@ -37,16 +37,20 @@ public record VegetationScatterBehavior(Holder<BlockStateProvider> vegetation,
         BlockPos origin = pos.above();
         if (origin.getY() >= level.getMinY() + 1 && origin.getY() + 1 < level.getMaxY()) {
             for (int i = 0; i < this.spreadWidth * this.spreadWidth; ++i) {
-                BlockPos randomPos = origin.offset(random.nextInt(this.spreadWidth) - random.nextInt(this.spreadWidth),
-                        random.nextInt(this.spreadHeight) - random.nextInt(this.spreadHeight),
-                        random.nextInt(this.spreadWidth) - random.nextInt(this.spreadWidth));
-                BlockState vegetationState = this.vegetation.value().getState(level, random, randomPos);
-                if (level.isEmptyBlock(randomPos) && randomPos.getY() > level.getMinY() && vegetationState.canSurvive(
+                BlockPos offsetPos = this.getOffsetPos(random, origin);
+                BlockState vegetationState = this.vegetation.value().getState(level, random, offsetPos);
+                if (level.isEmptyBlock(offsetPos) && offsetPos.getY() > level.getMinY() && vegetationState.canSurvive(
                         level,
-                        randomPos)) {
-                    level.setBlock(randomPos, vegetationState, Block.UPDATE_CLIENTS);
+                        offsetPos)) {
+                    level.setBlock(offsetPos, vegetationState, Block.UPDATE_CLIENTS);
                 }
             }
         }
+    }
+
+    private BlockPos getOffsetPos(RandomSource random, BlockPos pos) {
+        return pos.offset(random.nextInt(this.spreadWidth) - random.nextInt(this.spreadWidth),
+                random.nextInt(this.spreadHeight) - random.nextInt(this.spreadHeight),
+                random.nextInt(this.spreadWidth) - random.nextInt(this.spreadWidth));
     }
 }

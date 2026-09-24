@@ -7,7 +7,7 @@ import fuzs.universalbonemeal.common.data.loot.ModBlockInteractLootProvider;
 import fuzs.universalbonemeal.common.data.tags.ModBlockTagsProvider;
 import fuzs.universalbonemeal.common.init.BoneMealBehaviors;
 import fuzs.universalbonemeal.common.init.CoralPlacedFeatures;
-import fuzs.universalbonemeal.common.init.ModRegistry;
+import fuzs.universalbonemeal.common.world.level.block.behavior.BoneMealBehavior;
 import fuzs.universalbonemeal.neoforge.data.ModDataMapProvider;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -20,7 +20,7 @@ public class UniversalBoneMealNeoForge {
         ModConstructor.construct(UniversalBoneMeal.MOD_ID, UniversalBoneMeal::new);
         DataProviderBuilder.of(UniversalBoneMeal.MOD_ID)
                 .addWorldBootstrap(Registries.PLACED_FEATURE, CoralPlacedFeatures::bootstrap)
-                .addWorldBootstrap(ModRegistry.BONE_MEAL_BEHAVIOR_REGISTRY_KEY, BoneMealBehaviors::bootstrap)
+                .addWorldBootstrap(BoneMealBehavior.REGISTRY_KEY, BoneMealBehaviors::bootstrap)
                 .addProvider(ModBlockTagsProvider::new)
                 .addProvider(ModDataMapProvider::new)
                 .addLootProvider(ModBlockInteractLootProvider::new, LootContextParamSets.BLOCK_INTERACT);

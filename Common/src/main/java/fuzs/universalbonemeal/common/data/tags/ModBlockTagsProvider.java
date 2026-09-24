@@ -19,6 +19,7 @@ public class ModBlockTagsProvider extends AbstractTagsProvider<Block> {
         this.tag(ModRegistry.FERTILIZER_RESISTANT_FLOWERS_BLOCK_TAG)
                 .add(BlockItemIds.WITHER_ROSE.block(),
                         BlockItemIds.TORCHFLOWER.block(),
-                        BlockItemIds.PINK_PETALS.block());
+                        BlockItemIds.PINK_PETALS.block(),
+                        BlockItemIds.WILDFLOWERS.block());
     }
 }

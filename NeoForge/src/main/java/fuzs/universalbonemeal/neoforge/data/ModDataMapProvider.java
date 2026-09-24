@@ -25,31 +25,44 @@ public class ModDataMapProvider extends DataMapProvider {
 
     @Override
     protected void gather(HolderLookup.Provider registries) {
-        HolderLookup.RegistryLookup<BoneMealBehavior> lookup = registries.lookupOrThrow(
-                ModRegistry.BONE_MEAL_BEHAVIOR_REGISTRY_KEY);
+        HolderLookup.RegistryLookup<BoneMealBehavior> lookup = registries.lookupOrThrow(BoneMealBehavior.REGISTRY_KEY);
         this.builder(NeoForgeDataMapToken.unwrap(ModRegistry.BONE_MEAL_BEHAVIORS_DATA_MAP))
                 .add(Blocks.CACTUS.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.CACTUS), false)
                 .add(Blocks.SUGAR_CANE.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.SUGAR_CANE), false)
                 .add(Blocks.VINE.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.VINE), false)
-                .add(Blocks.NETHER_WART.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.NETHER_WART), false)
+                .add(Blocks.NETHER_WART.builtInRegistryHolder(),
+                        lookup.getOrThrow(BoneMealBehaviors.NETHER_WART),
+                        false)
                 .add(Blocks.MELON_STEM.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.MELON_STEM), false)
-                .add(Blocks.PUMPKIN_STEM.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.PUMPKIN_STEM), false)
+                .add(Blocks.PUMPKIN_STEM.builtInRegistryHolder(),
+                        lookup.getOrThrow(BoneMealBehaviors.PUMPKIN_STEM),
+                        false)
                 .add(Blocks.LILY_PAD.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.LILY_PAD), false)
                 .add(Blocks.DEAD_BUSH.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.DEAD_BUSH), false)
                 .add(BlockTags.SMALL_FLOWERS, lookup.getOrThrow(BoneMealBehaviors.SMALL_FLOWER), false)
                 .add(Blocks.TUBE_CORAL.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.TUBE_CORAL), false)
-                .add(Blocks.BRAIN_CORAL.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.BRAIN_CORAL), false)
-                .add(Blocks.BUBBLE_CORAL.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.BUBBLE_CORAL), false)
+                .add(Blocks.BRAIN_CORAL.builtInRegistryHolder(),
+                        lookup.getOrThrow(BoneMealBehaviors.BRAIN_CORAL),
+                        false)
+                .add(Blocks.BUBBLE_CORAL.builtInRegistryHolder(),
+                        lookup.getOrThrow(BoneMealBehaviors.BUBBLE_CORAL),
+                        false)
                 .add(Blocks.FIRE_CORAL.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.FIRE_CORAL), false)
                 .add(Blocks.HORN_CORAL.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.HORN_CORAL), false)
-                .add(Blocks.CHORUS_FLOWER.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.CHORUS_FLOWER), false)
-                .add(Blocks.CHORUS_PLANT.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.CHORUS_PLANT), false)
+                .add(Blocks.CHORUS_FLOWER.builtInRegistryHolder(),
+                        lookup.getOrThrow(BoneMealBehaviors.CHORUS_FLOWER),
+                        false)
+                .add(Blocks.CHORUS_PLANT.builtInRegistryHolder(),
+                        lookup.getOrThrow(BoneMealBehaviors.CHORUS_PLANT),
+                        false)
                 .add(Blocks.MYCELIUM.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.MYCELIUM), false)
                 .add(Blocks.DIRT.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.DIRT), false)
                 .add(Blocks.COARSE_DIRT.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.DIRT), false)
                 .add(Blocks.DIRT_PATH.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.DIRT), false)
                 .add(Blocks.PODZOL.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.PODZOL), false)
-                .add(Blocks.SPORE_BLOSSOM.builtInRegistryHolder(), lookup.getOrThrow(BoneMealBehaviors.SPORE_BLOSSOM), false)
+                .add(Blocks.SPORE_BLOSSOM.builtInRegistryHolder(),
+                        lookup.getOrThrow(BoneMealBehaviors.SPORE_BLOSSOM),
+                        false)
                 .remove(ModRegistry.FERTILIZER_RESISTANT_FLOWERS_BLOCK_TAG);
     }
 }

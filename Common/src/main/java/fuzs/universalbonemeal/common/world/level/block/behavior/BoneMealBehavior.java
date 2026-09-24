@@ -1,14 +1,29 @@
 package fuzs.universalbonemeal.common.world.level.block.behavior;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import fuzs.universalbonemeal.common.UniversalBoneMeal;
+import fuzs.universalbonemeal.common.init.ModRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.codec.RegistryCodecs;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.function.Function;
+
 public interface BoneMealBehavior extends BonemealableBlock {
+    ResourceKey<Registry<BoneMealBehavior>> REGISTRY_KEY = ResourceKey.createRegistryKey(UniversalBoneMeal.id(
+            "bone_meal_behavior"));
+    Codec<BoneMealBehavior> DIRECT_CODEC = ModRegistry.BONE_MEAL_BEHAVIOR_TYPE_REGISTRY.byNameCodec()
+            .dispatch(BoneMealBehavior::codec, Function.identity());
+    Codec<Holder<BoneMealBehavior>> CODEC = RegistryCodecs.holder(REGISTRY_KEY, DIRECT_CODEC);
+
     /**
      * @return the codec for this bone meal behavior type
      *

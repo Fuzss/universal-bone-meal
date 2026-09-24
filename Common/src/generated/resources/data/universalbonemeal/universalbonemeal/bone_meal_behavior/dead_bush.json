@@ -1,5 +1,8 @@
 {
   "type": "universalbonemeal:neighbor_spread",
   "most_successes": 2,
-  "spread_width": 4
+  "spread_width": 4,
+  "vegetation": {
+    "type": "universalbonemeal:copy_source"
+  }
 }

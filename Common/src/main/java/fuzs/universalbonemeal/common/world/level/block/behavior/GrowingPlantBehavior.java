@@ -14,8 +14,10 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealSource;
+import net.minecraft.world.level.block.VineBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
@@ -23,15 +25,14 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 public record GrowingPlantBehavior(Direction direction,
                                    IntProvider blocksToGrow,
                                    BlockPredicate canGrowInto,
-                                   Holder<BlockStateProvider> blockStateProvider,
+                                   Holder<BlockStateProvider> vegetation,
                                    IntProvider maxHeight) implements BoneMealBehavior {
     public static final MapCodec<GrowingPlantBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                     Direction.CODEC.optionalFieldOf("direction", Direction.UP).forGetter(GrowingPlantBehavior::direction),
                     IntProviders.codec(0, 128).fieldOf("blocks_to_grow").forGetter(GrowingPlantBehavior::blocksToGrow),
                     BlockPredicate.CODEC.optionalFieldOf("can_grow_into", BlockPredicate.ONLY_IN_AIR_PREDICATE)
                             .forGetter(GrowingPlantBehavior::canGrowInto),
-                    BlockStateProvider.CODEC.fieldOf("block_state_provider")
-                            .forGetter(GrowingPlantBehavior::blockStateProvider),
+                    BlockStateProvider.CODEC.fieldOf("vegetation").forGetter(GrowingPlantBehavior::vegetation),
                     IntProviders.codec(1, 128).fieldOf("max_height").forGetter(GrowingPlantBehavior::maxHeight))
             .apply(instance, GrowingPlantBehavior::new));
 
@@ -42,6 +43,11 @@ public record GrowingPlantBehavior(Direction direction,
 
     @Override
     public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, BonemealSource source) {
+        // TODO only for vines
+        if (!test(state)) {
+            return false;
+        }
+
         if (this.getConnectedPlantHeight(level, pos, state.getBlock()) < this.getMaxHeightAtPosition(pos)) {
             BlockPos headPos = getHeadPos(level, pos, state.getBlock(), this.direction);
             BlockPos targetPos = headPos.relative(this.direction);
@@ -55,26 +61,46 @@ public record GrowingPlantBehavior(Direction direction,
         }
     }
 
-    @Override
-    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
-        BlockPos topPos = getHeadPos(level, pos, state.getBlock(), this.direction);
-        this.growPlant(level, random, topPos, state);
+    private static boolean test(BlockState state) {
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+            BooleanProperty property = VineBlock.getPropertyForFace(direction);
+            if (state.hasProperty(property) && state.getValue(property)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    private void growPlant(ServerLevel level, RandomSource random, BlockPos topPos, BlockState sourceState) {
-        BlockPos.MutableBlockPos pos = topPos.relative(this.direction).mutable();
+    @Override
+    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
+        BlockPos headPos = getHeadPos(level, pos, state.getBlock(), this.direction);
+        this.growPlant(level, random, headPos, state);
+    }
+
+    private void growPlant(ServerLevel level, RandomSource random, BlockPos pos, BlockState sourceState) {
+        BlockPos.MutableBlockPos offsetPos = pos.relative(this.direction).mutable();
         int blocksToGrow = this.blocksToGrow.sample(random);
-        for (int i = 0; i < blocksToGrow && this.canGrowInto.test(level, pos); ++i) {
-            BlockState state = this.blockStateProvider.value().getState(level, random, pos);
-            level.setBlockAndUpdate(pos, state);
+        for (int i = 0; i < blocksToGrow && this.canGrowInto.test(level, offsetPos); ++i) {
+            BlockState vegetationState = this.vegetation.value()
+                    .getState(level, random, offsetPos.relative(this.direction.getOpposite()));
+            if (vegetationState.hasProperty(VineBlock.UP)) {
+                vegetationState = vegetationState.setValue(VineBlock.UP, false);
+            }
+
+            level.setBlock(offsetPos, vegetationState, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
             // Stop if we grew a block that is not the default plant block, like a cactus flower on a cactus.
-            if (!state.is(sourceState.getBlock())) {
+            if (!vegetationState.is(sourceState.getBlock())) {
                 break;
             }
 
-            pos.move(this.direction);
+            offsetPos.move(this.direction);
         }
 
+        this.resetAgeProperty(level, pos);
+    }
+
+    private void resetAgeProperty(ServerLevel level, BlockPos topPos) {
         // Reset the age of the top block so the plant can be bone mealed again.
         if (this.direction == Direction.UP) {
             BlockState state = level.getBlockState(topPos);
@@ -97,6 +123,9 @@ public record GrowingPlantBehavior(Direction direction,
         return this.maxHeight.sample(WorldgenRandom.seedSlimeChunk(pos.getX(), pos.getZ(), 0, 987234911L));
     }
 
+    /**
+     * @see net.minecraft.world.level.block.GrowingPlantBodyBlock#getHeadPos(BlockGetter, BlockPos, Block)
+     */
     private static BlockPos getHeadPos(BlockGetter level, BlockPos pos, Block block, Direction direction) {
         return getTopConnectedBlock(level, pos, block, direction);
     }

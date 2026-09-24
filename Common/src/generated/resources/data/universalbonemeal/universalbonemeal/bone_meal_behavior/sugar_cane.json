@@ -1,11 +1,5 @@
 {
   "type": "universalbonemeal:growing_plant",
-  "block_state_provider": {
-    "id": "minecraft:sugar_cane",
-    "properties": {
-      "age": "0"
-    }
-  },
   "blocks_to_grow": {
     "type": "minecraft:uniform",
     "max_inclusive": 2,
@@ -15,5 +9,11 @@
     "type": "minecraft:uniform",
     "max_inclusive": 16,
     "min_inclusive": 12
+  },
+  "vegetation": {
+    "id": "minecraft:sugar_cane",
+    "properties": {
+      "age": "0"
+    }
   }
 }
