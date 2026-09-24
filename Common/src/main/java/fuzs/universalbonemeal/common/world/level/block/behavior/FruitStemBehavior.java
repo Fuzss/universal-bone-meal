@@ -1,9 +1,13 @@
 package fuzs.universalbonemeal.common.world.level.block.behavior;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -12,14 +16,16 @@ import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.StemBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class FruitStemBehavior implements BoneMealBehavior {
-    /**
-     * @see StemBlock#fruitSupportBlocks
-     */
-    private final TagKey<Block> fruitSupportBlocks;
+public record FruitStemBehavior(HolderSet<Block> fruitSupportBlocks) implements BoneMealBehavior {
+    public static final MapCodec<FruitStemBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                    RegistryCodecs.holderSet(Registries.BLOCK)
+                            .fieldOf("fruit_support_blocks")
+                            .forGetter(FruitStemBehavior::fruitSupportBlocks))
+            .apply(instance, FruitStemBehavior::new));
 
-    public FruitStemBehavior(TagKey<Block> fruitSupportBlocks) {
-        this.fruitSupportBlocks = fruitSupportBlocks;
+    @Override
+    public MapCodec<FruitStemBehavior> codec() {
+        return CODEC;
     }
 
     /**
@@ -35,7 +41,8 @@ public class FruitStemBehavior implements BoneMealBehavior {
             for (Direction direction : Direction.Plane.HORIZONTAL) {
                 BlockPos fruitBlockPos = pos.relative(direction);
                 BlockState soilBlockState = level.getBlockState(fruitBlockPos.below());
-                if (level.getBlockState(fruitBlockPos).isAir() && soilBlockState.is(this.fruitSupportBlocks)) {
+                if (level.getBlockState(fruitBlockPos)
+                        .isAir() && this.fruitSupportBlocks.contains(soilBlockState.typeHolder())) {
                     return true;
                 }
             }

@@ -1,14 +1,19 @@
 package fuzs.universalbonemeal.common.world.level.block.behavior;
 
 import com.google.common.collect.Sets;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,11 +24,50 @@ import java.util.Map;
 import java.util.Set;
 
 public class ChorusPlantBehavior extends ChorusFlowerBehavior {
+    public static final MapCodec<ChorusPlantBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                    RegistryCodecs.holderSet(Registries.BLOCK).fieldOf("plant").forGetter(ChorusPlantBehavior::getPlant),
+                    RegistryCodecs.holderSet(Registries.BLOCK)
+                            .fieldOf("flower")
+                            .forGetter(ChorusPlantBehavior::getFlower),
+                    Codec.intRange(1, 256)
+                            .fieldOf("search_range")
+                            .forGetter(ChorusPlantBehavior::getSearchRange))
+            .apply(instance, ChorusPlantBehavior::new));
+
+    private final HolderSet<Block> plant;
+    private final HolderSet<Block> flower;
+    private final int searchRange;
+
+    public ChorusPlantBehavior(HolderSet<Block> plant, HolderSet<Block> flower, int searchRange) {
+        this.plant = plant;
+        this.flower = flower;
+        this.searchRange = searchRange;
+    }
+
+    public HolderSet<Block> getPlant() {
+        return this.plant;
+    }
+
+    public HolderSet<Block> getFlower() {
+        return this.flower;
+    }
+
+    public int getSearchRange() {
+        return this.searchRange;
+    }
+
+    @Override
+    public MapCodec<ChorusPlantBehavior> codec() {
+        return CODEC;
+    }
 
     @Override
     public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState blockState, BonemealSource bonemealSource) {
         for (BlockPos flowerPosition : this.getFlowerPositions(level, pos)) {
-            if (super.isValidBonemealTarget(level, flowerPosition, level.getBlockState(flowerPosition), bonemealSource)) return true;
+            if (super.isValidBonemealTarget(level,
+                    flowerPosition,
+                    level.getBlockState(flowerPosition),
+                    bonemealSource)) return true;
         }
         return false;
     }
@@ -31,20 +75,32 @@ public class ChorusPlantBehavior extends ChorusFlowerBehavior {
     @Override
     public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState blockState, BonemealSource bonemealSource) {
         for (BlockPos flowerPosition : this.getFlowerPositions(level, pos)) {
-            super.performBonemeal(level, random, flowerPosition, level.getBlockState(flowerPosition), bonemealSource);
+            super.performBonemeal(level,
+                    random,
+                    flowerPosition,
+                    level.getBlockState(flowerPosition),
+                    bonemealSource);
         }
     }
 
     private Collection<BlockPos> getFlowerPositions(BlockGetter level, BlockPos startPos) {
         Set<BlockPos> targets = Sets.newHashSet();
-        getTopConnectedBlock(level, startPos.mutable(), Blocks.CHORUS_PLANT, Blocks.CHORUS_FLOWER, targets, Direction.DOWN, 128);
+        getTopConnectedBlock(level,
+                startPos.mutable(),
+                this.plant,
+                this.flower,
+                targets,
+                Direction.DOWN,
+                this.searchRange);
         return targets;
     }
 
-    public static void getTopConnectedBlock(BlockGetter level, BlockPos.MutableBlockPos sourcePosition, Block sourceBlock, Block targetBlock, Collection<BlockPos> targets, Direction sourceDirection, int depth) {
+    public static void getTopConnectedBlock(BlockGetter level, BlockPos.MutableBlockPos sourcePosition, HolderSet<Block> sourceBlocks, HolderSet<Block> targetBlocks, Collection<BlockPos> targets, Direction sourceDirection, int depth) {
         BlockState sourceState = level.getBlockState(sourcePosition);
-        if (depth <= 0 || !sourceState.is(sourceBlock)) {
-            if (sourceState.is(targetBlock)) targets.add(sourcePosition.immutable());
+        if (depth <= 0 || !sourceBlocks.contains(sourceState.typeHolder())) {
+            if (targetBlocks.contains(sourceState.typeHolder())) {
+                targets.add(sourcePosition.immutable());
+            }
             return;
         }
         for (Map.Entry<Direction, BooleanProperty> entry : PipeBlock.PROPERTY_BY_DIRECTION.entrySet()) {
@@ -52,7 +108,13 @@ public class ChorusPlantBehavior extends ChorusFlowerBehavior {
             if (direction != Direction.DOWN && direction != sourceDirection) {
                 if (sourceState.getValue(entry.getValue())) {
                     sourcePosition.move(direction);
-                    getTopConnectedBlock(level, sourcePosition, sourceBlock, targetBlock, targets, direction.getOpposite(), depth - 1);
+                    getTopConnectedBlock(level,
+                            sourcePosition,
+                            sourceBlocks,
+                            targetBlocks,
+                            targets,
+                            direction.getOpposite(),
+                            depth - 1);
                     sourcePosition.move(direction.getOpposite());
                 }
             }

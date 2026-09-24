@@ -1,6 +1,7 @@
 package fuzs.universalbonemeal.common.world.level.block.behavior;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
@@ -10,10 +11,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
 public abstract class SpreadAroundBehavior implements BoneMealBehavior {
-    private final BlockStateProvider blockStateProvider;
+    private final Holder<BlockStateProvider> blockStateProvider;
 
-    public SpreadAroundBehavior(BlockStateProvider blockStateProvider) {
+    protected SpreadAroundBehavior(Holder<BlockStateProvider> blockStateProvider) {
         this.blockStateProvider = blockStateProvider;
+    }
+
+    public Holder<BlockStateProvider> getBlockStateProvider() {
+        return this.blockStateProvider;
     }
 
     @Override
@@ -40,7 +45,7 @@ public abstract class SpreadAroundBehavior implements BoneMealBehavior {
                 BlockPos randomPos = pos.offset(random.nextInt(spreadWidth) - random.nextInt(spreadWidth),
                         random.nextInt(spreadHeight) - random.nextInt(spreadHeight),
                         random.nextInt(spreadWidth) - random.nextInt(spreadWidth));
-                BlockState state = this.blockStateProvider.getState(level, random, randomPos);
+                BlockState state = this.blockStateProvider.value().getState(level, random, randomPos);
                 if (level.isEmptyBlock(randomPos) && randomPos.getY() > level.getMinY() && state.canSurvive(level,
                         randomPos)) {
                     level.setBlock(randomPos, state, 2);

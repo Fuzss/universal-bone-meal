@@ -36,7 +36,7 @@ public abstract class GrowingPlantBehavior implements BoneMealBehavior {
         BlockPos blockPos = topPos.relative(this.getGrowthDirection());
         int j = this.getBlocksToGrowWhenBonemealed(randomSource);
         for (int k = 0; k < j && this.canGrowInto(serverLevel.getBlockState(blockPos)); ++k) {
-            BlockState blockState = this.getGrownBlockState(sourceState, randomSource);
+            BlockState blockState = this.getGrownBlockState(sourceState, randomSource, serverLevel, blockPos);
             serverLevel.setBlockAndUpdate(blockPos, blockState);
             // stop if we grew a block that is not the default plant block, like a cactus flower on a cactus
             if (!blockState.is(sourceState.getBlock())) {
@@ -67,5 +67,5 @@ public abstract class GrowingPlantBehavior implements BoneMealBehavior {
 
     protected abstract boolean canGrowInto(BlockState state);
 
-    protected abstract BlockState getGrownBlockState(BlockState sourceState, RandomSource randomSource);
+    protected abstract BlockState getGrownBlockState(BlockState sourceState, RandomSource randomSource, ServerLevel level, BlockPos pos);
 }

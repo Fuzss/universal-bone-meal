@@ -27,6 +27,14 @@
             ]
         },
         {
+            "name": "multiloaderdataextensions",
+            "type": "embedded",
+            "platforms": [
+                "fabric",
+                "neoforge"
+            ]
+        },
+        {
             "name": "puzzleslib",
             "type": "required",
             "platforms": [

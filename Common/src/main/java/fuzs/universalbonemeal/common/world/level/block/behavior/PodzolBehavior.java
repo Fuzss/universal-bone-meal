@@ -1,27 +1,36 @@
 package fuzs.universalbonemeal.common.world.level.block.behavior;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealSource;
-import net.minecraft.world.level.block.SweetBerryBushBlock;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 
-public class PodzolBehavior implements BoneMealBehavior {
-    private static final BlockStateProvider PODZOL_VEGETATION_PROVIDER = new WeightedStateProvider(WeightedList.<BlockState>builder()
-            .add(Blocks.SWEET_BERRY_BUSH.defaultBlockState().setValue(SweetBerryBushBlock.AGE, 3), 2)
-            .add(Blocks.SWEET_BERRY_BUSH.defaultBlockState().setValue(SweetBerryBushBlock.AGE, 2), 4)
-            .add(Blocks.SWEET_BERRY_BUSH.defaultBlockState().setValue(SweetBerryBushBlock.AGE, 1), 8)
-            .add(Blocks.SWEET_BERRY_BUSH.defaultBlockState().setValue(SweetBerryBushBlock.AGE, 0), 12)
-            .add(Blocks.FERN.defaultBlockState(), 120)
-            .add(Blocks.DEAD_BUSH.defaultBlockState(), 1));
+public record PodzolBehavior(HolderSet<Block> groundBlocks,
+                             Holder<BlockStateProvider> vegetation,
+                             HolderSet<Block> bonemealableBlocks) implements BoneMealBehavior {
+    public static final MapCodec<PodzolBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            RegistryCodecs.holderSet(Registries.BLOCK).fieldOf("ground_blocks").forGetter(PodzolBehavior::groundBlocks),
+            BlockStateProvider.CODEC.fieldOf("vegetation").forGetter(PodzolBehavior::vegetation),
+            RegistryCodecs.holderSet(Registries.BLOCK)
+                    .fieldOf("bonemealable_blocks")
+                    .forGetter(PodzolBehavior::bonemealableBlocks)).apply(instance, PodzolBehavior::new));
+
+    @Override
+    public MapCodec<PodzolBehavior> codec() {
+        return CODEC;
+    }
 
     @Override
     public boolean isValidBonemealTarget(LevelReader level, BlockPos blockPos, BlockState blockState, BonemealSource bonemealSource) {
@@ -42,22 +51,24 @@ public class PodzolBehavior implements BoneMealBehavior {
                 randomPos = randomPos.offset(random.nextInt(3) - 1,
                         (random.nextInt(3) - 1) * random.nextInt(3) / 2,
                         random.nextInt(3) - 1);
-                if (!level.getBlockState(randomPos.below()).is(Blocks.PODZOL) || level.getBlockState(randomPos)
-                        .isCollisionShapeFullBlock(level, randomPos)) {
+                if (!this.groundBlocks.contains(level.getBlockState(randomPos.below()).typeHolder())
+                        || level.getBlockState(randomPos).isCollisionShapeFullBlock(level, randomPos)) {
                     continue label;
                 }
             }
 
             BlockState stateAtRandomPosition = level.getBlockState(randomPos);
-            if (stateAtRandomPosition.is(Blocks.FERN) && random.nextInt(10) == 0) {
-                ((BonemealableBlock) Blocks.FERN).performBonemeal(level, random, randomPos, stateAtRandomPosition, bonemealSource);
+            if (this.bonemealableBlocks.contains(stateAtRandomPosition.typeHolder())
+                    && stateAtRandomPosition.getBlock() instanceof BonemealableBlock bonemealableBlock
+                    && random.nextInt(10) == 0) {
+                bonemealableBlock.performBonemeal(level, random, randomPos, stateAtRandomPosition, bonemealSource);
             }
 
             if (stateAtRandomPosition.isAir()) {
                 if (random.nextInt(5) == 0) {
                     if (level.isEmptyBlock(randomPos) && randomPos.getY() > level.getMinY()) {
-                        BlockState stateToPlace = PODZOL_VEGETATION_PROVIDER.getState(level, random, randomPos);
-                        level.setBlock(randomPos, stateToPlace, 2);
+                        BlockState stateToPlace = this.vegetation.value().getState(level, random, randomPos);
+                        level.setBlock(randomPos, stateToPlace, Block.UPDATE_CLIENTS);
                     }
                 }
 

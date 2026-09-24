@@ -1,10 +1,15 @@
 package fuzs.universalbonemeal.common.world.level.block.behavior;
 
 import com.google.common.collect.Lists;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
@@ -25,8 +30,24 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CoralBehavior implements BoneMealBehavior {
+public record CoralBehavior(HolderSet<Block> coralBlocks, HolderSet<Block> corals, HolderSet<Block> wallCorals, Holder<Block> seaPickle) implements BoneMealBehavior {
+    public static final MapCodec<CoralBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                    RegistryCodecs.holderSet(Registries.BLOCK)
+                            .fieldOf("coral_blocks")
+                            .forGetter(CoralBehavior::coralBlocks),
+                    RegistryCodecs.holderSet(Registries.BLOCK).fieldOf("corals").forGetter(CoralBehavior::corals),
+                    RegistryCodecs.holderSet(Registries.BLOCK)
+                            .fieldOf("wall_corals")
+                            .forGetter(CoralBehavior::wallCorals),
+                    RegistryCodecs.holder(Registries.BLOCK).fieldOf("sea_pickle").forGetter(CoralBehavior::seaPickle))
+            .apply(instance, CoralBehavior::new));
+
     private static Map<Block, Block> plantToBlock;
+
+    @Override
+    public MapCodec<CoralBehavior> codec() {
+        return CODEC;
+    }
 
     @Override
     public boolean isValidBonemealTarget(LevelReader level, BlockPos blockPos, BlockState blockState, BonemealSource bonemealSource) {
@@ -43,14 +64,14 @@ public class CoralBehavior implements BoneMealBehavior {
         this.place(level, blockPos, blockState, random);
     }
 
-    private boolean place(ServerLevel level, BlockPos blockPos, BlockState blockState, RandomSource randomSource) {
+    private void place(ServerLevel level, BlockPos blockPos, BlockState blockState, RandomSource randomSource) {
         level.removeBlock(blockPos, false);
         this.dissolve();
-        if (this.placeFeature(level, randomSource, blockPos, this.getBlockEquivalent(blockState, randomSource).defaultBlockState())) {
-            return true;
-        } else {
+        if (!this.placeFeature(level,
+                randomSource,
+                blockPos,
+                this.getBlockEquivalent(blockState, randomSource).defaultBlockState())) {
             level.setBlock(blockPos, blockState, 3);
-            return false;
         }
     }
 
@@ -76,7 +97,7 @@ public class CoralBehavior implements BoneMealBehavior {
         // hopeful this will be enough for mod compat with e.g. upgrade aquatic
         String name = BuiltInRegistries.BLOCK.getKey(block).getPath();
         name = name.substring(0, name.indexOf("_coral"));
-        for (Holder<Block> holder : BuiltInRegistries.BLOCK.getTagOrEmpty(BlockTags.CORAL_BLOCKS)) {
+        for (Holder<Block> holder : this.coralBlocks) {
             if (BuiltInRegistries.BLOCK.getKey(holder.value()).getPath().contains(name)) {
                 return holder.value();
             }
@@ -87,16 +108,14 @@ public class CoralBehavior implements BoneMealBehavior {
     private Block getBlockEquivalent(BlockState blockState, RandomSource random) {
         Block block = plantToBlock.get(blockState.getBlock());
         if (block != null) return block;
-        return BuiltInRegistries.BLOCK.get(BlockTags.CORAL_BLOCKS).flatMap((holders) -> {
-            return holders.getRandomElement(random);
-        }).map(Holder::value).orElseThrow();
+        return this.coralBlocks.getRandomElement(random).map(Holder::value).orElseThrow();
     }
 
     private boolean placeFeature(LevelAccessor level, RandomSource random, BlockPos pos, BlockState blockState) {
         BlockPos.MutableBlockPos mutable = pos.mutable();
         int trunkHeight = random.nextInt(3) + 1;
         if (!this.isValidPosition(level, pos, trunkHeight)) return false;
-        for(int j = 0; j < trunkHeight; ++j) {
+        for (int j = 0; j < trunkHeight; ++j) {
             if (!this.placeCoralBlock(level, random, mutable, blockState, j == trunkHeight - 1)) {
                 return j != 0;
             }
@@ -127,10 +146,10 @@ public class CoralBehavior implements BoneMealBehavior {
         int i = blockPos.getY();
         if (i >= level.getMinY() + 1 && i + height + 1 < level.getMaxY()) {
             BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
-            for(int j = 0; j <= height + 4; ++j) {
+            for (int j = 0; j <= height + 4; ++j) {
                 int k = j < height ? 0 : (j - height) / 2 + 1;
-                for(int l = -k; l <= k; ++l) {
-                    for(int i1 = -k; i1 <= k; ++i1) {
+                for (int l = -k; l <= k; ++l) {
+                    for (int i1 = -k; i1 <= k; ++i1) {
                         BlockState blockstate1 = level.getBlockState(mutable.setWithOffset(blockPos, l, j, i1));
                         if (!this.isCoralReplaceable(blockstate1)) {
                             return false;
@@ -145,7 +164,8 @@ public class CoralBehavior implements BoneMealBehavior {
     }
 
     private boolean isCoralReplaceable(BlockState blockState) {
-        return blockState.is(Blocks.WATER) || blockState.is(BlockTags.CORAL_BLOCKS) || blockState.is(BlockTags.CORALS) || blockState.is(BlockTags.WALL_CORALS);
+        return blockState.is(Blocks.WATER) || this.coralBlocks.contains(blockState.typeHolder()) || this.corals.contains(
+                blockState.typeHolder()) || this.wallCorals.contains(blockState.typeHolder());
     }
 
     private boolean placeCoralBlock(LevelAccessor level, RandomSource random, BlockPos pos, BlockState blockState, boolean decorateTop) {
@@ -157,22 +177,22 @@ public class CoralBehavior implements BoneMealBehavior {
             // vanilla always decorates top, resulting in trunks sometimes being cut off
             if (decorateTop) {
                 if (random.nextFloat() < 0.25F) {
-                    BuiltInRegistries.BLOCK.get(BlockTags.CORALS).flatMap((holders) -> {
-                        return holders.getRandomElement(random);
-                    }).map(Holder::value).ifPresent((block) -> {
-                        level.setBlock(blockpos, block.defaultBlockState(), 2);
-                    });
+                    this.corals.getRandomElement(random)
+                            .map(Holder::value)
+                            .ifPresent(block -> level.setBlock(blockpos, block.defaultBlockState(), 2));
                 } else if (random.nextFloat() < 0.05F) {
-                    level.setBlock(blockpos, Blocks.SEA_PICKLE.defaultBlockState().setValue(SeaPickleBlock.PICKLES, random.nextInt(4) + 1), 2);
+                    level.setBlock(blockpos,
+                            this.seaPickle.value()
+                                    .defaultBlockState()
+                                    .setValue(SeaPickleBlock.PICKLES, random.nextInt(4) + 1),
+                            2);
                 }
             }
             for (Direction direction : Direction.Plane.HORIZONTAL) {
                 if (random.nextFloat() < 0.2F) {
                     BlockPos blockpos1 = pos.relative(direction);
                     if (level.getBlockState(blockpos1).is(Blocks.WATER)) {
-                        BuiltInRegistries.BLOCK.get(BlockTags.WALL_CORALS).flatMap((holders) -> {
-                            return holders.getRandomElement(random);
-                        }).map(Holder::value).ifPresent((block) -> {
+                        this.wallCorals.getRandomElement(random).map(Holder::value).ifPresent((block) -> {
                             BlockState blockstate1 = block.defaultBlockState();
                             if (blockstate1.hasProperty(BaseCoralWallFanBlock.FACING)) {
                                 blockstate1 = blockstate1.setValue(BaseCoralWallFanBlock.FACING, direction);

@@ -1,23 +1,36 @@
 package fuzs.universalbonemeal.common.world.level.block.behavior;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 
 public class MyceliumBehavior extends SpreadAroundBehavior {
-    private static final BlockStateProvider MYCELIUM_VEGETATION_PROVIDER = new WeightedStateProvider(WeightedList.<BlockState>builder()
-            .add(Blocks.RED_MUSHROOM.defaultBlockState(), 1)
-            .add(Blocks.BROWN_MUSHROOM.defaultBlockState(), 1));
+    public static final MapCodec<MyceliumBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                    BlockStateProvider.CODEC.fieldOf("vegetation").forGetter(MyceliumBehavior::getBlockStateProvider),
+                    Codec.intRange(1, 16).fieldOf("spread_width").forGetter(MyceliumBehavior::getSpreadWidth),
+                    Codec.intRange(0, 16).fieldOf("spread_height").forGetter(MyceliumBehavior::getSpreadHeight))
+            .apply(instance, MyceliumBehavior::new));
 
-    public MyceliumBehavior() {
-        super(MYCELIUM_VEGETATION_PROVIDER);
+    private final int spreadWidth;
+    private final int spreadHeight;
+
+    public MyceliumBehavior(Holder<BlockStateProvider> vegetation, int spreadWidth, int spreadHeight) {
+        super(vegetation);
+        this.spreadWidth = spreadWidth;
+        this.spreadHeight = spreadHeight;
+    }
+
+    @Override
+    public MapCodec<MyceliumBehavior> codec() {
+        return CODEC;
     }
 
     @Override
@@ -32,11 +45,11 @@ public class MyceliumBehavior extends SpreadAroundBehavior {
 
     @Override
     protected int getSpreadWidth() {
-        return 3;
+        return this.spreadWidth;
     }
 
     @Override
     protected int getSpreadHeight() {
-        return 1;
+        return this.spreadHeight;
     }
 }

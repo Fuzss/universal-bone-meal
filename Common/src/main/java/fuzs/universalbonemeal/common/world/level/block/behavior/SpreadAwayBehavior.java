@@ -5,7 +5,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -33,13 +33,17 @@ public abstract class SpreadAwayBehavior implements BoneMealBehavior {
             BlockPos currentPos = pos;
             BlockState defaultBlockState = blockState.getBlock().defaultBlockState();
             for (int j = 0; j < i / 16; ++j) {
-                currentPos = currentPos.offset(random.nextInt(3) - 1, (random.nextInt(3) - 1) * random.nextInt(3) / 2, random.nextInt(3) - 1);
-                if (!defaultBlockState.canSurvive(level, currentPos) || level.getBlockState(currentPos).isCollisionShapeFullBlock(level, currentPos)) {
+                currentPos = currentPos.offset(random.nextInt(3) - 1,
+                        (random.nextInt(3) - 1) * random.nextInt(3) / 2,
+                        random.nextInt(3) - 1);
+                if (!defaultBlockState.canSurvive(level, currentPos) || level.getBlockState(currentPos)
+                        .isCollisionShapeFullBlock(level, currentPos)) {
                     continue label;
                 }
             }
+
             if (level.isEmptyBlock(currentPos) && currentPos.getY() > level.getMinY()) {
-                ((WorldGenLevel) level).setBlock(currentPos, defaultBlockState, 2);
+                level.setBlock(currentPos, defaultBlockState, Block.UPDATE_CLIENTS);
                 if (++successes >= this.getMostSuccesses()) {
                     return;
                 }

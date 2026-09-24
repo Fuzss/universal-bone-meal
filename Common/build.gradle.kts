@@ -4,4 +4,5 @@ plugins {
 
 dependencies {
     modCompileOnlyApi(sharedLibs.puzzleslib.common)
+    modCompileOnlyApi(sharedLibs.multiloaderdataextensions.common)
 }

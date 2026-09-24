@@ -1,9 +1,13 @@
 package fuzs.universalbonemeal.common.world.level.block.behavior;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.IntProviders;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -14,6 +18,26 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 
 public class SimpleGrowingPlantBehavior extends GrowingPlantBehavior {
+    public static final MapCodec<SimpleGrowingPlantBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                    IntProviders.codec(0, 128)
+                            .fieldOf("blocks_to_grow")
+                            .forGetter(SimpleGrowingPlantBehavior::getBlocksToGrow))
+            .apply(instance, SimpleGrowingPlantBehavior::new));
+
+    private final IntProvider blocksToGrow;
+
+    public SimpleGrowingPlantBehavior(IntProvider blocksToGrow) {
+        this.blocksToGrow = blocksToGrow;
+    }
+
+    public IntProvider getBlocksToGrow() {
+        return this.blocksToGrow;
+    }
+
+    @Override
+    public MapCodec<? extends BoneMealBehavior> codec() {
+        return CODEC;
+    }
 
     @Override
     public boolean isValidBonemealTarget(LevelReader level, BlockPos blockPos, BlockState blockState, BonemealSource bonemealSource) {
@@ -55,7 +79,7 @@ public class SimpleGrowingPlantBehavior extends GrowingPlantBehavior {
 
     @Override
     protected int getBlocksToGrowWhenBonemealed(RandomSource random) {
-        return 1 + random.nextInt(2);
+        return this.blocksToGrow.sample(random);
     }
 
     @Override
@@ -64,7 +88,7 @@ public class SimpleGrowingPlantBehavior extends GrowingPlantBehavior {
     }
 
     @Override
-    protected BlockState getGrownBlockState(BlockState sourceState, RandomSource randomSource) {
+    protected BlockState getGrownBlockState(BlockState sourceState, RandomSource randomSource, ServerLevel level, BlockPos pos) {
         return sourceState.getBlock().defaultBlockState();
     }
 }
