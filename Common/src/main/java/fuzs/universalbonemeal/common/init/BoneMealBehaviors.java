@@ -18,9 +18,7 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.util.valueproviders.WeightedListInt;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.NetherWartBlock;
-import net.minecraft.world.level.block.SweetBerryBushBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
@@ -73,7 +71,8 @@ public class BoneMealBehaviors {
                         UniformInt.of(1, 2),
                         BlockPredicate.ONLY_IN_AIR_PREDICATE,
                         Holder.direct(new SimpleStateProvider(Blocks.SUGAR_CANE.defaultBlockState())),
-                        UniformInt.of(12, 16)));
+                        UniformInt.of(12, 16),
+                        SugarCaneBlock.AGE));
         context.register(CACTUS,
                 new GrowingPlantBehavior(Direction.UP,
                         UniformInt.of(1, 2),
@@ -81,9 +80,10 @@ public class BoneMealBehaviors {
                         Holder.direct(new WeightedStateProvider(WeightedList.<BlockState>builder()
                                 .add(Blocks.CACTUS.defaultBlockState(), 9)
                                 .add(Blocks.CACTUS_FLOWER.defaultBlockState(), 1))),
-                        UniformInt.of(12, 16)));
+                        UniformInt.of(12, 16),
+                        CactusBlock.AGE));
         context.register(VINE,
-                new GrowingPlantBehavior(Direction.DOWN,
+                new VineBehavior(Direction.DOWN,
                         new VinesIntProvider(5),
                         BlockPredicate.ONLY_IN_AIR_PREDICATE,
                         Holder.direct(new CopySourceProvider()),

@@ -10,6 +10,7 @@
     "max_inclusive": 16,
     "min_inclusive": 12
   },
+  "property": "age",
   "vegetation": {
     "id": "minecraft:sugar_cane",
     "properties": {

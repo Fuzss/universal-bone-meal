@@ -1,5 +1,5 @@
 {
-  "type": "universalbonemeal:growing_plant",
+  "type": "universalbonemeal:vine",
   "blocks_to_grow": {
     "type": "universalbonemeal:vines",
     "max_inclusive": 5

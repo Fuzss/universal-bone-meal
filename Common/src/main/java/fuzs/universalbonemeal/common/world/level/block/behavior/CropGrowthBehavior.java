@@ -38,8 +38,7 @@ public class CropGrowthBehavior implements BoneMealBehavior {
     }
 
     public CropGrowthBehavior(IntegerProperty ageProperty, IntProvider ageIncrease) {
-        this.property = ageProperty.getName();
-        this.ageIncrease = ageIncrease;
+        this(ageProperty.getName(), ageIncrease);
         this.ageProperty = ageProperty;
     }
 
@@ -65,10 +64,12 @@ public class CropGrowthBehavior implements BoneMealBehavior {
     @Override
     public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
         IntegerProperty ageProperty = this.getAgeProperty(state);
-        if (ageProperty != null) {
-            int age = Math.min(state.getValue(ageProperty) + this.ageIncrease.sample(random), getMaxAge(ageProperty));
-            level.setBlock(pos, state.getBlock().defaultBlockState().setValue(ageProperty, age), Block.UPDATE_CLIENTS);
+        if (ageProperty == null) {
+            return;
         }
+
+        int age = Math.min(state.getValue(ageProperty) + this.ageIncrease.sample(random), getMaxAge(ageProperty));
+        level.setBlock(pos, state.getBlock().defaultBlockState().setValue(ageProperty, age), Block.UPDATE_CLIENTS);
     }
 
     private @Nullable IntegerProperty getAgeProperty(BlockState state) {
@@ -83,7 +84,7 @@ public class CropGrowthBehavior implements BoneMealBehavior {
         return Collections.max(ageProperty.getPossibleValues());
     }
 
-    private static @Nullable IntegerProperty findProperty(BlockState source, String propertyName) {
+    public static @Nullable IntegerProperty findProperty(BlockState source, String propertyName) {
         Collection<Property<?>> properties = source.getProperties();
         return properties.stream()
                 .filter((Property<?> property) -> property.getName().equals(propertyName))
