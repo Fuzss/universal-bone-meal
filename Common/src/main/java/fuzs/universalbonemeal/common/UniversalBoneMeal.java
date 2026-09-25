@@ -21,6 +21,10 @@ public class UniversalBoneMeal implements ModConstructor {
     @Override
     public void onConstructMod() {
         ModRegistry.bootstrap();
+        registerEventHandlers();
+    }
+
+    private static void registerEventHandlers() {
         UseBoneMealCallback.EVENT.register(UseBoneMealHandler::onUseBoneMeal);
     }
 
@@ -31,12 +35,12 @@ public class UniversalBoneMeal implements ModConstructor {
 
     @Override
     public void onRegisterDataPackRegistries(DataPackRegistriesContext context) {
-        context.registerSyncedRegistry(BoneMealBehavior.REGISTRY_KEY,
-                BoneMealBehavior.DIRECT_CODEC);
+        context.registerSyncedRegistry(BoneMealBehavior.REGISTRY_KEY, BoneMealBehavior.DIRECT_CODEC);
     }
 
     @Override
     public void onRegisterPayloadTypes(PayloadTypesContext context) {
+        context.optional();
         context.playToClient(ClientboundGrowthParticlesMessage.class, ClientboundGrowthParticlesMessage.STREAM_CODEC);
     }
 
