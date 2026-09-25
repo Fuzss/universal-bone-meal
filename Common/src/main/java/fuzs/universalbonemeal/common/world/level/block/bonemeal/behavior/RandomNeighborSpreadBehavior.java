@@ -13,17 +13,20 @@ import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
-public record NeighborSpreadBehavior(Holder<BlockStateProvider> vegetation,
-                                     IntProvider spreadWidth,
-                                     IntProvider mostSuccesses) implements BoneMealBehavior {
-    public static final MapCodec<NeighborSpreadBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                    BlockStateProvider.CODEC.fieldOf("vegetation").forGetter(NeighborSpreadBehavior::vegetation),
-                    IntProviders.codec(1, 16).fieldOf("spread_width").forGetter(NeighborSpreadBehavior::spreadWidth),
-                    IntProviders.codec(1, 16).fieldOf("most_successes").forGetter(NeighborSpreadBehavior::mostSuccesses))
-            .apply(instance, NeighborSpreadBehavior::new));
+/**
+ * @see net.minecraft.world.level.levelgen.feature.RandomNeighborSpreadFeature
+ */
+public record RandomNeighborSpreadBehavior(Holder<BlockStateProvider> block,
+                                           IntProvider spreadWidth,
+                                           IntProvider mostSuccesses) implements BoneMealBehavior {
+    public static final MapCodec<RandomNeighborSpreadBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                    BlockStateProvider.CODEC.fieldOf("block").forGetter(RandomNeighborSpreadBehavior::block),
+                    IntProviders.codec(1, 16).fieldOf("spread_width").forGetter(RandomNeighborSpreadBehavior::spreadWidth),
+                    IntProviders.codec(1, 16).fieldOf("most_successes").forGetter(RandomNeighborSpreadBehavior::mostSuccesses))
+            .apply(instance, RandomNeighborSpreadBehavior::new));
 
     @Override
-    public MapCodec<NeighborSpreadBehavior> codec() {
+    public MapCodec<RandomNeighborSpreadBehavior> codec() {
         return CODEC;
     }
 
@@ -34,7 +37,7 @@ public record NeighborSpreadBehavior(Holder<BlockStateProvider> vegetation,
         int successes = 0;
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         for (int spread = (spreadWidth + 1) * 16 - 1; spread >= 0; spread--) {
-            if (this.placeVegetationAtOffset(level, random, mutablePos.set(pos), pos, spread)) {
+            if (this.placeBlockAtOffset(level, random, mutablePos.set(pos), pos, spread)) {
                 if (++successes >= mostSuccesses) {
                     return;
                 }
@@ -42,21 +45,21 @@ public record NeighborSpreadBehavior(Holder<BlockStateProvider> vegetation,
         }
     }
 
-    private boolean placeVegetationAtOffset(ServerLevel level, RandomSource random, BlockPos.MutableBlockPos offsetPos, BlockPos origin, int steps) {
-        BlockState vegetationState = null;
+    private boolean placeBlockAtOffset(ServerLevel level, RandomSource random, BlockPos.MutableBlockPos offsetPos, BlockPos origin, int steps) {
+        BlockState state = null;
         for (int step = 0; step < steps / 16; ++step) {
             offsetPos.move(random.nextInt(3) - 1,
                     (random.nextInt(3) - 1) * random.nextInt(3) / 2,
                     random.nextInt(3) - 1);
-            vegetationState = this.vegetation.value().getState(level, random, origin);
-            if (!vegetationState.canSurvive(level, offsetPos) || level.getBlockState(offsetPos)
+            state = this.block.value().getState(level, random, origin);
+            if (!state.canSurvive(level, offsetPos) || level.getBlockState(offsetPos)
                     .isCollisionShapeFullBlock(level, offsetPos)) {
                 return false;
             }
         }
 
-        if (vegetationState != null && level.isEmptyBlock(offsetPos) && offsetPos.getY() > level.getMinY()) {
-            level.setBlock(offsetPos, vegetationState, Block.UPDATE_CLIENTS);
+        if (state != null && level.isEmptyBlock(offsetPos) && offsetPos.getY() > level.getMinY()) {
+            level.setBlock(offsetPos, state, Block.UPDATE_CLIENTS);
             return true;
         } else {
             return false;

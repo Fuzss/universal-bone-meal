@@ -1,5 +1,5 @@
 {
   "type": "universalbonemeal:placed_feature",
-  "feature": "universalbonemeal:fire_coral",
+  "placed_feature": "universalbonemeal:fire_coral",
   "success_chance": 0.4
 }

@@ -89,15 +89,15 @@ public class BoneMealBehaviors {
         context.register(MELON_STEM, new RandomTickBehavior(UniformInt.of(2, 5)));
         context.register(PUMPKIN_STEM, new RandomTickBehavior(UniformInt.of(2, 5)));
         context.register(LILY_PAD,
-                new NeighborSpreadBehavior(Holder.direct(new CopySourceProvider()),
+                new RandomNeighborSpreadBehavior(Holder.direct(new CopySourceProvider()),
                         ConstantInt.of(4),
                         ConstantInt.of(3)));
         context.register(DEAD_BUSH,
-                new NeighborSpreadBehavior(Holder.direct(new CopySourceProvider()),
+                new RandomNeighborSpreadBehavior(Holder.direct(new CopySourceProvider()),
                         ConstantInt.of(4),
                         ConstantInt.of(2)));
         context.register(SMALL_FLOWER,
-                new NeighborSpreadBehavior(Holder.direct(new CopySourceProvider()),
+                new RandomNeighborSpreadBehavior(Holder.direct(new CopySourceProvider()),
                         ConstantInt.of(3),
                         ConstantInt.of(1)));
         context.register(TUBE_CORAL, placedFeatureBehavior(CoralPlacedFeatures.TUBE_CORAL));
@@ -116,7 +116,7 @@ public class BoneMealBehaviors {
                 new NeighborConversionBehavior(HolderSet.direct(Blocks.GRASS_BLOCK.builtInRegistryHolder(),
                         Blocks.MYCELIUM.builtInRegistryHolder()), 1, 1));
         context.register(PODZOL,
-                new VegetationSpreadBehavior(HolderSet.direct(Blocks.PODZOL.builtInRegistryHolder()),
+                new VegetationPatchBehavior(HolderSet.direct(Blocks.PODZOL.builtInRegistryHolder()),
                         PODZOL_VEGETATION,
                         HolderSet.direct(Blocks.FERN.builtInRegistryHolder()),
                         ConstantInt.of(128),

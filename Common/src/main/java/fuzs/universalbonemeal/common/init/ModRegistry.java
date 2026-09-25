@@ -79,13 +79,13 @@ public class ModRegistry {
         registerBoneMealBehaviorType("growing_plant", GrowingPlantBehavior.CODEC);
         registerBoneMealBehaviorType("vine", VineBehavior.CODEC);
         registerBoneMealBehaviorType("crop_growth", CropGrowthBehavior.CODEC);
-        registerBoneMealBehaviorType("fruit_stem", RandomTickBehavior.CODEC);
-        registerBoneMealBehaviorType("neighbor_spread", NeighborSpreadBehavior.CODEC);
+        registerBoneMealBehaviorType("random_tick", RandomTickBehavior.CODEC);
+        registerBoneMealBehaviorType("random_neighbor_spread", RandomNeighborSpreadBehavior.CODEC);
         registerBoneMealBehaviorType("vegetation_scatter", VegetationScatterBehavior.CODEC);
         registerBoneMealBehaviorType("placed_feature", PlacedFeatureBehavior.CODEC);
         registerBoneMealBehaviorType("chorus_plant", ChorusPlantBehavior.CODEC);
         registerBoneMealBehaviorType("neighbor_conversion", NeighborConversionBehavior.CODEC);
-        registerBoneMealBehaviorType("vegetation_spread", VegetationSpreadBehavior.CODEC);
+        registerBoneMealBehaviorType("vegetation_patch", VegetationPatchBehavior.CODEC);
         registerBoneMealBehaviorType("pop_resource", PopResourceBehavior.CODEC);
     }
 

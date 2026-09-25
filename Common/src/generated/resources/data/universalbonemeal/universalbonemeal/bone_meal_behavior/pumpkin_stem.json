@@ -1,5 +1,5 @@
 {
-  "type": "universalbonemeal:fruit_stem",
+  "type": "universalbonemeal:random_tick",
   "growth_attempts": {
     "type": "minecraft:uniform",
     "max_inclusive": 5,

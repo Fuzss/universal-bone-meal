@@ -1,10 +1,9 @@
 {
-  "type": "universalbonemeal:vegetation_spread",
+  "type": "universalbonemeal:vegetation_patch",
   "attempts": 128,
   "attempts_per_step": 16,
   "bonemealable_blocks": "minecraft:fern",
-  "ground_blocks": "minecraft:podzol",
-  "vegetation": {
+  "ground_state": {
     "type": "minecraft:weighted",
     "entries": [
       {
@@ -47,5 +46,6 @@
         "weight": 1
       }
     ]
-  }
+  },
+  "replaceable": "minecraft:podzol"
 }

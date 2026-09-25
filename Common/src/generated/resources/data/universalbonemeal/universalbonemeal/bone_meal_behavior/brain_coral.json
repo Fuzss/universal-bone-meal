@@ -1,5 +1,5 @@
 {
   "type": "universalbonemeal:placed_feature",
-  "feature": "universalbonemeal:brain_coral",
+  "placed_feature": "universalbonemeal:brain_coral",
   "success_chance": 0.4
 }

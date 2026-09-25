@@ -1,8 +1,8 @@
 {
-  "type": "universalbonemeal:neighbor_spread",
-  "most_successes": 1,
-  "spread_width": 3,
-  "vegetation": {
+  "type": "universalbonemeal:random_neighbor_spread",
+  "block": {
     "type": "universalbonemeal:copy_source"
-  }
+  },
+  "most_successes": 1,
+  "spread_width": 3
 }

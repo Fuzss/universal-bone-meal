@@ -19,27 +19,30 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import org.jspecify.annotations.Nullable;
 
-public record VegetationSpreadBehavior(HolderSet<Block> groundBlocks,
-                                       Holder<BlockStateProvider> vegetation,
-                                       HolderSet<Block> bonemealableBlocks,
-                                       IntProvider attempts,
-                                       IntProvider attemptsPerStep) implements BoneMealBehavior {
-    public static final MapCodec<VegetationSpreadBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+/**
+ * @see net.minecraft.world.level.levelgen.feature.VegetationPatchFeature
+ */
+public record VegetationPatchBehavior(HolderSet<Block> replaceable,
+                                      Holder<BlockStateProvider> groundState,
+                                      HolderSet<Block> bonemealableBlocks,
+                                      IntProvider attempts,
+                                      IntProvider attemptsPerStep) implements BoneMealBehavior {
+    public static final MapCodec<VegetationPatchBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                     RegistryCodecs.holderSet(Registries.BLOCK)
-                            .fieldOf("ground_blocks")
-                            .forGetter(VegetationSpreadBehavior::groundBlocks),
-                    BlockStateProvider.CODEC.fieldOf("vegetation").forGetter(VegetationSpreadBehavior::vegetation),
+                            .fieldOf("replaceable")
+                            .forGetter(VegetationPatchBehavior::replaceable),
+                    BlockStateProvider.CODEC.fieldOf("ground_state").forGetter(VegetationPatchBehavior::groundState),
                     RegistryCodecs.holderSet(Registries.BLOCK)
                             .fieldOf("bonemealable_blocks")
-                            .forGetter(VegetationSpreadBehavior::bonemealableBlocks),
-                    IntProviders.codec(1, 1024).fieldOf("attempts").forGetter(VegetationSpreadBehavior::attempts),
+                            .forGetter(VegetationPatchBehavior::bonemealableBlocks),
+                    IntProviders.codec(1, 1024).fieldOf("attempts").forGetter(VegetationPatchBehavior::attempts),
                     IntProviders.codec(1, 128)
                             .fieldOf("attempts_per_step")
-                            .forGetter(VegetationSpreadBehavior::attemptsPerStep))
-            .apply(instance, VegetationSpreadBehavior::new));
+                            .forGetter(VegetationPatchBehavior::attemptsPerStep))
+            .apply(instance, VegetationPatchBehavior::new));
 
     @Override
-    public MapCodec<VegetationSpreadBehavior> codec() {
+    public MapCodec<VegetationPatchBehavior> codec() {
         return CODEC;
     }
 
@@ -63,8 +66,8 @@ public record VegetationSpreadBehavior(HolderSet<Block> groundBlocks,
 
                 if (randomState.isAir() && random.nextInt(5) == 0 && level.isEmptyBlock(offsetPos)
                         && offsetPos.getY() > level.getMinY()) {
-                    BlockState vegetationState = this.vegetation.value().getState(level, random, offsetPos);
-                    level.setBlock(offsetPos, vegetationState, Block.UPDATE_CLIENTS);
+                    BlockState groundState = this.groundState.value().getState(level, random, offsetPos);
+                    level.setBlock(offsetPos, groundState, Block.UPDATE_CLIENTS);
                 }
             }
         }
@@ -75,7 +78,7 @@ public record VegetationSpreadBehavior(HolderSet<Block> groundBlocks,
             mutablePos.move(random.nextInt(3) - 1,
                     (random.nextInt(3) - 1) * random.nextInt(3) / 2,
                     random.nextInt(3) - 1);
-            if (!this.groundBlocks.contains(level.getBlockState(mutablePos.below()).typeHolder())
+            if (!this.replaceable.contains(level.getBlockState(mutablePos.below()).typeHolder())
                     || level.getBlockState(mutablePos).isCollisionShapeFullBlock(level, mutablePos)) {
                 return null;
             }
