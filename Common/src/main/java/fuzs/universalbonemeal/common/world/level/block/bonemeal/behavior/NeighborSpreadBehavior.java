@@ -1,24 +1,25 @@
 package fuzs.universalbonemeal.common.world.level.block.bonemeal.behavior;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.IntProviders;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
 public record NeighborSpreadBehavior(Holder<BlockStateProvider> vegetation,
-                                     int spreadWidth,
-                                     int mostSuccesses) implements BoneMealBehavior {
+                                     IntProvider spreadWidth,
+                                     IntProvider mostSuccesses) implements BoneMealBehavior {
     public static final MapCodec<NeighborSpreadBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                     BlockStateProvider.CODEC.fieldOf("vegetation").forGetter(NeighborSpreadBehavior::vegetation),
-                    Codec.intRange(1, 16).fieldOf("spread_width").forGetter(NeighborSpreadBehavior::spreadWidth),
-                    Codec.intRange(1, 16).fieldOf("most_successes").forGetter(NeighborSpreadBehavior::mostSuccesses))
+                    IntProviders.codec(1, 16).fieldOf("spread_width").forGetter(NeighborSpreadBehavior::spreadWidth),
+                    IntProviders.codec(1, 16).fieldOf("most_successes").forGetter(NeighborSpreadBehavior::mostSuccesses))
             .apply(instance, NeighborSpreadBehavior::new));
 
     @Override
@@ -28,11 +29,13 @@ public record NeighborSpreadBehavior(Holder<BlockStateProvider> vegetation,
 
     @Override
     public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
+        int spreadWidth = this.spreadWidth.sample(random);
+        int mostSuccesses = this.mostSuccesses.sample(random);
         int successes = 0;
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-        for (int spread = (this.spreadWidth + 1) * 16 - 1; spread >= 0; spread--) {
+        for (int spread = (spreadWidth + 1) * 16 - 1; spread >= 0; spread--) {
             if (this.placeVegetationAtOffset(level, random, mutablePos.set(pos), pos, spread)) {
-                if (++successes >= this.mostSuccesses) {
+                if (++successes >= mostSuccesses) {
                     return;
                 }
             }

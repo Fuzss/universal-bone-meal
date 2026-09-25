@@ -1,6 +1,5 @@
 package fuzs.universalbonemeal.common.world.level.block.bonemeal.behavior;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
@@ -11,6 +10,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.IntProviders;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.BonemealableBlock;
@@ -21,8 +22,8 @@ import org.jspecify.annotations.Nullable;
 public record VegetationSpreadBehavior(HolderSet<Block> groundBlocks,
                                        Holder<BlockStateProvider> vegetation,
                                        HolderSet<Block> bonemealableBlocks,
-                                       int attempts,
-                                       int attemptsPerStep) implements BoneMealBehavior {
+                                       IntProvider attempts,
+                                       IntProvider attemptsPerStep) implements BoneMealBehavior {
     public static final MapCodec<VegetationSpreadBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                     RegistryCodecs.holderSet(Registries.BLOCK)
                             .fieldOf("ground_blocks")
@@ -31,8 +32,10 @@ public record VegetationSpreadBehavior(HolderSet<Block> groundBlocks,
                     RegistryCodecs.holderSet(Registries.BLOCK)
                             .fieldOf("bonemealable_blocks")
                             .forGetter(VegetationSpreadBehavior::bonemealableBlocks),
-                    Codec.intRange(1, 1024).fieldOf("attempts").forGetter(VegetationSpreadBehavior::attempts),
-                    Codec.intRange(1, 128).fieldOf("attempts_per_step").forGetter(VegetationSpreadBehavior::attemptsPerStep))
+                    IntProviders.codec(1, 1024).fieldOf("attempts").forGetter(VegetationSpreadBehavior::attempts),
+                    IntProviders.codec(1, 128)
+                            .fieldOf("attempts_per_step")
+                            .forGetter(VegetationSpreadBehavior::attemptsPerStep))
             .apply(instance, VegetationSpreadBehavior::new));
 
     @Override
@@ -42,9 +45,15 @@ public record VegetationSpreadBehavior(HolderSet<Block> groundBlocks,
 
     @Override
     public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
+        int attempts = this.attempts.sample(random);
+        int attemptsPerStep = this.attemptsPerStep.sample(random);
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-        for (int attempt = 0; attempt < this.attempts; ++attempt) {
-            BlockPos offsetPos = this.getOffsetPos(level, random, mutablePos.setWithOffset(pos, Direction.UP), attempt);
+        for (int attempt = 0; attempt < attempts; ++attempt) {
+            BlockPos offsetPos = this.getOffsetPos(level,
+                    random,
+                    mutablePos.setWithOffset(pos, Direction.UP),
+                    attempt,
+                    attemptsPerStep);
             if (offsetPos != null) {
                 BlockState randomState = level.getBlockState(offsetPos);
                 if (this.bonemealableBlocks.contains(randomState.typeHolder())
@@ -61,8 +70,8 @@ public record VegetationSpreadBehavior(HolderSet<Block> groundBlocks,
         }
     }
 
-    private @Nullable BlockPos getOffsetPos(ServerLevel level, RandomSource random, BlockPos.MutableBlockPos mutablePos, int attempt) {
-        for (int step = 0; step < attempt / this.attemptsPerStep; ++step) {
+    private @Nullable BlockPos getOffsetPos(ServerLevel level, RandomSource random, BlockPos.MutableBlockPos mutablePos, int attempt, int attemptsPerStep) {
+        for (int step = 0; step < attempt / attemptsPerStep; ++step) {
             mutablePos.move(random.nextInt(3) - 1,
                     (random.nextInt(3) - 1) * random.nextInt(3) / 2,
                     random.nextInt(3) - 1);
