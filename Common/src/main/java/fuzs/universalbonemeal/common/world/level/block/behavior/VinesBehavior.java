@@ -20,17 +20,17 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 
 import java.util.Optional;
 
-public class VineBehavior extends GrowingPlantBehavior {
-    public static final MapCodec<VineBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> commonFields(instance).apply(
+public class VinesBehavior extends GrowingPlantBehavior {
+    public static final MapCodec<VinesBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> commonFields(instance).apply(
             instance,
-            VineBehavior::new));
+            VinesBehavior::new));
 
-    public VineBehavior(Direction direction, IntProvider blocksToGrow, BlockPredicate canGrowInto, Holder<BlockStateProvider> vegetation, IntProvider maxHeight) {
+    public VinesBehavior(Direction direction, IntProvider blocksToGrow, BlockPredicate canGrowInto, Holder<BlockStateProvider> vegetation, IntProvider maxHeight) {
         super(direction, blocksToGrow, canGrowInto, vegetation, maxHeight, Optional.empty());
     }
 
     @Override
-    public MapCodec<VineBehavior> codec() {
+    public MapCodec<VinesBehavior> codec() {
         return CODEC;
     }
 

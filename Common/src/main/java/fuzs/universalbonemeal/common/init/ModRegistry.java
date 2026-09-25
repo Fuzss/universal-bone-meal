@@ -42,7 +42,7 @@ public class ModRegistry {
         REGISTRIES.register(Registries.INT_PROVIDER_TYPE, "vines", () -> VinesIntProvider.CODEC);
         REGISTRIES.register(Registries.BLOCK_STATE_PROVIDER_TYPE, "copy_source", () -> CopySourceProvider.CODEC);
         registerBoneMealBehaviorType("growing_plant", GrowingPlantBehavior.CODEC);
-        registerBoneMealBehaviorType("vine", VineBehavior.CODEC);
+        registerBoneMealBehaviorType("vines", VinesBehavior.CODEC);
         registerBoneMealBehaviorType("crop_growth", CropGrowthBehavior.CODEC);
         registerBoneMealBehaviorType("fruit_stem", FruitStemBehavior.CODEC);
         registerBoneMealBehaviorType("neighbor_spread", NeighborSpreadBehavior.CODEC);

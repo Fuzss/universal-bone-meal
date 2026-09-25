@@ -6,7 +6,6 @@ import fuzs.universalbonemeal.common.world.level.block.behavior.*;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.component.BlockTransformer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
@@ -29,7 +28,7 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 public class BoneMealBehaviors {
     public static final ResourceKey<BoneMealBehavior> CACTUS = register("cactus");
     public static final ResourceKey<BoneMealBehavior> SUGAR_CANE = register("sugar_cane");
-    public static final ResourceKey<BoneMealBehavior> VINE = register("vine");
+    public static final ResourceKey<BoneMealBehavior> VINES = register("vines");
     public static final ResourceKey<BoneMealBehavior> NETHER_WART = register("nether_wart");
     public static final ResourceKey<BoneMealBehavior> MELON_STEM = register("melon_stem");
     public static final ResourceKey<BoneMealBehavior> PUMPKIN_STEM = register("pumpkin_stem");
@@ -82,8 +81,8 @@ public class BoneMealBehaviors {
                                 .add(Blocks.CACTUS_FLOWER.defaultBlockState(), 1))),
                         UniformInt.of(12, 16),
                         CactusBlock.AGE));
-        context.register(VINE,
-                new VineBehavior(Direction.DOWN,
+        context.register(VINES,
+                new VinesBehavior(Direction.DOWN,
                         new VinesIntProvider(5),
                         BlockPredicate.ONLY_IN_AIR_PREDICATE,
                         Holder.direct(new CopySourceProvider()),
@@ -127,7 +126,7 @@ public class BoneMealBehaviors {
                         16));
         context.register(SPORE_BLOSSOM,
                 new PopResourceBehavior(ModRegistry.SPORE_BLOSSOM_LOOT_TABLE,
-                        BlockTransformer.DropStrategy.FROM_MIDDLE));
+                        new PopResourceBehavior.Drop.FromMiddle()));
     }
 
     /**

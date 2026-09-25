@@ -64,7 +64,7 @@
       "behavior": "universalbonemeal:tube_coral"
     },
     "minecraft:vine": {
-      "behavior": "universalbonemeal:vine"
+      "behavior": "universalbonemeal:vines"
     }
   }
 }

@@ -34,7 +34,7 @@ public class ModDataMapProvider extends DataMapProvider {
                         new BoneMealBehavior.Configured(lookup.getOrThrow(BoneMealBehaviors.SUGAR_CANE)),
                         false)
                 .add(Blocks.VINE.builtInRegistryHolder(),
-                        new BoneMealBehavior.Configured(lookup.getOrThrow(BoneMealBehaviors.VINE)),
+                        new BoneMealBehavior.Configured(lookup.getOrThrow(BoneMealBehaviors.VINES)),
                         false)
                 .add(Blocks.NETHER_WART.builtInRegistryHolder(),
                         new BoneMealBehavior.Configured(lookup.getOrThrow(BoneMealBehaviors.NETHER_WART)),
