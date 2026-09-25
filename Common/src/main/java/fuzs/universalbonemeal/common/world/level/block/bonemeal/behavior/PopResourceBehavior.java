@@ -1,4 +1,4 @@
-package fuzs.universalbonemeal.common.world.level.block.behavior;
+package fuzs.universalbonemeal.common.world.level.block.bonemeal.behavior;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -10,7 +10,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,11 +23,6 @@ public record PopResourceBehavior(ResourceKey<LootTable> loot, Drop drop) implem
     @Override
     public MapCodec<PopResourceBehavior> codec() {
         return CODEC;
-    }
-
-    @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, BonemealSource source) {
-        return true;
     }
 
     @Override

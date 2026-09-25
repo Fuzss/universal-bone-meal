@@ -1,3 +1,4 @@
 {
-  "type": "universalbonemeal:chorus_flower"
+  "type": "universalbonemeal:fruit_stem",
+  "growth_attempts": 1
 }

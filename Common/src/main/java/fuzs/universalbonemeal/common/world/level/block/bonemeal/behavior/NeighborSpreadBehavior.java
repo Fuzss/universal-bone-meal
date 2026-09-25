@@ -1,4 +1,4 @@
-package fuzs.universalbonemeal.common.world.level.block.behavior;
+package fuzs.universalbonemeal.common.world.level.block.bonemeal.behavior;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,11 +24,6 @@ public record NeighborSpreadBehavior(Holder<BlockStateProvider> vegetation,
     @Override
     public MapCodec<NeighborSpreadBehavior> codec() {
         return CODEC;
-    }
-
-    @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, BonemealSource source) {
-        return true;
     }
 
     @Override

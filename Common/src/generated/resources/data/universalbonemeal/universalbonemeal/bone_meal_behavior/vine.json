@@ -1,11 +1,10 @@
 {
-  "type": "universalbonemeal:vines",
+  "type": "universalbonemeal:vine",
   "blocks_to_grow": {
-    "type": "universalbonemeal:vines",
+    "type": "universalbonemeal:vine",
     "max_inclusive": 5
   },
   "direction": "down",
-  "max_height": 128,
   "vegetation": {
     "type": "universalbonemeal:copy_source"
   }

@@ -1,0 +1,9 @@
+{
+  "type": "universalbonemeal:neighbor_conversion",
+  "spread_height": 1,
+  "spread_sources": [
+    "minecraft:grass_block",
+    "minecraft:mycelium"
+  ],
+  "spread_width": 1
+}

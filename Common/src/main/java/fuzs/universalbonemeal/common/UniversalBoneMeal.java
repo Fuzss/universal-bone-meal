@@ -8,8 +8,9 @@ import fuzs.puzzleslib.common.api.event.v1.level.UseBoneMealCallback;
 import fuzs.universalbonemeal.common.handler.UseBoneMealHandler;
 import fuzs.universalbonemeal.common.init.ModRegistry;
 import fuzs.universalbonemeal.common.network.ClientboundGrowthParticlesMessage;
-import fuzs.universalbonemeal.common.world.level.block.behavior.BoneMealBehavior;
+import fuzs.universalbonemeal.common.world.level.block.bonemeal.behavior.BoneMealBehavior;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +37,7 @@ public class UniversalBoneMeal implements ModConstructor {
     @Override
     public void onRegisterDataPackRegistries(DataPackRegistriesContext context) {
         context.registerSyncedRegistry(BoneMealBehavior.REGISTRY_KEY, BoneMealBehavior.DIRECT_CODEC);
+        context.registerSyncedRegistry(ModRegistry.PREDICATE_REGISTRY_KEY, BlockPredicate.CODEC);
     }
 
     @Override

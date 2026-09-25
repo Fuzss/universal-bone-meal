@@ -1,6 +1,6 @@
 {
   "type": "universalbonemeal:crop_growth",
-  "age_increase": {
+  "increase": {
     "type": "minecraft:weighted_list",
     "distribution": [
       {

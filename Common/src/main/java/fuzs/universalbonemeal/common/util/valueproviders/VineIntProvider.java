@@ -10,16 +10,16 @@ import net.minecraft.world.level.block.NetherVines;
 /**
  * @see NetherVines#getBlocksToGrowWhenBonemealed(RandomSource)
  */
-public record VinesIntProvider(int maxInclusive) implements IntProvider {
+public record VineIntProvider(int maxInclusive) implements IntProvider {
     /**
      * This is derived from the implementation of the vanilla method used for sampling.
      */
     private static final int MIN_INCLUSIVE = 1;
     private static final int MAX_INCLUSIVE = 128;
-    public static final MapCodec<VinesIntProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(Codec.intRange(
+    public static final MapCodec<VineIntProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(Codec.intRange(
                     MIN_INCLUSIVE,
-                    MAX_INCLUSIVE).optionalFieldOf("max_inclusive", MAX_INCLUSIVE).forGetter(VinesIntProvider::maxInclusive))
-            .apply(instance, VinesIntProvider::new));
+                    MAX_INCLUSIVE).optionalFieldOf("max_inclusive", MAX_INCLUSIVE).forGetter(VineIntProvider::maxInclusive))
+            .apply(instance, VineIntProvider::new));
 
     @Override
     public int sample(RandomSource random) {
@@ -37,7 +37,7 @@ public record VinesIntProvider(int maxInclusive) implements IntProvider {
     }
 
     @Override
-    public MapCodec<VinesIntProvider> codec() {
+    public MapCodec<VineIntProvider> codec() {
         return CODEC;
     }
 }

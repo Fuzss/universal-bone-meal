@@ -1,22 +1,18 @@
 package fuzs.universalbonemeal.common.init;
 
 import fuzs.universalbonemeal.common.util.stateproviders.CopySourceProvider;
-import fuzs.universalbonemeal.common.util.valueproviders.VinesIntProvider;
-import fuzs.universalbonemeal.common.world.level.block.behavior.*;
+import fuzs.universalbonemeal.common.util.valueproviders.VineIntProvider;
+import fuzs.universalbonemeal.common.world.level.block.bonemeal.behavior.*;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.tags.BiomeTags;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.util.valueproviders.WeightedListInt;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
@@ -28,7 +24,7 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 public class BoneMealBehaviors {
     public static final ResourceKey<BoneMealBehavior> CACTUS = register("cactus");
     public static final ResourceKey<BoneMealBehavior> SUGAR_CANE = register("sugar_cane");
-    public static final ResourceKey<BoneMealBehavior> VINES = register("vines");
+    public static final ResourceKey<BoneMealBehavior> VINE = register("vine");
     public static final ResourceKey<BoneMealBehavior> NETHER_WART = register("nether_wart");
     public static final ResourceKey<BoneMealBehavior> MELON_STEM = register("melon_stem");
     public static final ResourceKey<BoneMealBehavior> PUMPKIN_STEM = register("pumpkin_stem");
@@ -70,7 +66,6 @@ public class BoneMealBehaviors {
                         UniformInt.of(1, 2),
                         BlockPredicate.ONLY_IN_AIR_PREDICATE,
                         Holder.direct(new SimpleStateProvider(Blocks.SUGAR_CANE.defaultBlockState())),
-                        UniformInt.of(12, 16),
                         SugarCaneBlock.AGE));
         context.register(CACTUS,
                 new GrowingPlantBehavior(Direction.UP,
@@ -79,37 +74,29 @@ public class BoneMealBehaviors {
                         Holder.direct(new WeightedStateProvider(WeightedList.<BlockState>builder()
                                 .add(Blocks.CACTUS.defaultBlockState(), 9)
                                 .add(Blocks.CACTUS_FLOWER.defaultBlockState(), 1))),
-                        UniformInt.of(12, 16),
                         CactusBlock.AGE));
-        context.register(VINES,
-                new VinesBehavior(Direction.DOWN,
-                        new VinesIntProvider(5),
+        context.register(VINE,
+                new VineBehavior(Direction.DOWN,
+                        new VineIntProvider(5),
                         BlockPredicate.ONLY_IN_AIR_PREDICATE,
-                        Holder.direct(new CopySourceProvider()),
-                        ConstantInt.of(128)));
+                        Holder.direct(new CopySourceProvider())));
         context.register(NETHER_WART,
                 new CropGrowthBehavior(NetherWartBlock.AGE,
                         new WeightedListInt(WeightedList.<IntProvider>builder()
                                 .add(ConstantInt.of(0), 1)
                                 .add(ConstantInt.of(1), 3)
                                 .build())));
-        context.register(MELON_STEM,
-                new FruitStemBehavior(context.lookup(Registries.BLOCK).getOrThrow(BlockTags.SUPPORTS_MELON_STEM_FRUIT),
-                        UniformInt.of(2, 5)));
-        context.register(PUMPKIN_STEM,
-                new FruitStemBehavior(context.lookup(Registries.BLOCK)
-                        .getOrThrow(BlockTags.SUPPORTS_PUMPKIN_STEM_FRUIT), UniformInt.of(2, 5)));
+        context.register(MELON_STEM, new RandomTickBehavior(UniformInt.of(2, 5)));
+        context.register(PUMPKIN_STEM, new RandomTickBehavior(UniformInt.of(2, 5)));
         context.register(LILY_PAD, new NeighborSpreadBehavior(Holder.direct(new CopySourceProvider()), 4, 3));
         context.register(DEAD_BUSH, new NeighborSpreadBehavior(Holder.direct(new CopySourceProvider()), 4, 2));
         context.register(SMALL_FLOWER, new NeighborSpreadBehavior(Holder.direct(new CopySourceProvider()), 3, 1));
-        HolderSet<Biome> coralBiomes = context.lookup(Registries.BIOME)
-                .getOrThrow(BiomeTags.PRODUCES_CORALS_FROM_BONEMEAL);
-        context.register(TUBE_CORAL, placedFeatureBehavior(coralBiomes, CoralPlacedFeatures.TUBE_CORAL));
-        context.register(BRAIN_CORAL, placedFeatureBehavior(coralBiomes, CoralPlacedFeatures.BRAIN_CORAL));
-        context.register(BUBBLE_CORAL, placedFeatureBehavior(coralBiomes, CoralPlacedFeatures.BUBBLE_CORAL));
-        context.register(FIRE_CORAL, placedFeatureBehavior(coralBiomes, CoralPlacedFeatures.FIRE_CORAL));
-        context.register(HORN_CORAL, placedFeatureBehavior(coralBiomes, CoralPlacedFeatures.HORN_CORAL));
-        context.register(CHORUS_FLOWER, new ChorusFlowerBehavior());
+        context.register(TUBE_CORAL, placedFeatureBehavior(CoralPlacedFeatures.TUBE_CORAL));
+        context.register(BRAIN_CORAL, placedFeatureBehavior(CoralPlacedFeatures.BRAIN_CORAL));
+        context.register(BUBBLE_CORAL, placedFeatureBehavior(CoralPlacedFeatures.BUBBLE_CORAL));
+        context.register(FIRE_CORAL, placedFeatureBehavior(CoralPlacedFeatures.FIRE_CORAL));
+        context.register(HORN_CORAL, placedFeatureBehavior(CoralPlacedFeatures.HORN_CORAL));
+        context.register(CHORUS_FLOWER, new RandomTickBehavior(ConstantInt.of(1)));
         context.register(CHORUS_PLANT,
                 new ChorusPlantBehavior(HolderSet.direct(Blocks.CHORUS_PLANT.builtInRegistryHolder()),
                         HolderSet.direct(Blocks.CHORUS_FLOWER.builtInRegistryHolder()),
@@ -132,7 +119,7 @@ public class BoneMealBehaviors {
     /**
      * @see net.minecraft.world.level.block.NetherFungusBlock#BONEMEAL_SUCCESS_PROBABILITY
      */
-    private static PlacedFeatureBehavior placedFeatureBehavior(HolderSet<Biome> biomes, ResourceKey<PlacedFeature> feature) {
-        return new PlacedFeatureBehavior(feature, biomes, 0.4F);
+    private static PlacedFeatureBehavior placedFeatureBehavior(ResourceKey<PlacedFeature> feature) {
+        return new PlacedFeatureBehavior(feature, 0.4F);
     }
 }

@@ -4,67 +4,85 @@
       "behavior": "universalbonemeal:small_flower"
     },
     "minecraft:brain_coral": {
-      "behavior": "universalbonemeal:brain_coral"
+      "behavior": "universalbonemeal:brain_coral",
+      "target_predicate": "universalbonemeal:coral"
     },
     "minecraft:bubble_coral": {
-      "behavior": "universalbonemeal:bubble_coral"
+      "behavior": "universalbonemeal:bubble_coral",
+      "target_predicate": "universalbonemeal:coral"
     },
     "minecraft:cactus": {
-      "behavior": "universalbonemeal:cactus"
+      "behavior": "universalbonemeal:cactus",
+      "target_predicate": "universalbonemeal:cactus"
     },
     "minecraft:chorus_flower": {
-      "behavior": "universalbonemeal:chorus_flower"
+      "behavior": "universalbonemeal:chorus_flower",
+      "target_predicate": "universalbonemeal:chorus_flower"
     },
     "minecraft:chorus_plant": {
-      "behavior": "universalbonemeal:chorus_plant"
+      "behavior": "universalbonemeal:chorus_plant",
+      "target_predicate": "universalbonemeal:chorus_plant"
     },
     "minecraft:coarse_dirt": {
-      "behavior": "universalbonemeal:dirt"
+      "behavior": "universalbonemeal:dirt",
+      "target_predicate": "universalbonemeal:neighbor_conversion"
     },
     "minecraft:dead_bush": {
       "behavior": "universalbonemeal:dead_bush"
     },
     "minecraft:dirt": {
-      "behavior": "universalbonemeal:dirt"
+      "behavior": "universalbonemeal:dirt",
+      "target_predicate": "universalbonemeal:neighbor_conversion"
     },
     "minecraft:dirt_path": {
-      "behavior": "universalbonemeal:dirt"
+      "behavior": "universalbonemeal:dirt",
+      "target_predicate": "universalbonemeal:neighbor_conversion"
     },
     "minecraft:fire_coral": {
-      "behavior": "universalbonemeal:fire_coral"
+      "behavior": "universalbonemeal:fire_coral",
+      "target_predicate": "universalbonemeal:coral"
     },
     "minecraft:horn_coral": {
-      "behavior": "universalbonemeal:horn_coral"
+      "behavior": "universalbonemeal:horn_coral",
+      "target_predicate": "universalbonemeal:coral"
     },
     "minecraft:lily_pad": {
       "behavior": "universalbonemeal:lily_pad"
     },
     "minecraft:melon_stem": {
-      "behavior": "universalbonemeal:melon_stem"
+      "behavior": "universalbonemeal:melon_stem",
+      "target_predicate": "universalbonemeal:melon_stem"
     },
     "minecraft:mycelium": {
-      "behavior": "universalbonemeal:mycelium"
+      "behavior": "universalbonemeal:mycelium",
+      "target_predicate": "universalbonemeal:air_above"
     },
     "minecraft:nether_wart": {
-      "behavior": "universalbonemeal:nether_wart"
+      "behavior": "universalbonemeal:nether_wart",
+      "target_predicate": "universalbonemeal:nether_wart"
     },
     "minecraft:podzol": {
-      "behavior": "universalbonemeal:podzol"
+      "behavior": "universalbonemeal:podzol",
+      "target_predicate": "universalbonemeal:air_above"
     },
     "minecraft:pumpkin_stem": {
-      "behavior": "universalbonemeal:pumpkin_stem"
+      "behavior": "universalbonemeal:pumpkin_stem",
+      "target_predicate": "universalbonemeal:pumpkin_stem"
     },
     "minecraft:spore_blossom": {
       "behavior": "universalbonemeal:spore_blossom"
     },
     "minecraft:sugar_cane": {
-      "behavior": "universalbonemeal:sugar_cane"
+      "behavior": "universalbonemeal:sugar_cane",
+      "target_predicate": "universalbonemeal:sugar_cane"
     },
     "minecraft:tube_coral": {
-      "behavior": "universalbonemeal:tube_coral"
+      "behavior": "universalbonemeal:tube_coral",
+      "target_predicate": "universalbonemeal:coral"
     },
     "minecraft:vine": {
-      "behavior": "universalbonemeal:vines"
+      "behavior": "universalbonemeal:vine",
+      "target_predicate": "universalbonemeal:vine"
     }
   }
 }

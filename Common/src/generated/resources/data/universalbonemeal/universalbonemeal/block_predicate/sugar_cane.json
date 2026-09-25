@@ -1,0 +1,8 @@
+{
+  "type": "universalbonemeal:growing_plant",
+  "max_height": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 16,
+    "min_inclusive": 12
+  }
+}

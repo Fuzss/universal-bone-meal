@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:all_of",
+  "predicates": [
+    {
+      "type": "universalbonemeal:growing_plant",
+      "direction": "down",
+      "max_height": 128
+    },
+    {
+      "type": "universalbonemeal:vine_face"
+    }
+  ]
+}

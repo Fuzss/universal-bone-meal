@@ -1,4 +1,4 @@
-package fuzs.universalbonemeal.common.world.level.block.behavior;
+package fuzs.universalbonemeal.common.world.level.block.bonemeal.behavior;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -11,7 +11,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.BonemealableBlock;
@@ -39,11 +38,6 @@ public record VegetationSpreadBehavior(HolderSet<Block> groundBlocks,
     @Override
     public MapCodec<VegetationSpreadBehavior> codec() {
         return CODEC;
-    }
-
-    @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, BonemealSource source) {
-        return level.getBlockState(pos.above()).isAir();
     }
 
     @Override

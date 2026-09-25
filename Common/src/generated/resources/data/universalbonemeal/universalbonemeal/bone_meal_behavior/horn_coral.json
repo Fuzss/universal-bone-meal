@@ -1,6 +1,5 @@
 {
   "type": "universalbonemeal:placed_feature",
-  "biomes": "#minecraft:produces_corals_from_bonemeal",
   "feature": "universalbonemeal:horn_coral",
   "success_chance": 0.4
 }

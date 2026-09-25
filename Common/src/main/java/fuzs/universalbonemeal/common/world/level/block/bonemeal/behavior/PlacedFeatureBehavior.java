@@ -1,42 +1,31 @@
-package fuzs.universalbonemeal.common.world.level.block.behavior;
+package fuzs.universalbonemeal.common.world.level.block.bonemeal.behavior;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 public record PlacedFeatureBehavior(ResourceKey<PlacedFeature> feature,
-                                    HolderSet<Biome> biomes,
                                     float successChance) implements BoneMealBehavior {
     public static final MapCodec<PlacedFeatureBehavior> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                     ResourceKey.codec(Registries.PLACED_FEATURE)
                             .fieldOf("feature")
                             .forGetter(PlacedFeatureBehavior::feature),
-                    RegistryCodecs.holderSet(Registries.BIOME).fieldOf("biomes").forGetter(PlacedFeatureBehavior::biomes),
                     Codec.floatRange(0.0F, 1.0F).fieldOf("success_chance").forGetter(PlacedFeatureBehavior::successChance))
             .apply(instance, PlacedFeatureBehavior::new));
 
     @Override
     public MapCodec<PlacedFeatureBehavior> codec() {
         return CODEC;
-    }
-
-    @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, BonemealSource source) {
-        return this.biomes.contains(level.getBiome(pos));
     }
 
     @Override
