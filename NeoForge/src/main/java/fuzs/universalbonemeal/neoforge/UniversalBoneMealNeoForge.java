@@ -22,8 +22,8 @@ public class UniversalBoneMealNeoForge {
         ModConstructor.construct(UniversalBoneMeal.MOD_ID, UniversalBoneMeal::new);
         DataProviderBuilder.of(UniversalBoneMeal.MOD_ID)
                 .addWorldBootstrap(Registries.PLACED_FEATURE, CoralPlacedFeatures::bootstrap)
-                .addWorldBootstrap(BoneMealBehavior.REGISTRY_KEY, BoneMealBehaviors::bootstrap)
                 .addWorldBootstrap(ModRegistry.PREDICATE_REGISTRY_KEY, BoneMealBlockPredicates::bootstrap)
+                .addWorldBootstrap(BoneMealBehavior.REGISTRY_KEY, BoneMealBehaviors::bootstrap)
                 .addProvider(ModBlockTagsProvider::new)
                 .addProvider(ModDataMapProvider::new)
                 .addLootProvider(ModBlockInteractLootProvider::new, LootContextParamSets.BLOCK_INTERACT);

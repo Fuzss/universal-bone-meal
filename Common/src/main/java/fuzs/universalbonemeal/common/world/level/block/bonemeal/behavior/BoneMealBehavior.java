@@ -37,9 +37,17 @@ public interface BoneMealBehavior {
      */
     MapCodec<? extends BoneMealBehavior> codec();
 
+    /**
+     * @see net.minecraft.world.level.block.BonemealableBlock#isBonemealSuccess(Level, RandomSource, BlockPos,
+     *         BlockState, BonemealSource)
+     */
     default boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
         return true;
     }
 
+    /**
+     * @see net.minecraft.world.level.block.BonemealableBlock#performBonemeal(ServerLevel, RandomSource, BlockPos,
+     *         BlockState, BonemealSource)
+     */
     void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state, BonemealSource source);
 }

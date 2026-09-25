@@ -60,7 +60,7 @@ public final class CropGrowthBehavior implements BoneMealBehavior, LazyBlockProp
         }
 
         int value = Math.min(state.getValue(property) + this.increase.sample(random), this.getMaxValue(property));
-        level.setBlock(pos, state.getBlock().defaultBlockState().setValue(property, value), Block.UPDATE_CLIENTS);
+        level.setBlock(pos, state.setValue(property, value), Block.UPDATE_CLIENTS);
     }
 
     private @Nullable IntegerProperty getProperty(BlockState state) {

@@ -25,12 +25,12 @@ public final class BlockPropertyPredicate extends StateTestingPredicate implemen
         this.propertyName = propertyName;
     }
 
-    public BlockPropertyPredicate(String propertyName) {
-        this(Vec3i.ZERO, propertyName);
+    public BlockPropertyPredicate(IntegerProperty property) {
+        this(Vec3i.ZERO, property);
     }
 
-    public BlockPropertyPredicate(IntegerProperty property) {
-        this(Vec3i.ZERO, property.getName());
+    public BlockPropertyPredicate(Vec3i offset, IntegerProperty property) {
+        this(offset, property.getName());
         this.property = property;
     }
 
