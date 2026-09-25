@@ -65,6 +65,7 @@
     "minecraft:melon_stem": {
       "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:melon_stem",
+      "replace": true,
       "when": "universalbonemeal:melon_stem"
     },
     "minecraft:mycelium": {
@@ -85,6 +86,7 @@
     "minecraft:pumpkin_stem": {
       "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:pumpkin_stem",
+      "replace": true,
       "when": "universalbonemeal:pumpkin_stem"
     },
     "minecraft:spore_blossom": {

@@ -48,7 +48,7 @@ public class BoneMealBlockPredicates {
         context.register(VINE,
                 BlockPredicate.allOf(new GrowingPlantPredicate(Direction.DOWN,
                         ConstantInt.of(128),
-                        BlockPredicate.ONLY_IN_AIR_PREDICATE), new VineFacePredicate()));
+                        BlockPredicate.ONLY_IN_AIR_PREDICATE), new VinePredicate()));
         context.register(NETHER_WART, new BlockPropertyPredicate(NetherWartBlock.AGE));
         context.register(MELON_STEM, new FruitStemPredicate(melonSupport));
         context.register(PUMPKIN_STEM, new FruitStemPredicate(pumpkinSupport));

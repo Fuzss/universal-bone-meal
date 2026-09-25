@@ -6,8 +6,8 @@ import fuzs.universalbonemeal.common.init.BoneMealBehaviors;
 import fuzs.universalbonemeal.common.init.BoneMealBlockPredicates;
 import fuzs.universalbonemeal.common.init.ModRegistry;
 import fuzs.universalbonemeal.common.world.level.block.bonemeal.Bonemealable;
-import fuzs.universalbonemeal.common.world.level.block.bonemeal.conditional.SimpleConditionalBoneMealBehavior;
 import fuzs.universalbonemeal.common.world.level.block.bonemeal.behavior.BoneMealBehavior;
+import fuzs.universalbonemeal.common.world.level.block.bonemeal.conditional.SimpleConditionalBoneMealBehavior;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
@@ -32,77 +32,82 @@ public class ModDataMapProvider extends DataMapProvider {
     protected void gather(HolderLookup.Provider lookupProvider) {
         this.builder(NeoForgeDataMapToken.unwrap(ModRegistry.BONE_MEAL_BEHAVIORS_DATA_MAP))
                 .add(Blocks.CACTUS.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.CACTUS, BoneMealBlockPredicates.CACTUS),
+                        simple(lookupProvider, BoneMealBehaviors.CACTUS, BoneMealBlockPredicates.CACTUS),
                         false)
                 .add(Blocks.SUGAR_CANE.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.SUGAR_CANE, BoneMealBlockPredicates.SUGAR_CANE),
+                        simple(lookupProvider, BoneMealBehaviors.SUGAR_CANE, BoneMealBlockPredicates.SUGAR_CANE),
                         false)
                 .add(Blocks.VINE.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.VINE, BoneMealBlockPredicates.VINE),
+                        simple(lookupProvider, BoneMealBehaviors.VINE, BoneMealBlockPredicates.VINE),
                         false)
                 .add(Blocks.NETHER_WART.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.NETHER_WART, BoneMealBlockPredicates.NETHER_WART),
+                        simple(lookupProvider, BoneMealBehaviors.NETHER_WART, BoneMealBlockPredicates.NETHER_WART),
                         false)
                 .add(Blocks.MELON_STEM.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.MELON_STEM, BoneMealBlockPredicates.MELON_STEM),
+                        simple(lookupProvider, BoneMealBehaviors.MELON_STEM, BoneMealBlockPredicates.MELON_STEM, true),
                         false)
                 .add(Blocks.PUMPKIN_STEM.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.PUMPKIN_STEM, BoneMealBlockPredicates.PUMPKIN_STEM),
+                        simple(lookupProvider,
+                                BoneMealBehaviors.PUMPKIN_STEM,
+                                BoneMealBlockPredicates.PUMPKIN_STEM,
+                                true),
                         false)
-                .add(Blocks.LILY_PAD.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.LILY_PAD),
-                        false)
+                .add(Blocks.LILY_PAD.builtInRegistryHolder(), simple(lookupProvider, BoneMealBehaviors.LILY_PAD), false)
                 .add(Blocks.DEAD_BUSH.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.DEAD_BUSH),
+                        simple(lookupProvider, BoneMealBehaviors.DEAD_BUSH),
                         false)
-                .add(BlockTags.SMALL_FLOWERS, conditional(lookupProvider, BoneMealBehaviors.SMALL_FLOWER), false)
+                .add(BlockTags.SMALL_FLOWERS, simple(lookupProvider, BoneMealBehaviors.SMALL_FLOWER), false)
                 .add(Blocks.TUBE_CORAL.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.TUBE_CORAL, BoneMealBlockPredicates.CORAL),
+                        simple(lookupProvider, BoneMealBehaviors.TUBE_CORAL, BoneMealBlockPredicates.CORAL),
                         false)
                 .add(Blocks.BRAIN_CORAL.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.BRAIN_CORAL, BoneMealBlockPredicates.CORAL),
+                        simple(lookupProvider, BoneMealBehaviors.BRAIN_CORAL, BoneMealBlockPredicates.CORAL),
                         false)
                 .add(Blocks.BUBBLE_CORAL.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.BUBBLE_CORAL, BoneMealBlockPredicates.CORAL),
+                        simple(lookupProvider, BoneMealBehaviors.BUBBLE_CORAL, BoneMealBlockPredicates.CORAL),
                         false)
                 .add(Blocks.FIRE_CORAL.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.FIRE_CORAL, BoneMealBlockPredicates.CORAL),
+                        simple(lookupProvider, BoneMealBehaviors.FIRE_CORAL, BoneMealBlockPredicates.CORAL),
                         false)
                 .add(Blocks.HORN_CORAL.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.HORN_CORAL, BoneMealBlockPredicates.CORAL),
+                        simple(lookupProvider, BoneMealBehaviors.HORN_CORAL, BoneMealBlockPredicates.CORAL),
                         false)
                 .add(Blocks.CHORUS_FLOWER.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.CHORUS_FLOWER, BoneMealBlockPredicates.CHORUS_FLOWER),
+                        simple(lookupProvider, BoneMealBehaviors.CHORUS_FLOWER, BoneMealBlockPredicates.CHORUS_FLOWER),
                         false)
                 .add(Blocks.CHORUS_PLANT.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.CHORUS_PLANT, BoneMealBlockPredicates.CHORUS_PLANT),
+                        simple(lookupProvider, BoneMealBehaviors.CHORUS_PLANT, BoneMealBlockPredicates.CHORUS_PLANT),
                         false)
                 .add(Blocks.MYCELIUM.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.MYCELIUM, BoneMealBlockPredicates.AIR_ABOVE),
+                        simple(lookupProvider, BoneMealBehaviors.MYCELIUM, BoneMealBlockPredicates.AIR_ABOVE),
                         false)
                 .add(Blocks.DIRT.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.DIRT, BoneMealBlockPredicates.NEIGHBOR_CONVERSION),
+                        simple(lookupProvider, BoneMealBehaviors.DIRT, BoneMealBlockPredicates.NEIGHBOR_CONVERSION),
                         false)
                 .add(Blocks.COARSE_DIRT.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.DIRT, BoneMealBlockPredicates.NEIGHBOR_CONVERSION),
+                        simple(lookupProvider, BoneMealBehaviors.DIRT, BoneMealBlockPredicates.NEIGHBOR_CONVERSION),
                         false)
                 .add(Blocks.DIRT_PATH.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.DIRT, BoneMealBlockPredicates.NEIGHBOR_CONVERSION),
+                        simple(lookupProvider, BoneMealBehaviors.DIRT, BoneMealBlockPredicates.NEIGHBOR_CONVERSION),
                         false)
                 .add(Blocks.PODZOL.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.PODZOL, BoneMealBlockPredicates.AIR_ABOVE),
+                        simple(lookupProvider, BoneMealBehaviors.PODZOL, BoneMealBlockPredicates.AIR_ABOVE),
                         false)
                 .add(Blocks.SPORE_BLOSSOM.builtInRegistryHolder(),
-                        conditional(lookupProvider, BoneMealBehaviors.SPORE_BLOSSOM),
+                        simple(lookupProvider, BoneMealBehaviors.SPORE_BLOSSOM),
                         false);
     }
 
-    private static Bonemealable conditional(HolderLookup.Provider lookupProvider, ResourceKey<BoneMealBehavior> behavior) {
+    private static Bonemealable simple(HolderLookup.Provider lookupProvider, ResourceKey<BoneMealBehavior> behavior) {
         return new Bonemealable(new SimpleConditionalBoneMealBehavior(lookupProvider.getOrThrow(behavior)), false);
     }
 
-    private static Bonemealable conditional(HolderLookup.Provider lookupProvider, ResourceKey<BoneMealBehavior> behavior, ResourceKey<BlockPredicate> predicate) {
+    private static Bonemealable simple(HolderLookup.Provider lookupProvider, ResourceKey<BoneMealBehavior> behavior, ResourceKey<BlockPredicate> predicate) {
+        return simple(lookupProvider, behavior, predicate, false);
+    }
+
+    private static Bonemealable simple(HolderLookup.Provider lookupProvider, ResourceKey<BoneMealBehavior> behavior, ResourceKey<BlockPredicate> predicate, boolean replace) {
         return new Bonemealable(new SimpleConditionalBoneMealBehavior(lookupProvider.getOrThrow(behavior),
-                lookupProvider.getOrThrow(predicate)), false);
+                lookupProvider.getOrThrow(predicate)), replace);
     }
 }

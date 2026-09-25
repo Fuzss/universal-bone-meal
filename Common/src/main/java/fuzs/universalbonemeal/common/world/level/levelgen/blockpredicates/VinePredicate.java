@@ -15,15 +15,15 @@ import net.minecraft.world.level.levelgen.blockpredicates.StateTestingPredicate;
 /**
  * @see VineBlock#getUpdatedState(BlockState, net.minecraft.world.level.BlockGetter, BlockPos)
  */
-public final class VineFacePredicate extends StateTestingPredicate {
-    public static final MapCodec<VineFacePredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> stateTestingCodec(
-            instance).apply(instance, VineFacePredicate::new));
+public final class VinePredicate extends StateTestingPredicate {
+    public static final MapCodec<VinePredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> stateTestingCodec(
+            instance).apply(instance, VinePredicate::new));
 
-    public VineFacePredicate(Vec3i offset) {
+    public VinePredicate(Vec3i offset) {
         super(offset);
     }
 
-    public VineFacePredicate() {
+    public VinePredicate() {
         this(Vec3i.ZERO);
     }
 
@@ -41,6 +41,6 @@ public final class VineFacePredicate extends StateTestingPredicate {
 
     @Override
     public BlockPredicateType<?> type() {
-        return ModRegistry.VINE_FACE_BLOCK_PREDICATE_TYPE.value();
+        return ModRegistry.VINE_BLOCK_PREDICATE_TYPE.value();
     }
 }

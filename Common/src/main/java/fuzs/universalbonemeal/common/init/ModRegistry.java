@@ -40,10 +40,10 @@ public class ModRegistry {
             Registries.BLOCK_PREDICATE_TYPE,
             "growing_plant",
             () -> (BlockPredicateType<GrowingPlantPredicate>) () -> GrowingPlantPredicate.CODEC);
-    public static final Holder.Reference<BlockPredicateType<?>> VINE_FACE_BLOCK_PREDICATE_TYPE = REGISTRIES.register(
+    public static final Holder.Reference<BlockPredicateType<?>> VINE_BLOCK_PREDICATE_TYPE = REGISTRIES.register(
             Registries.BLOCK_PREDICATE_TYPE,
-            "vine_face",
-            () -> (BlockPredicateType<VineFacePredicate>) () -> VineFacePredicate.CODEC);
+            "vine",
+            () -> (BlockPredicateType<VinePredicate>) () -> VinePredicate.CODEC);
     public static final Holder.Reference<BlockPredicateType<?>> BLOCK_PROPERTY_BLOCK_PREDICATE_TYPE = REGISTRIES.register(
             Registries.BLOCK_PREDICATE_TYPE,
             "block_property",
