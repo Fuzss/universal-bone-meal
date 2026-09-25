@@ -122,7 +122,7 @@ public class BoneMealBehaviors {
                         ConstantInt.of(128),
                         ConstantInt.of(16)));
         context.register(SPORE_BLOSSOM,
-                new PopResourceBehavior(ModRegistry.SPORE_BLOSSOM_LOOT_TABLE,
+                new PopResourceBehavior(ModRegistry.GROW_SPORE_BLOSSOM_LOOT_TABLE,
                         new PopResourceBehavior.Drop.FromMiddle()));
     }
 

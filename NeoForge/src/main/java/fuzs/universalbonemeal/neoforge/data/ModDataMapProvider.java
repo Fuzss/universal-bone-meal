@@ -81,10 +81,7 @@ public class ModDataMapProvider extends DataMapProvider {
                 .add(Blocks.MYCELIUM.builtInRegistryHolder(),
                         simple(lookupProvider, BoneMealBehaviors.MYCELIUM, BoneMealBlockPredicates.AIR_ABOVE),
                         false)
-                .add(Blocks.DIRT.builtInRegistryHolder(),
-                        simple(lookupProvider, BoneMealBehaviors.DIRT, BoneMealBlockPredicates.NEIGHBOR_CONVERSION),
-                        false)
-                .add(Blocks.COARSE_DIRT.builtInRegistryHolder(),
+                .add(BlockTags.DIRT,
                         simple(lookupProvider, BoneMealBehaviors.DIRT, BoneMealBlockPredicates.NEIGHBOR_CONVERSION),
                         false)
                 .add(Blocks.DIRT_PATH.builtInRegistryHolder(),

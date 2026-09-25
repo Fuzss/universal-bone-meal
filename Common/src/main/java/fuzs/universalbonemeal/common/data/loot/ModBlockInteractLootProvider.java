@@ -17,7 +17,7 @@ public class ModBlockInteractLootProvider extends AbstractLootSubProvider {
 
     @Override
     public void generate() {
-        this.output.accept(ModRegistry.SPORE_BLOSSOM_LOOT_TABLE,
+        this.output.accept(ModRegistry.GROW_SPORE_BLOSSOM_LOOT_TABLE,
                 LootTable.lootTable()
                         .withPool(LootPool.lootPool()
                                 .setRolls(ContextIntProviders.exactly(1))

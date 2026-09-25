@@ -60,8 +60,8 @@ public class ModRegistry {
             Registries.BLOCK_PREDICATE_TYPE,
             "neighbor_conversion",
             () -> (BlockPredicateType<NeighborConversionPredicate>) () -> NeighborConversionPredicate.CODEC);
-    public static final ResourceKey<LootTable> SPORE_BLOSSOM_LOOT_TABLE = REGISTRIES.makeResourceKey(Registries.LOOT_TABLE,
-            "spore_blossom");
+    public static final ResourceKey<LootTable> GROW_SPORE_BLOSSOM_LOOT_TABLE = REGISTRIES.makeResourceKey(Registries.LOOT_TABLE,
+            "grow/spore_blossom");
 
     static final TagFactory TAGS = TagFactory.make(UniversalBoneMeal.MOD_ID);
     public static final TagKey<Block> FERTILIZER_RESISTANT_PLANTS_BLOCK_TAG = TAGS.registerBlockTag(

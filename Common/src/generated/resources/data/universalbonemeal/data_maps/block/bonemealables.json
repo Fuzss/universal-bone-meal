@@ -1,5 +1,10 @@
 {
   "values": {
+    "#minecraft:dirt": {
+      "type": "universalbonemeal:conditional",
+      "behavior": "universalbonemeal:dirt",
+      "when": "universalbonemeal:neighbor_conversion"
+    },
     "#minecraft:small_flowers": {
       "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:small_flower"
@@ -29,19 +34,9 @@
       "behavior": "universalbonemeal:chorus_plant",
       "when": "universalbonemeal:chorus_plant"
     },
-    "minecraft:coarse_dirt": {
-      "type": "universalbonemeal:conditional",
-      "behavior": "universalbonemeal:dirt",
-      "when": "universalbonemeal:neighbor_conversion"
-    },
     "minecraft:dead_bush": {
       "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:dead_bush"
-    },
-    "minecraft:dirt": {
-      "type": "universalbonemeal:conditional",
-      "behavior": "universalbonemeal:dirt",
-      "when": "universalbonemeal:neighbor_conversion"
     },
     "minecraft:dirt_path": {
       "type": "universalbonemeal:conditional",
