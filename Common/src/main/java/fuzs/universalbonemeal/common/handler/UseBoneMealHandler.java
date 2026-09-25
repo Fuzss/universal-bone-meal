@@ -2,56 +2,45 @@ package fuzs.universalbonemeal.common.handler;
 
 import fuzs.multiloaderdataextensions.common.api.v2.DataMapLookup;
 import fuzs.puzzleslib.common.api.event.v1.core.EventResult;
-import fuzs.puzzleslib.common.api.item.v2.ItemHelper;
 import fuzs.puzzleslib.common.api.network.v4.MessageSender;
 import fuzs.puzzleslib.common.api.network.v4.PlayerSet;
 import fuzs.universalbonemeal.common.init.ModRegistry;
 import fuzs.universalbonemeal.common.network.ClientboundGrowthParticlesMessage;
 import fuzs.universalbonemeal.common.world.level.block.behavior.BoneMealBehavior;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.BonemealSource;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import org.apache.commons.lang3.function.Consumers;
+
+import java.util.function.Function;
 
 public class UseBoneMealHandler {
 
-    public static EventResult onUseBoneMeal(Level level, BlockPos blockPos, BlockState blockState, ItemStack itemStack) {
-        Holder<BoneMealBehavior> holder = DataMapLookup.getData(ModRegistry.BONE_MEAL_BEHAVIORS_DATA_MAP,
-                blockState.typeHolder());
-        if (holder != null) {
-            BoneMealBehavior boneMealBehavior = holder.value();
-            if (boneMealBehavior.isValidBonemealTarget(level, blockPos, blockState, BonemealSource.INTERACTION)) {
+    public static EventResult onUseBoneMeal(Level level, BlockPos pos, BlockState state, ItemStack item) {
+        if (state.is(ModRegistry.FERTILIZER_RESISTANT_PLANTS_BLOCK_TAG)) {
+            return EventResult.DENY;
+        }
+
+        BoneMealBehavior.Configured configuredBehavior = DataMapLookup.getData(ModRegistry.BONE_MEAL_BEHAVIORS_DATA_MAP,
+                state.typeHolder());
+        if (configuredBehavior != null && (!(state.getBlock() instanceof BonemealableBlock)
+                || configuredBehavior.replace())) {
+            BoneMealBehavior behavior = configuredBehavior.behavior().value();
+            if (behavior.isValidBonemealTarget(level, pos, state, BonemealSource.INTERACTION)) {
                 if (level instanceof ServerLevel serverLevel) {
-                    if (boneMealBehavior.isBonemealSuccess(level,
-                            level.getRandom(),
-                            blockPos,
-                            blockState,
-                            BonemealSource.INTERACTION)) {
-                        boneMealBehavior.performBonemeal(serverLevel,
+                    if (behavior.isBonemealSuccess(level, level.getRandom(), pos, state, BonemealSource.INTERACTION)) {
+                        behavior.performBonemeal(serverLevel,
                                 level.getRandom(),
-                                blockPos,
-                                blockState,
+                                pos,
+                                state,
                                 BonemealSource.INTERACTION);
                     }
 
-                    if (itemStack.isStackable()) {
-                        itemStack.shrink(1);
-                    } else if (itemStack.isDamageableItem()) {
-                        ItemHelper.hurtAndBreak(itemStack, 1, serverLevel, null, Consumers.nop());
-                    }
-
-                    // vanilla only spawns particles for blocks that implement BonemealableBlock now,
-                    // which in our case only applies to stem blocks
-                    // so send a custom packet for all others
-                    if (!(blockState.getBlock() instanceof BonemealableBlock)) {
-                        MessageSender.broadcast(PlayerSet.nearPosition(blockPos, serverLevel),
-                                new ClientboundGrowthParticlesMessage(blockPos));
-                    }
+                    shrinkOrHurtItem(serverLevel, item);
+                    broadcastGrowthParticles(serverLevel, pos, state);
                 }
 
                 return EventResult.ALLOW;
@@ -59,5 +48,23 @@ public class UseBoneMealHandler {
         }
 
         return EventResult.PASS;
+    }
+
+    /**
+     * Vanilla only spawns particles for blocks that implement {@link BonemealableBlock} now. In our case that only
+     * applies to stem blocks. Therefore, we send a custom packet for all others.
+     */
+    private static void broadcastGrowthParticles(ServerLevel level, BlockPos pos, BlockState state) {
+        if (!(state.getBlock() instanceof BonemealableBlock)) {
+            MessageSender.broadcast(PlayerSet.nearPosition(pos, level), new ClientboundGrowthParticlesMessage(pos));
+        }
+    }
+
+    private static void shrinkOrHurtItem(ServerLevel level, ItemStack item) {
+        if (!item.isDamageableItem()) {
+            item.shrink(1);
+        } else {
+            item.hurtAndBreak(1, level, null, Function.identity()::apply);
+        }
     }
 }

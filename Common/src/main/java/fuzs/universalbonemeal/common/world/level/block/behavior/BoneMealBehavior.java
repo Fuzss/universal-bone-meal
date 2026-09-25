@@ -2,6 +2,7 @@ package fuzs.universalbonemeal.common.world.level.block.behavior;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import fuzs.universalbonemeal.common.UniversalBoneMeal;
 import fuzs.universalbonemeal.common.init.ModRegistry;
 import net.minecraft.core.BlockPos;
@@ -46,5 +47,18 @@ public interface BoneMealBehavior extends BonemealableBlock {
     @Override
     default Type getType() {
         throw new UnsupportedOperationException();
+    }
+
+    record Configured(Holder<BoneMealBehavior> behavior, boolean replace) {
+        public static final Codec<Configured> SIMPLE_CODEC = BoneMealBehavior.CODEC.xmap(Configured::new,
+                Configured::behavior);
+        public static final Codec<Configured> CODEC = Codec.withAlternative(RecordCodecBuilder.create(instance -> instance.group(
+                        BoneMealBehavior.CODEC.fieldOf("behavior").forGetter(Configured::behavior),
+                        Codec.BOOL.optionalFieldOf("replace", false).forGetter(Configured::replace))
+                .apply(instance, Configured::new)), SIMPLE_CODEC);
+
+        public Configured(Holder<BoneMealBehavior> behavior) {
+            this(behavior, false);
+        }
     }
 }

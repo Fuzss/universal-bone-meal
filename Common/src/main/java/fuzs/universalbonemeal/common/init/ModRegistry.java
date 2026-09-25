@@ -10,7 +10,6 @@ import fuzs.universalbonemeal.common.UniversalBoneMeal;
 import fuzs.universalbonemeal.common.util.stateproviders.CopySourceProvider;
 import fuzs.universalbonemeal.common.util.valueproviders.VinesIntProvider;
 import fuzs.universalbonemeal.common.world.level.block.behavior.*;
-import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -29,14 +28,14 @@ public class ModRegistry {
             "spore_blossom");
 
     static final TagFactory TAGS = TagFactory.make(UniversalBoneMeal.MOD_ID);
-    public static final TagKey<Block> FERTILIZER_RESISTANT_FLOWERS_BLOCK_TAG = TAGS.registerBlockTag(
-            "fertilizer_resistant_flowers");
+    public static final TagKey<Block> FERTILIZER_RESISTANT_PLANTS_BLOCK_TAG = TAGS.registerBlockTag(
+            "fertilizer_resistant_plants");
 
-    public static final DataMapToken<Block, Holder<BoneMealBehavior>> BONE_MEAL_BEHAVIORS_DATA_MAP = DataMapRegistrar.register(
+    public static final DataMapToken<Block, BoneMealBehavior.Configured> BONE_MEAL_BEHAVIORS_DATA_MAP = DataMapRegistrar.register(
             UniversalBoneMeal.id("bone_meal_behaviors"),
             Registries.BLOCK,
-            BoneMealBehavior.CODEC,
-            BoneMealBehavior.CODEC,
+            BoneMealBehavior.Configured.CODEC,
+            BoneMealBehavior.Configured.CODEC,
             false);
 
     public static void bootstrap() {

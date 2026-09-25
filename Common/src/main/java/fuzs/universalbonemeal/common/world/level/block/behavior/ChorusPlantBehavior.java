@@ -93,6 +93,7 @@ public class ChorusPlantBehavior extends ChorusFlowerBehavior {
             if (targetBlocks.contains(sourceState.typeHolder())) {
                 targets.add(sourcePos.immutable());
             }
+
             return;
         }
 
