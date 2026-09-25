@@ -77,17 +77,6 @@
       "behavior": "universalbonemeal:nether_wart",
       "when": "universalbonemeal:nether_wart"
     },
-    "minecraft:pink_petals": {
-      "type": "universalbonemeal:combined",
-      "conditions": [
-        {
-          "behavior": "universalbonemeal:flower_bed_growth",
-          "when": "universalbonemeal:flower_amount"
-        }
-      ],
-      "fallback": "universalbonemeal:pink_petals_drop",
-      "replace": true
-    },
     "minecraft:podzol": {
       "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:podzol",
@@ -116,17 +105,6 @@
       "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:vine",
       "when": "universalbonemeal:vine"
-    },
-    "minecraft:wildflowers": {
-      "type": "universalbonemeal:combined",
-      "conditions": [
-        {
-          "behavior": "universalbonemeal:flower_bed_growth",
-          "when": "universalbonemeal:flower_amount"
-        }
-      ],
-      "fallback": "universalbonemeal:wildflowers_drop",
-      "replace": true
     }
   }
 }

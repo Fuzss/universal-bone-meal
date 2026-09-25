@@ -6,7 +6,6 @@ import fuzs.universalbonemeal.common.init.BoneMealBehaviors;
 import fuzs.universalbonemeal.common.init.BoneMealBlockPredicates;
 import fuzs.universalbonemeal.common.init.ModRegistry;
 import fuzs.universalbonemeal.common.world.level.block.bonemeal.Bonemealable;
-import fuzs.universalbonemeal.common.world.level.block.bonemeal.conditional.CombinedConditionalBoneMealBehavior;
 import fuzs.universalbonemeal.common.world.level.block.bonemeal.conditional.SimpleConditionalBoneMealBehavior;
 import fuzs.universalbonemeal.common.world.level.block.bonemeal.behavior.BoneMealBehavior;
 import net.minecraft.core.HolderLookup;
@@ -17,8 +16,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.neoforged.neoforge.common.data.DataMapProvider;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public class ModDataMapProvider extends DataMapProvider {
@@ -97,12 +94,6 @@ public class ModDataMapProvider extends DataMapProvider {
                         false)
                 .add(Blocks.SPORE_BLOSSOM.builtInRegistryHolder(),
                         conditional(lookupProvider, BoneMealBehaviors.SPORE_BLOSSOM),
-                        false)
-                .add(Blocks.PINK_PETALS.builtInRegistryHolder(),
-                        flowerBed(lookupProvider, BoneMealBehaviors.PINK_PETALS_DROP),
-                        false)
-                .add(Blocks.WILDFLOWERS.builtInRegistryHolder(),
-                        flowerBed(lookupProvider, BoneMealBehaviors.WILDFLOWERS_DROP),
                         false);
     }
 
@@ -113,14 +104,5 @@ public class ModDataMapProvider extends DataMapProvider {
     private static Bonemealable conditional(HolderLookup.Provider lookupProvider, ResourceKey<BoneMealBehavior> behavior, ResourceKey<BlockPredicate> predicate) {
         return new Bonemealable(new SimpleConditionalBoneMealBehavior(lookupProvider.getOrThrow(behavior),
                 lookupProvider.getOrThrow(predicate)), false);
-    }
-
-    private static Bonemealable flowerBed(HolderLookup.Provider lookupProvider, ResourceKey<BoneMealBehavior> dropBehavior) {
-        return new Bonemealable(new CombinedConditionalBoneMealBehavior(
-                Optional.of(lookupProvider.getOrThrow(dropBehavior)),
-                List.of(new CombinedConditionalBoneMealBehavior.Condition(
-                        lookupProvider.getOrThrow(BoneMealBlockPredicates.FLOWER_AMOUNT),
-                        lookupProvider.getOrThrow(BoneMealBehaviors.FLOWER_BED_GROWTH)))),
-                true);
     }
 }

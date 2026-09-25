@@ -13,7 +13,6 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChorusFlowerBlock;
-import net.minecraft.world.level.block.FlowerBedBlock;
 import net.minecraft.world.level.block.NetherWartBlock;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.blockpredicates.MatchingBiomesPredicate;
@@ -30,7 +29,6 @@ public class BoneMealBlockPredicates {
     public static final ResourceKey<BlockPredicate> CHORUS_PLANT = register("chorus_plant");
     public static final ResourceKey<BlockPredicate> AIR_ABOVE = register("air_above");
     public static final ResourceKey<BlockPredicate> NEIGHBOR_CONVERSION = register("neighbor_conversion");
-    public static final ResourceKey<BlockPredicate> FLOWER_AMOUNT = register("flower_amount");
 
     private static ResourceKey<BlockPredicate> register(String path) {
         return ModRegistry.REGISTRIES.makeResourceKey(ModRegistry.PREDICATE_REGISTRY_KEY, path);
@@ -64,6 +62,5 @@ public class BoneMealBlockPredicates {
         context.register(NEIGHBOR_CONVERSION,
                 new NeighborConversionPredicate(HolderSet.direct(Blocks.GRASS_BLOCK.builtInRegistryHolder(),
                         Blocks.MYCELIUM.builtInRegistryHolder()), 1, 1));
-        context.register(FLOWER_AMOUNT, new BlockPropertyPredicate(FlowerBedBlock.AMOUNT));
     }
 }
