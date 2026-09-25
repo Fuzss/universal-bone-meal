@@ -6,7 +6,7 @@ import fuzs.puzzleslib.common.api.network.v4.MessageSender;
 import fuzs.puzzleslib.common.api.network.v4.PlayerSet;
 import fuzs.universalbonemeal.common.init.ModRegistry;
 import fuzs.universalbonemeal.common.network.ClientboundGrowthParticlesMessage;
-import fuzs.universalbonemeal.common.world.level.block.bonemeal.ConditionalBoneMealBehavior;
+import fuzs.universalbonemeal.common.world.level.block.bonemeal.Bonemealable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
@@ -24,9 +24,9 @@ public class UseBoneMealHandler {
             return EventResult.DENY;
         }
 
-        ConditionalBoneMealBehavior behavior = DataMapLookup.getData(ModRegistry.BONE_MEAL_BEHAVIORS_DATA_MAP,
-                state.typeHolder());
-        if (behavior != null && (!(state.getBlock() instanceof BonemealableBlock) || behavior.replace())) {
+        Bonemealable bonemealable = DataMapLookup.getData(ModRegistry.BONE_MEAL_BEHAVIORS_DATA_MAP, state.typeHolder());
+        if (bonemealable != null && (!(state.getBlock() instanceof BonemealableBlock) || bonemealable.replace())) {
+            BonemealableBlock behavior = bonemealable.behavior();
             if (behavior.isValidBonemealTarget(level, pos, state, BonemealSource.INTERACTION)) {
                 if (level instanceof ServerLevel serverLevel) {
                     if (behavior.isBonemealSuccess(level, level.getRandom(), pos, state, BonemealSource.INTERACTION)) {

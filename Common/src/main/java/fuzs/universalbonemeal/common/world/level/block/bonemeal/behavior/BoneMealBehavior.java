@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import fuzs.universalbonemeal.common.UniversalBoneMeal;
 import fuzs.universalbonemeal.common.init.ModRegistry;
-import fuzs.universalbonemeal.common.world.level.block.bonemeal.ConditionalBoneMealBehavior;
+import fuzs.universalbonemeal.common.world.level.block.bonemeal.conditional.ConditionalBoneMealBehavior;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;

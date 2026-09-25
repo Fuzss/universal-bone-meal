@@ -10,8 +10,9 @@ import fuzs.puzzleslib.common.api.init.v3.tags.TagFactory;
 import fuzs.universalbonemeal.common.UniversalBoneMeal;
 import fuzs.universalbonemeal.common.util.stateproviders.CopySourceProvider;
 import fuzs.universalbonemeal.common.util.valueproviders.VineIntProvider;
-import fuzs.universalbonemeal.common.world.level.block.bonemeal.*;
+import fuzs.universalbonemeal.common.world.level.block.bonemeal.Bonemealable;
 import fuzs.universalbonemeal.common.world.level.block.bonemeal.behavior.*;
+import fuzs.universalbonemeal.common.world.level.block.bonemeal.conditional.ConditionalBoneMealBehaviorTypes;
 import fuzs.universalbonemeal.common.world.level.levelgen.blockpredicates.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -61,16 +62,20 @@ public class ModRegistry {
             () -> (BlockPredicateType<NeighborConversionPredicate>) () -> NeighborConversionPredicate.CODEC);
     public static final ResourceKey<LootTable> SPORE_BLOSSOM_LOOT_TABLE = REGISTRIES.makeResourceKey(Registries.LOOT_TABLE,
             "spore_blossom");
+    public static final ResourceKey<LootTable> PINK_PETALS_LOOT_TABLE = REGISTRIES.makeResourceKey(Registries.LOOT_TABLE,
+            "pink_petals");
+    public static final ResourceKey<LootTable> WILDFLOWERS_LOOT_TABLE = REGISTRIES.makeResourceKey(Registries.LOOT_TABLE,
+            "wildflowers");
 
     static final TagFactory TAGS = TagFactory.make(UniversalBoneMeal.MOD_ID);
     public static final TagKey<Block> FERTILIZER_RESISTANT_PLANTS_BLOCK_TAG = TAGS.registerBlockTag(
             "fertilizer_resistant_plants");
 
-    public static final DataMapToken<Block, ConditionalBoneMealBehavior> BONE_MEAL_BEHAVIORS_DATA_MAP = DataMapRegistrar.register(
-            UniversalBoneMeal.id("bone_meal_behaviors"),
+    public static final DataMapToken<Block, Bonemealable> BONE_MEAL_BEHAVIORS_DATA_MAP = DataMapRegistrar.register(
+            UniversalBoneMeal.id("bonemealables"),
             Registries.BLOCK,
-            ConditionalBoneMealBehavior.CODEC,
-            ConditionalBoneMealBehavior.CODEC,
+            Bonemealable.CODEC,
+            Bonemealable.CODEC,
             false);
 
     public static void bootstrap() {
@@ -87,6 +92,7 @@ public class ModRegistry {
         registerBoneMealBehaviorType("neighbor_conversion", NeighborConversionBehavior.CODEC);
         registerBoneMealBehaviorType("vegetation_patch", VegetationPatchBehavior.CODEC);
         registerBoneMealBehaviorType("pop_resource", PopResourceBehavior.CODEC);
+        ConditionalBoneMealBehaviorTypes.bootstrap();
     }
 
     private static void registerBoneMealBehaviorType(String path, MapCodec<? extends BoneMealBehavior> codec) {

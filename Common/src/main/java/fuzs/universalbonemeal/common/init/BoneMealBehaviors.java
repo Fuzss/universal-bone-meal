@@ -42,6 +42,9 @@ public class BoneMealBehaviors {
     public static final ResourceKey<BoneMealBehavior> DIRT = register("dirt");
     public static final ResourceKey<BoneMealBehavior> PODZOL = register("podzol");
     public static final ResourceKey<BoneMealBehavior> SPORE_BLOSSOM = register("spore_blossom");
+    public static final ResourceKey<BoneMealBehavior> FLOWER_BED_GROWTH = register("flower_bed_growth");
+    public static final ResourceKey<BoneMealBehavior> PINK_PETALS_DROP = register("pink_petals_drop");
+    public static final ResourceKey<BoneMealBehavior> WILDFLOWERS_DROP = register("wildflowers_drop");
 
     private static final Holder<BlockStateProvider> MYCELIUM_VEGETATION = Holder.direct(new WeightedStateProvider(
             WeightedList.<BlockState>builder()
@@ -123,6 +126,13 @@ public class BoneMealBehaviors {
                         ConstantInt.of(16)));
         context.register(SPORE_BLOSSOM,
                 new PopResourceBehavior(ModRegistry.SPORE_BLOSSOM_LOOT_TABLE,
+                        new PopResourceBehavior.Drop.FromMiddle()));
+        context.register(FLOWER_BED_GROWTH, new CropGrowthBehavior(FlowerBedBlock.AMOUNT, ConstantInt.of(1)));
+        context.register(PINK_PETALS_DROP,
+                new PopResourceBehavior(ModRegistry.PINK_PETALS_LOOT_TABLE,
+                        new PopResourceBehavior.Drop.FromMiddle()));
+        context.register(WILDFLOWERS_DROP,
+                new PopResourceBehavior(ModRegistry.WILDFLOWERS_LOOT_TABLE,
                         new PopResourceBehavior.Drop.FromMiddle()));
     }
 

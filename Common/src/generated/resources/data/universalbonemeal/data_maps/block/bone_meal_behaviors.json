@@ -1,88 +1,132 @@
 {
   "values": {
     "#minecraft:small_flowers": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:small_flower"
     },
     "minecraft:brain_coral": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:brain_coral",
-      "target_predicate": "universalbonemeal:coral"
+      "when": "universalbonemeal:coral"
     },
     "minecraft:bubble_coral": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:bubble_coral",
-      "target_predicate": "universalbonemeal:coral"
+      "when": "universalbonemeal:coral"
     },
     "minecraft:cactus": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:cactus",
-      "target_predicate": "universalbonemeal:cactus"
+      "when": "universalbonemeal:cactus"
     },
     "minecraft:chorus_flower": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:chorus_flower",
-      "target_predicate": "universalbonemeal:chorus_flower"
+      "when": "universalbonemeal:chorus_flower"
     },
     "minecraft:chorus_plant": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:chorus_plant",
-      "target_predicate": "universalbonemeal:chorus_plant"
+      "when": "universalbonemeal:chorus_plant"
     },
     "minecraft:coarse_dirt": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:dirt",
-      "target_predicate": "universalbonemeal:neighbor_conversion"
+      "when": "universalbonemeal:neighbor_conversion"
     },
     "minecraft:dead_bush": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:dead_bush"
     },
     "minecraft:dirt": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:dirt",
-      "target_predicate": "universalbonemeal:neighbor_conversion"
+      "when": "universalbonemeal:neighbor_conversion"
     },
     "minecraft:dirt_path": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:dirt",
-      "target_predicate": "universalbonemeal:neighbor_conversion"
+      "when": "universalbonemeal:neighbor_conversion"
     },
     "minecraft:fire_coral": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:fire_coral",
-      "target_predicate": "universalbonemeal:coral"
+      "when": "universalbonemeal:coral"
     },
     "minecraft:horn_coral": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:horn_coral",
-      "target_predicate": "universalbonemeal:coral"
+      "when": "universalbonemeal:coral"
     },
     "minecraft:lily_pad": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:lily_pad"
     },
     "minecraft:melon_stem": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:melon_stem",
-      "target_predicate": "universalbonemeal:melon_stem"
+      "when": "universalbonemeal:melon_stem"
     },
     "minecraft:mycelium": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:mycelium",
-      "target_predicate": "universalbonemeal:air_above"
+      "when": "universalbonemeal:air_above"
     },
     "minecraft:nether_wart": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:nether_wart",
-      "target_predicate": "universalbonemeal:nether_wart"
+      "when": "universalbonemeal:nether_wart"
+    },
+    "minecraft:pink_petals": {
+      "type": "universalbonemeal:combined",
+      "conditions": [
+        {
+          "behavior": "universalbonemeal:flower_bed_growth",
+          "when": "universalbonemeal:flower_amount"
+        }
+      ],
+      "fallback": "universalbonemeal:pink_petals_drop",
+      "replace": true
     },
     "minecraft:podzol": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:podzol",
-      "target_predicate": "universalbonemeal:air_above"
+      "when": "universalbonemeal:air_above"
     },
     "minecraft:pumpkin_stem": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:pumpkin_stem",
-      "target_predicate": "universalbonemeal:pumpkin_stem"
+      "when": "universalbonemeal:pumpkin_stem"
     },
     "minecraft:spore_blossom": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:spore_blossom"
     },
     "minecraft:sugar_cane": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:sugar_cane",
-      "target_predicate": "universalbonemeal:sugar_cane"
+      "when": "universalbonemeal:sugar_cane"
     },
     "minecraft:tube_coral": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:tube_coral",
-      "target_predicate": "universalbonemeal:coral"
+      "when": "universalbonemeal:coral"
     },
     "minecraft:vine": {
+      "type": "universalbonemeal:conditional",
       "behavior": "universalbonemeal:vine",
-      "target_predicate": "universalbonemeal:vine"
+      "when": "universalbonemeal:vine"
+    },
+    "minecraft:wildflowers": {
+      "type": "universalbonemeal:combined",
+      "conditions": [
+        {
+          "behavior": "universalbonemeal:flower_bed_growth",
+          "when": "universalbonemeal:flower_amount"
+        }
+      ],
+      "fallback": "universalbonemeal:wildflowers_drop",
+      "replace": true
     }
   }
 }
